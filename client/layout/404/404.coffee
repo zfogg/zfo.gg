@@ -1,6 +1,4 @@
-'use strict'
-
-angular.module('bitcampApp')
+angular.module('zfoggApp')
 
   .controller '404Ctrl', ($scope, $http) ->
     console.log "404 :("

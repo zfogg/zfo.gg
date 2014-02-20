@@ -1,9 +1,8 @@
-bitcamp = angular.module('bitcampApp', [
+angular.module('zfoggApp', [
+  'ngAnimate'
   'ngCookies'
   'ngResource'
-  'ngSanitize'
   'ngRoute'
-  'ngAnimate'
 ])
 
 
@@ -15,15 +14,6 @@ bitcamp = angular.module('bitcampApp', [
       .when '/',
         templateUrl: 'main/index.html'
         controller: 'MainCtrl'
-      .when '/fireside',
-        templateUrl: 'fireside/index.html'
-        controller: 'FiresideCtrl'
-      .when '/faq',
-        templateUrl: 'faq/index.html'
-        controller: 'FaqCtrl'
-      .when '/faq/sponsors',
-        templateUrl: 'faq/sponsors.html'
-        controller: 'FaqCtrl'
       .when '/404',
         templateUrl: 'layout/404/index.html'
         controller: '404Ctrl'
@@ -38,25 +28,16 @@ bitcamp = angular.module('bitcampApp', [
       fontRatio : 40
       lineRatio : 1.45
 
-    console.log "Looking for this? http://github.com/bitcamp/bitca.mp"
-
-
-  .directive "scrollTo", ->
-    (scope, element, attrs) ->
-      element.bind "click", (event) ->
-        location = attrs.scrollTo
-        $.scrollTo location, +attrs.scrollSpeed or 300
+    console.log "Looking for this? http://github.com/zfogg/zfo.gg"
 
 
   .controller "BodyCtrl", ($http, $scope, $rootScope, $window, $location) ->
     $rootScope.isLoaded = true
 
-    $scope.animClass = ''
     $scope.animReady = false
 
-    $http.get('/api/bitcamp')
+    $http.get('/api/zfogg')
       .success ->
-        $scope.animClass = "bitcamp-view"
         $scope.animReady = true
       .error (data) ->
         null

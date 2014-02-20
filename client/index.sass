@@ -10,7 +10,7 @@
 *, *:before, *:after
   @include box-sizing(border-box)
 
-html, body
+html, body, #buffer
   min-height: 100%
   height: 100%
 
@@ -34,71 +34,18 @@ body
   overflow: hidden
   margin: 0 auto
 
-.btc-row
-  padding: 2.5em 1em
-  text-align: center
-  position: relative
-
-.btc-background-wrapper
-  position: absolute
-  top: 0
-  left: 0
-  @include square(100%)
-  .btc-background
-    margin: 0 auto
-    @include square(100%)
-
 .clearfix
   @include clearfix()
 
-.noselect
-  user-select: none
-
-*
-  @extend .noselect
-
-button, .button
-  max-width: 10em
-  width: 100%
-  padding: 0.5em
-  border: none
-  font-weight: bold
-  border-radius: 6px
-  user-select: none !important
-
 input
-  @include placeholder($color_white)
+  @include placeholder($white)
 
 *:focus, *:active, *:hover
   outline: none
 
-.noselect
-  @include user-select(none)
-
-fieldset
-  border: none
-  margin-bottom: 1.25em
-
-.vspace
-  display: block
-  height: 5vw
-  max-height: 120px
-
 
 #header
   white-space: normal
-  .btc-background
-    z-index: 1
-    max-width: 60.0em
-    height: 100%
-    #treetent
-      position: absolute
-      left: 10%
-      bottom: 0
-  #logo
-    z-index: 3
-    padding: 0.938em 0
-    margin-bottom: 40px
 
 #footer
   padding-top: 0
@@ -114,8 +61,8 @@ fieldset
       text-align: center
   a
     &:hover
-      color: $color_white
-    color: $color_white
+      color: $white
+    color: $white
 
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
@@ -127,10 +74,11 @@ fieldset
     animation: fadeIn 0.4s
 
 #wrapper
-  &.bitcamp-view
+  &.main-view
     $enterTime: 0.3s
     $leaveTime: 0.2s
     &.ng-leave
       animation: fadeOutUp $leaveTime
     &.ng-enter
       animation: fadeInDown $enterTime $leaveTime
+
