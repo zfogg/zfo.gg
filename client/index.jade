@@ -31,9 +31,10 @@ html(ng-app="zfoggApp")
   body(ng-controller="BodyCtrl")
 
     #buffer(ng-if="animReady")
-      .wrapper#wrapper(ng-view ng-class="{'main-view': animReady}")
+      #wrapper
+        .wrapper.main-view(ng-view ng-show="viewReady")
 
-      .wrapper.ng-cloak(ng-include="" src=" 'layout/footer.html' ")
+      footer#footer.wrapper.ng-cloak(ng-include="" src=" 'layout/footer.html' ")
 
     <!-- build:js(./) scripts/plugins.js -->
     script(src="components/jquery/dist/jquery.js")

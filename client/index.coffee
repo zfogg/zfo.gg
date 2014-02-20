@@ -31,8 +31,10 @@ angular.module('zfoggApp', [
     console.log "Looking for this? http://github.com/zfogg/zfo.gg"
 
 
-  .controller "BodyCtrl", ($http, $scope, $rootScope, $window, $location) ->
-    $rootScope.isLoaded = true
+  .controller "BodyCtrl", ($http, $scope, $rootScope, $window, $location, $timeout) ->
+
+    $rootScope.isLoaded  = true
+    $rootScope.viewReady = false
 
     $scope.animReady = false
 
@@ -42,7 +44,14 @@ angular.module('zfoggApp', [
       .error (data) ->
         null
 
+    $rootScope.$on "$routeChangeStart", ->
+      $rootScope.viewReady = false
+
     $rootScope.$on "$routeChangeSuccess", ->
+      $timeout ->
+        $rootScope.viewReady = true
+      , 300
+
       $window.ga? "set", "page", $location.path()
       $window.ga? "send", "pageview"
 

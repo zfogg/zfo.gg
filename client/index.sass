@@ -5,13 +5,13 @@
 @import 'sass-bootstrap/lib/normalize'
 @import 'sass-bootstrap/lib/glyphicons'
 @import 'sass-bootstrap/lib/grid'
+@import 'sass-bootstrap/lib/type'
 
 
 *, *:before, *:after
   @include box-sizing(border-box)
 
 html, body, #buffer
-  min-height: 100%
   height: 100%
 
 body
@@ -21,18 +21,21 @@ body
 #wrapper
   white-space: pre-line
   min-height: 100%
+
+#wrapper
   margin-bottom: -1*$footer-height
 
 #wrapper:after
   content: ""
   display: block
 
+.main-view
+  position: relative
+  top:  0
+  left: 0
+
 #footer, #wrapper:after
   height: $footer-height
-
-.wrapper
-  overflow: hidden
-  margin: 0 auto
 
 .clearfix
   @include clearfix()
@@ -44,12 +47,10 @@ input
   outline: none
 
 
-#header
-  white-space: normal
+#content
+  text-align: center
 
 #footer
-  padding-top: 0
-  padding-bottom: 0
   #footer-inner
     height: 100%
     width: 100%
@@ -59,10 +60,6 @@ input
       display: table-cell
       vertical-align: middle
       text-align: center
-  a
-    &:hover
-      color: $white
-    color: $white
 
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
@@ -73,12 +70,14 @@ input
   &.ng-enter
     animation: fadeIn 0.4s
 
-#wrapper
-  &.main-view
-    $enterTime: 0.3s
-    $leaveTime: 0.2s
-    &.ng-leave
-      animation: fadeOutUp $leaveTime
-    &.ng-enter
-      animation: fadeInDown $enterTime $leaveTime
+.main-view
+  $enterTime: 0.3s
+  $leaveTime: 0.2s
+  &.ng-leave
+    animation: fadeOutUp $leaveTime
+  //&.ng-enter
+  //  animation: fadeIn $enterTime $leaveTime
 
+.valign-text
+  display: inline-block
+  vertical-align: middle
