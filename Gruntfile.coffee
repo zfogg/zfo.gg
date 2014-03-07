@@ -6,7 +6,7 @@ module.exports = (grunt) ->
 
 
   grunt.initConfig
-    bitcamp:
+    zfogg:
 
       app:   "client"
       srv:   "server"
@@ -21,13 +21,13 @@ module.exports = (grunt) ->
 
       dev:
         options:
-          script: "bitcamp.coffee"
+          script: "zfogg.coffee"
           node_env: "development"
           port: process.env.PORT or 8000
 
       prod:
         options:
-          script: "bitcamp.coffee"
+          script: "zfogg.coffee"
           node_env: "production"
           port: process.env.PORT or 80
 
@@ -35,50 +35,50 @@ module.exports = (grunt) ->
     prettify:
       dist:
         expand: true
-        cwd:  "<%= bitcamp.dist %>"
+        cwd:  "<%= zfogg.dist %>"
         src:  "**/*.html"
-        dest: "<%= bitcamp.dist %>"
+        dest: "<%= zfogg.dist %>"
 
     watch:
       views_templates:
         files: [
-          "<%= bitcamp.app %>/**/*.jade",
-          "!<%= bitcamp.app %>/index.jade"
+          "<%= zfogg.app %>/**/*.jade",
+          "!<%= zfogg.app %>/index.jade"
         ]
         tasks: [ "newer:jade:templates" ]
       views_index:
-        files: [ "<%= bitcamp.app %>/index.jade" ]
+        files: [ "<%= zfogg.app %>/index.jade" ]
         tasks: [ "newer:jade:index" ]
 
       scripts:
-        files: ["<%= bitcamp.app %>/**/*.coffee"]
+        files: ["<%= zfogg.app %>/**/*.coffee"]
         tasks: ["newer:coffee:dist"]
 
       styles:
-        files: ["<%= bitcamp.app %>/**/*.sass"]
+        files: ["<%= zfogg.app %>/**/*.sass"]
         tasks: [ "compass:dev", "autoprefixer" ]
 
       livereload_css:
         options: livereload: true
-        files: [ "<%= bitcamp.tmp %>/**/*.css" ]
+        files: [ "<%= zfogg.tmp %>/**/*.css" ]
 
       livereload_else:
         options: livereload: true
         files: [
-          "<%= bitcamp.dist %>/index.html"
-          "<%= bitcamp.tmp %>/**/*.html"
-          "<%= bitcamp.tmp %>/**/*.js"
+          "<%= zfogg.dist %>/index.html"
+          "<%= zfogg.tmp %>/**/*.html"
+          "<%= zfogg.tmp %>/**/*.js"
         ]
 
       express:
-        files: [ "<%= bitcamp.srv %>/**/*.coffee", "bitcamp.coffee" ]
+        files: [ "<%= zfogg.srv %>/**/*.coffee", "zfogg.coffee" ]
         tasks: ["express:dev"]
         options:
           livereload: true
           nospawn:    true
 
       css:
-        files: ["<%= bitcamp.app %>/**/*.css"]
+        files: ["<%= zfogg.app %>/**/*.css"]
         tasks: [ "newer:copy:styles_tmp", "autoprefixer" ]
 
       gruntfile: files: ["Gruntfile.{js,coffee}"]
@@ -89,8 +89,8 @@ module.exports = (grunt) ->
         files: [
           dot: true
           src: [
-            "<%= bitcamp.tmp %>/*"
-            "<%= bitcamp.dist %>/*"
+            "<%= zfogg.tmp %>/*"
+            "<%= zfogg.dist %>/*"
           ]
         ]
 
@@ -98,15 +98,15 @@ module.exports = (grunt) ->
     jade:
       index:
         expand: true
-        cwd:    "<%= bitcamp.app %>"
+        cwd:    "<%= zfogg.app %>"
         src:    [ "index.jade" ]
-        dest:   "<%= bitcamp.dist %>"
+        dest:   "<%= zfogg.dist %>"
         ext:    ".html"
       templates:
         expand: true
-        cwd:    "<%= bitcamp.app %>"
+        cwd:    "<%= zfogg.app %>"
         src:    [ "**/*.jade", "!index.jade" ]
-        dest:   "<%= bitcamp.tmp %>"
+        dest:   "<%= zfogg.tmp %>"
         ext:    ".html"
 
 
@@ -114,9 +114,9 @@ module.exports = (grunt) ->
       options: browsers: ["last 1 version"]
       dist:
         expand: true
-        cwd:    "<%= bitcamp.tmp %>"
+        cwd:    "<%= zfogg.tmp %>"
         src:    [ "**/*.css" ]
-        dest:   "<%= bitcamp.tmp %>"
+        dest:   "<%= zfogg.tmp %>"
 
 
     coffee:
@@ -124,9 +124,9 @@ module.exports = (grunt) ->
         options: sourceMap: false
         files: [
           expand: true
-          cwd:  "<%= bitcamp.app %>"
+          cwd:  "<%= zfogg.app %>"
           src:  "**/*.coffee"
-          dest: "<%= bitcamp.tmp %>"
+          dest: "<%= zfogg.tmp %>"
           ext: ".js"
         ]
       dev:
@@ -138,11 +138,11 @@ module.exports = (grunt) ->
 
     compass:
       options:
-        sassDir:                 "<%= bitcamp.app %>"
-        cssDir:                  "<%= bitcamp.tmp %>"
-        imagesDir:               "<%= bitcamp.app %>"
-        javascriptsDir:          "<%= bitcamp.app %>"
-        fontsDir:                "<%= bitcamp.app %>"
+        sassDir:                 "<%= zfogg.app %>"
+        cssDir:                  "<%= zfogg.tmp %>"
+        imagesDir:               "<%= zfogg.app %>"
+        javascriptsDir:          "<%= zfogg.app %>"
+        fontsDir:                "<%= zfogg.app %>"
         importPath:              "components"
         httpImagesPath:          "/images"
         httpFontsPath:           "/fonts"
@@ -159,53 +159,53 @@ module.exports = (grunt) ->
     rev:
       dist:
         src: [
-          "<%= bitcamp.dist %>/**/*.js"
-          "<%= bitcamp.dist %>/**/*.css"
-          "<%= bitcamp.dist %>/**/*.{png,jpg,jpeg,gif,webp,svg}"
-          "!<%= bitcamp.dist %>/**/opengraph.png"
+          "<%= zfogg.dist %>/**/*.js"
+          "<%= zfogg.dist %>/**/*.css"
+          "<%= zfogg.dist %>/**/*.{png,jpg,jpeg,gif,webp,svg}"
+          "!<%= zfogg.dist %>/**/opengraph.png"
         ]
 
 
     useminPrepare:
       options: dest: "public"
-      html: "<%= bitcamp.dist %>/index.html"
+      html: "<%= zfogg.dist %>/index.html"
 
 
     usemin:
-      options: assetsDirs: "<%= bitcamp.dist %>"
-      html: [ "<%= bitcamp.dist %>/**/*.html" ]
-      css:  [ "<%= bitcamp.dist %>/**/*.css" ]
+      options: assetsDirs: "<%= zfogg.dist %>"
+      html: [ "<%= zfogg.dist %>/**/*.html" ]
+      css:  [ "<%= zfogg.dist %>/**/*.css" ]
 
 
     usebanner:
       options:
         position: "top"
         banner: require "./ascii"
-      files:  [ "<%= bitcamp.dist %>/index.html" ]
+      files:  [ "<%= zfogg.dist %>/index.html" ]
 
 
     ngmin:
       dist:
         expand: true
-        cwd:  "<%= bitcamp.tmp %>"
+        cwd:  "<%= zfogg.tmp %>"
         src:  "**/*.js"
-        dest: "<%= bitcamp.tmp %>"
+        dest: "<%= zfogg.tmp %>"
 
 
     copy:
       styles_tmp:
         expand: true
-        cwd:  "<%= bitcamp.app %>"
+        cwd:  "<%= zfogg.app %>"
         src:  "**/*.css"
-        dest: "<%= bitcamp.tmp %>"
+        dest: "<%= zfogg.tmp %>"
       components_dist:
         expand: true
         src:  [ "components/**" ]
-        dest: "<%= bitcamp.dist %>"
+        dest: "<%= zfogg.dist %>"
       app_dist:
         expand: true
-        cwd: "<%= bitcamp.app %>"
-        dest: "<%= bitcamp.dist %>"
+        cwd: "<%= zfogg.app %>"
+        dest: "<%= zfogg.dist %>"
         src: [
           "*.{ico,txt}"
           "images/**/*"
@@ -215,9 +215,9 @@ module.exports = (grunt) ->
 
     inject:
       googleAnalytics:
-        scriptSrc: "<%= bitcamp.app %>/ga.js"
+        scriptSrc: "<%= zfogg.app %>/analytics.js"
         files:
-          "<%= bitcamp.dist %>/index.html": "<%= bitcamp.dist %>/index.html"
+          "<%= zfogg.dist %>/index.html": "<%= zfogg.dist %>/index.html"
 
 
     concurrent:
@@ -250,10 +250,10 @@ module.exports = (grunt) ->
 
 
     ngtemplates:
-      bitcampApp:
-        cwd:  "<%= bitcamp.tmp %>"
+      zfoggApp:
+        cwd:  "<%= zfogg.tmp %>"
         src:  [ "**/*.html", "!index.html" ]
-        dest: "<%= bitcamp.dist %>/scripts/templates.js"
+        dest: "<%= zfogg.dist %>/scripts/templates.js"
         options:
           usemin: "scripts/main.js"
 
@@ -262,7 +262,6 @@ module.exports = (grunt) ->
   grunt.registerTask "build", [
     "clean"
 
-    "jade"
     "concurrent:dist1"
 
     "prettify"
