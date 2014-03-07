@@ -1,28 +1,33 @@
 #main.single-view
-  header#header
+  header#header.text-center
+    .col-xs-12
+      h2 @zfogg
 
   section#content
-    .row
-      .col-xs-12
-        h2 @zfogg
-        h3 maker of things
-
-    .vspace
-    .vspace
-
-    .row
+    .col-xs-12.col-sm-4
+      h3 maker of things
       .thing
         //-a(href="/things/ascii-chat")
-        a(href="https://github.com/zfogg/ascii-chat")
+        a(href="https://github.com/zfogg/ascii-chat" target="_blank")
           p ascii-chat
       .thing
         a(href="/thing/gravity")
           p gravity
+
+    .col-xs-12.col-sm-4
+      h3 leader and organizer
       .thing
-        //-a(href="/things/ascii-chat")
-        a(href="https://bitca.mp/")
+        a(href="https://bitca.mp/" target="_blank")
           p bitcamp
       .thing
-        a(href="http://terrapinhackers.com/")
+        a(href="http://terrapinhackers.com/" target="_blank")
           p terrapin hackers
 
+    .col-xs-12.col-sm-4
+      h3 rants and lectures
+      .thing
+        a(href="http://zfogg.github.io/" target="_blank")
+          p webdev-workflow
+      .thing
+        a(href="http://swipe.to/6001m" target="_blank")
+          p intro to git
