@@ -24,15 +24,11 @@ body
 
 #wrapper
   margin-bottom: -1*$footer-height
+  width: 100%
 
 #wrapper:after
   content: ""
   display: block
-
-.main-view
-  position: relative
-  top:  0
-  left: 0
 
 #footer, #wrapper:after
   height: $footer-height
@@ -46,11 +42,17 @@ input
 *:focus, *:active, *:hover
   outline: none
 
+.vspace
+  height: 1rem
+
 
 #content
   text-align: center
 
 #footer
+  .footer-link
+    &:hover
+      animation: flash 0.4s
   #footer-inner
     height: 100%
     width: 100%
@@ -71,13 +73,13 @@ input
     animation: fadeIn 0.4s
 
 .main-view
-  $enterTime: 0.3s
-  $leaveTime: 0.2s
-  &.ng-leave
-    animation: fadeOutUp $leaveTime
-  //&.ng-enter
-  //  animation: fadeIn $enterTime $leaveTime
+  $enterTime: 0.5s
 
-.valign-text
-  display: inline-block
-  vertical-align: middle
+  &.ng-enter
+    animation: fadeInUp $enterTime
+    transition: $enterTime linear all
+    opacity: 0
+
+  &.ng-enter.ng-enter-active
+    opacity: 1
+

@@ -1,0 +1,23 @@
+#gravity.single-view
+  header#header.text-center
+    a(href="/")
+      h2 @zfogg
+    h3 gravity
+      br
+      small a 2d n-body simulation
+
+  section#demo
+    #canvas-container
+      canvas#canvas(oncontextmenu="return false;")
+      #canvas-controls-container
+        h4#toggle-menu
+          a Show
+          |  controls.
+        #canvas-controls
+
+  section#readme.container
+    .row
+      .col-xs-12
+        :markdown
+          ### Being one of my first projects,
+          gravity has a special place in my heart

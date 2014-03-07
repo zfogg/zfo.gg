@@ -8,7 +8,8 @@ ready.then ->
   app.get  "/api/zfogg", main.zfogg
 
   # Angular Routes
-  app.get "/",             indexRoute
+  app.get "/",              indexRoute
+  app.get "/thing/gravity", indexRoute
 
   # 404
   app.get "/404", indexRoute

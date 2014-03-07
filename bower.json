@@ -12,6 +12,7 @@
     "angular-route": "~1.2.0",
     "sass-bootstrap": "~3.0.0",
     "socket.io-client": "~0.9.16",
-    "bootflat": "*"
+    "bootflat": "*",
+    "mousetrap": "~1.4.6"
   }
 }

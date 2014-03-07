@@ -1,3 +1,22 @@
 @import 'sass-bootstrap/lib/mixins'
 @import '../layout/variables'
 
+
+#content
+  &, p, .p
+    transition: all 0.4s ease-in
+  .thing
+    display: inline-block
+    width: 100%
+    max-width: 15rem
+    vertical-align: middle
+
+    height: 5rem
+    p
+      line-height: 5rem
+
+    &:hover
+      p
+        font-weight: bold
+      background-color: darken($gray-lighter, 5%)
+      animation: pulse .3s

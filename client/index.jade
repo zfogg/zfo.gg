@@ -26,15 +26,17 @@ html(ng-app="zfoggApp")
     link(rel="stylesheet" href="layout/typo.css")
 
     link(rel="stylesheet" href="main/main.css")
+
+    link(rel="stylesheet" href="gravity/gravity.css")
     <!-- endbuild -->
 
   body(ng-controller="BodyCtrl")
 
     #buffer(ng-if="animReady")
       #wrapper
-        .wrapper.main-view(ng-view ng-show="viewReady")
+        .wrapper.main-view(ng-view)
 
-      footer#footer.wrapper.ng-cloak(ng-include="" src=" 'layout/footer.html' ")
+      footer#footer.wrapper.ng-cloak( ng-include="" src=" 'layout/footer.html' ")
 
     <!-- build:js(./) scripts/plugins.js -->
     script(src="components/jquery/dist/jquery.js")
@@ -44,6 +46,8 @@ html(ng-app="zfoggApp")
     script(src="components/flowtype/flowtype.js")
 
     script(src="components/socket.io-client/dist/socket.io.js")
+
+    script(src="components/mousetrap/mousetrap.js")
     <!-- endbuild -->
 
     <!-- build:js(./) scripts/modules.js -->
@@ -59,6 +63,17 @@ html(ng-app="zfoggApp")
     script(src="layout/404/404.js")
 
     script(src="main/main.js")
+
+    script(src="gravity/index.js")
+    script(src="gravity/canvas-tools.js")
+    script(src="gravity/canvas-controls.js")
+    script(src="gravity/barnes-hut/AABB.js")
+    script(src="gravity/barnes-hut/QuadTree.js")
+    script(src="gravity/barnes-hut/SquareTree.js")
+    script(src="gravity/PhysicalBody.js")
+    script(src="gravity/PhysicalCursor.js")
+    script(src="gravity/PhysicalSquare.js")
+    script(src="gravity/gravity.js")
     <!-- endbuild -->
 
     <!-- Google Analytics: analytics.js -->
