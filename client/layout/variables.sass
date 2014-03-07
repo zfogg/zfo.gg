@@ -2,46 +2,31 @@
 $footer-height: 160px
 
 
-$color_white:         #ffffff
-$color_black:         #000000
+$white:         #ffffff
+$black:         #000000
 
-$color_grey-light:    #e5d8cf
-$color_grey:          #a58c7c
-$color_grey-dark:     #7f6c60
+$gray-darker:            lighten(#000, 13.5%)
+$gray-dark:              lighten(#000, 20%)
+$gray:                   lighten(#000, 33.5%)
+$gray-light:             lighten(#000, 60%)
+$gray-lighter:           lighten(#000, 93.5%)
 
-$color_orange:        #ff6d40
+// Brand colors
+// -------------------------
 
-$color_yellow:        #ffec40
-
-$color_orangeyellow:  #ffad40
-
-$color_red:           #ff404a
-
-$color_blue-light:    #ccf3ff
-$color_blue-dark:     #538ca5
-
-$color_green:         #53a559
-
-
-$gray-darker:           #222
-$gray-dark:             #333
-$gray:                  #555
-$gray-light:            #999
-$gray-lighter:          #eee
-
-
-$brand-primary:         $color_blue-dark
+$brand-primary:         #428bca
 $brand-success:         #5cb85c
 $brand-warning:         #f0ad4e
 $brand-danger:          #d9534f
 $brand-info:            #5bc0de
 
-$body-bg:               $color_blue-light
-$text-color:            $color_white
+
+$body-bg:               $gray-lighter
+$text-color:            $gray-darker
 
 
-$link-color:            $color_red
-$link-hover-color:      $color_orange
+$link-color:            $brand-primary
+$link-hover-color:      adjust-hue($link-color, 15%)
 
 
 $font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif

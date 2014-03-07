@@ -5,13 +5,13 @@
 @import 'sass-bootstrap/lib/normalize'
 @import 'sass-bootstrap/lib/glyphicons'
 @import 'sass-bootstrap/lib/grid'
+@import 'sass-bootstrap/lib/type'
 
 
 *, *:before, *:after
   @include box-sizing(border-box)
 
-html, body
-  min-height: 100%
+html, body, #buffer
   height: 100%
 
 body
@@ -21,7 +21,10 @@ body
 #wrapper
   white-space: pre-line
   min-height: 100%
+
+#wrapper
   margin-bottom: -1*$footer-height
+  width: 100%
 
 #wrapper:after
   content: ""
@@ -30,79 +33,26 @@ body
 #footer, #wrapper:after
   height: $footer-height
 
-.wrapper
-  overflow: hidden
-  margin: 0 auto
-
-.btc-row
-  padding: 2.5em 1em
-  text-align: center
-  position: relative
-
-.btc-background-wrapper
-  position: absolute
-  top: 0
-  left: 0
-  @include square(100%)
-  .btc-background
-    margin: 0 auto
-    @include square(100%)
-
 .clearfix
   @include clearfix()
 
-.noselect
-  user-select: none
-
-*
-  @extend .noselect
-
-button, .button
-  max-width: 10em
-  width: 100%
-  padding: 0.5em
-  border: none
-  font-weight: bold
-  border-radius: 6px
-  user-select: none !important
-
 input
-  @include placeholder($color_white)
+  @include placeholder($white)
 
 *:focus, *:active, *:hover
   outline: none
 
-.noselect
-  @include user-select(none)
-
-fieldset
-  border: none
-  margin-bottom: 1.25em
-
 .vspace
-  display: block
-  height: 5vw
-  max-height: 120px
+  height: 1rem
 
 
-#header
-  white-space: normal
-  .btc-background
-    z-index: 1
-    max-width: 60.0em
-    height: 100%
-    #treetent
-      position: absolute
-      left: 10%
-      bottom: 0
-  #logo
-    z-index: 3
-    padding: 0.938em 0
-    margin-bottom: 40px
+#content
+  text-align: center
 
 #footer
-  padding-top: 0
-  padding-bottom: 0
+  .footer-link
+    &:hover
+      animation: flash 0.4s
   #footer-inner
     height: 100%
     width: 100%
@@ -112,10 +62,6 @@ fieldset
       display: table-cell
       vertical-align: middle
       text-align: center
-  a
-    &:hover
-      color: $color_white
-    color: $color_white
 
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
@@ -126,11 +72,25 @@ fieldset
   &.ng-enter
     animation: fadeIn 0.4s
 
-#wrapper
-  &.bitcamp-view
-    $enterTime: 0.3s
-    $leaveTime: 0.2s
-    &.ng-leave
-      animation: fadeOutUp $leaveTime
-    &.ng-enter
-      animation: fadeInDown $enterTime $leaveTime
+.main-view
+  $enterTime: 0.5s
+
+  &.ng-enter
+    animation: fadeInUp $enterTime
+    transition: $enterTime linear all
+    opacity: 0
+
+  &.ng-enter.ng-enter-active
+    opacity: 1
+
+
+.text-truncate
+  width: 100%
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
+.v-center-view
+  margin-top: 60%
+  &:before
+    margin-top: -55%

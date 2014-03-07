@@ -1,0 +1,27 @@
+#gravity.single-view
+  header#header.text-center
+    a(href="/")
+      h2 @zfogg
+    h3 gravity
+      br
+      small a 2d n-body simulation
+
+  section#demo
+    #canvas-container
+      canvas#canvas(oncontextmenu="return false;")
+      #canvas-controls-container
+        h4.toggle-menu
+          a show
+          |  controls
+        #canvas-controls
+
+  section#readme.container
+    .row
+      .col-xs-12.text-center
+        h3 gravity is interactive! you should try to
+        h4.toggle-menu
+          | click and drag
+          | refresh to randomize
+          | 
+          a(scroll-to="canvas") show
+          |  the canvas controls

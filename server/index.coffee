@@ -9,18 +9,8 @@ exports.app    = app    = express()
 exports.server = server = require("http").createServer app
 exports.io     = io     = require("socket.io").listen server, log: false
 
-exports.db     = db     = require "mysql-promise"
 
-exports.email_server    = require("emailjs").server.connect
-  user     : "bitcamp_bitcamp"
-  password : process.env.EMAIL_PASSWORD
-  host     : "smtp.webfaction.com"
-  ssl      : true
-  timeout  : 5000
-  domain   : "bitca.mp"
-
-
-cacheTime = 86400000
+exports.cacheTime = cacheTime = 86400000
 
 staticDir = (p) ->
   express.static path.join(__dirname, p),
@@ -63,11 +53,6 @@ app.configure ->
 
   app.use app.router
 
-  db.configure
-    host:     'localhost'
-    user:     'bitcamp'
-    password: process.env.DB_PASSWORD
-    database: 'bitcamp'
 
 # Start server
 ready = q.defer()
@@ -77,9 +62,8 @@ server.listen port, ->
   console.log "Listening on port %d in %s mode", port, app.get("env")
   ready.resolve()
 
-
 exports.ready = ready.promise
-
 
 exports.indexRoute = (req, res) ->
   res.sendfile path.resolve "#{__dirname}/../public/index.html"
+
