@@ -45,15 +45,13 @@ html(ng-app="zfoggApp")
 
     script(src="components/flowtype/flowtype.js")
 
-    script(src="components/socket.io-client/dist/socket.io.js")
-
     script(src="components/mousetrap/mousetrap.js")
     <!-- endbuild -->
 
     <!-- build:js(./) scripts/modules.js -->
+    script(src="components/jquery.scrollTo/jquery.scrollTo.js")
+
     script(src="components/angular-animate/angular-animate.js")
-    script(src="components/angular-cookies/angular-cookies.js")
-    script(src="components/angular-resource/angular-resource.js")
     script(src="components/angular-route/angular-route.js")
     <!-- endbuild -->
 
@@ -63,6 +61,8 @@ html(ng-app="zfoggApp")
     script(src="layout/404/404.js")
 
     script(src="main/main.js")
+
+    script(src="bitcoin/bitcoin.js")
 
     script(src="gravity/index.js")
     script(src="gravity/canvas-tools.js")

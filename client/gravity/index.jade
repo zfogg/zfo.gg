@@ -10,14 +10,18 @@
     #canvas-container
       canvas#canvas(oncontextmenu="return false;")
       #canvas-controls-container
-        h4#toggle-menu
-          a Show
-          |  controls.
+        h4.toggle-menu
+          a show
+          |  controls
         #canvas-controls
 
   section#readme.container
     .row
-      .col-xs-12
-        :markdown
-          ### Being one of my first projects,
-          gravity has a special place in my heart
+      .col-xs-12.text-center
+        h3 gravity is interactive! you should try to
+        h4.toggle-menu
+          | click and drag
+          | refresh to randomize
+          | 
+          a(scroll-to="canvas") show
+          |  the canvas controls

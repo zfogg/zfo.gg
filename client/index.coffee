@@ -1,7 +1,5 @@
 angular.module("zfoggApp", [
   "ngAnimate"
-  "ngCookies"
-  "ngResource"
   "ngRoute"
 
   "zfoggApp.gravity"
@@ -19,6 +17,9 @@ angular.module("zfoggApp", [
       .when "/thing/gravity",
         templateUrl: "gravity/index.html"
         controller: "GravityCtrl"
+      .when "/bitcoin",
+        templateUrl: "bitcoin/index.html"
+        controller: "BitcoinCtrl"
       .when "/404",
         templateUrl: "layout/404/index.html"
         controller: "404Ctrl"
@@ -64,4 +65,11 @@ angular.module("zfoggApp", [
       top    = target
       target = target[item] or= {} for item in name.split '.'
       block target, top
+
+  .directive "scrollTo", ->
+    (scope, element, attrs) ->
+      element.bind "click", (event) ->
+        location = attrs.scrollTo
+        console.log location
+        $.scrollTo location, +attrs.scrollSpeed or 300
 

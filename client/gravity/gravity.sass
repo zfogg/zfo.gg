@@ -1,73 +1,77 @@
-#canvas-container
-  position: relative
-  margin: 0 auto
-  display: block
+#gravity
+  a
+    cursor: pointer
 
-  canvas
+  #canvas-container
+    position: relative
     margin: 0 auto
     display: block
 
+    canvas
+      margin: 0 auto
+      display: block
 
-#canvas-controls-container
-  /* Your script can enable this if you need controls. */
-  display: none
-  position: absolute
-  top: 15px
-  left: 20px
-  font-weight: bold
-  font-size: 13.5px
 
-  #toggle-menu
-    cursor: default
-    font-size: 1.61em
-    a
-      cursor: pointer
-
-  #canvas-controls
+  #canvas-controls-container
+    /* Your script can enable this if you need controls. */
     display: none
-    height: 1%
-    overflow-y: hidden
-    max-width: 3*167px
-    background: rgba(40, 40, 40, 0.20)
-    padding: 9px
-    margin-top: 10px
-    border-radius: 4px
-    box-shadow:  3px  3px 6px rgb(50, 50, 90), -3px -3px 6px rgb(90, 180, 140)
+    position: absolute
+    top: 15px
+    left: 20px
+    font-weight: bold
+    font-size: 13.5px
 
-    .canvas-control
-      text-align: center
-      position: relative
-      float: left
-      width: 160px
-      min-height: 90px
+    #toggle-menu
+      cursor: default
+      font-size: 1.61em
+      a
+        cursor: pointer
+
+    #canvas-controls
+      display: none
+      height: 1%
+      overflow-y: hidden
+      max-width: 3*167px
+      background: rgba(40, 40, 40, 0.20)
+      padding: 9px
+      margin-top: 10px
+      border-radius: 4px
+      box-shadow:  3px  3px 6px rgb(50, 50, 90), -3px -3px 6px rgb(90, 180, 140)
+
+      .canvas-control
+        text-align: center
+        position: relative
+        float: left
+        width: 160px
+        min-height: 90px
+
+        input
+          position: absolute
+          bottom: 0
+          left: 50%
+          margin-bottom: 8px
+          width: 130px
+
+        input[type=number], input[type=range]
+          margin-left: -70px
+          //height: 20px
+
+        input[type=button]
+          margin-left: -65px
 
       input
-        position: absolute
-        bottom: 0
-        left: 50%
-        margin-bottom: 8px
-        width: 130px
+        border: solid 1px rgb(133, 177, 222)
+        background-color: rgba(255, 255, 255, 0.75)
+        padding: 4px
+        user-select: text
 
-      input[type=number], input[type=range]
-        margin-left: -70px
-        //height: 20px
+      input[type=number]
+        width: 130px
+        box-shadow: inset 0 -1px 6px #222222
 
       input[type=button]
-        margin-left: -65px
-
-    input
-      border: solid 1px rgb(133, 177, 222)
-      background-color: rgba(255, 255, 255, 0.75)
-      padding: 4px
-      user-select: text
-
-    input[type=number]
-      width: 130px
-      box-shadow: inset 0 -1px 6px #222222
-
-    input[type=button]
-      padding: 6px
-      display: inline-block
-      font-weight: bold
-      border-radius: 5px
-      box-shadow: inset  2px  2px 4px rgb(50, 50, 90), inset -2px -2px 4px rgb(110, 140, 150)
+        padding: 6px
+        display: inline-block
+        font-weight: bold
+        border-radius: 5px
+        box-shadow: inset  2px  2px 4px rgb(50, 50, 90), inset -2px -2px 4px rgb(110, 140, 150)

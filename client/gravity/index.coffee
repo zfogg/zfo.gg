@@ -13,11 +13,12 @@ angular.module("zfoggApp.gravity", [
         G.Gravity canvas
 
         ($ "#canvas-controls-container").show()
-        link = $ "#toggle-menu a"
+        link = $ ".toggle-menu a"
         link.click (click) ->
           if click.which is 1
             ($ "#canvas-controls").slideToggle "slow"
-            if link.text() is "Show"
-            then link.text "Hide"
-            else link.text "Show"
+            if link[0]?
+              if link.eq(0).text() is "show"
+              then link.text "hide"
+              else link.text "show"
 
