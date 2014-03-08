@@ -32,3 +32,7 @@ The website hosted at http://bitca.mp/.
 4. Probably do step #3 a few more times.
 5. Send a Pull Request.
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/zfogg/zfo.gg/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
