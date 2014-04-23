@@ -70,6 +70,5 @@ angular.module("zfoggApp", [
     (scope, element, attrs) ->
       element.bind "click", (event) ->
         location = attrs.scrollTo
-        console.log location
         $.scrollTo location, +attrs.scrollSpeed or 300
 

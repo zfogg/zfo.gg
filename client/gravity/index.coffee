@@ -6,8 +6,8 @@ angular.module("zfoggApp.gravity", [
     namespace "Gravity", (G, top) ->
       canvas        = ($ "#canvas")[0]
 
-      canvas.width  = Math.min 1920, ($ "#gravity").width()
-      canvas.height = canvas.width * (9/16)
+      canvas.width  = Math.min 1920, ($ "#canvas-container").width()
+      canvas.height = canvas.width * 1 #(9/16)
 
       if canvas.getContext
         G.Gravity canvas

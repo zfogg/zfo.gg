@@ -15,7 +15,7 @@ angular.module("zfoggApp.gravity")
         defaultCursorFriction = (C$.Math.randomBetween 1, 4)
         defaultCursorMass     = 1750
         defaultCursorForce    = 0.65
-        defaultParticlesN     = 15
+        defaultParticlesN     = 13
 
         G.direction = direction = (p1, p2) ->
           vectors.get p1[0] - p2[0], p1[1] - p2[1]
@@ -91,7 +91,7 @@ angular.module("zfoggApp.gravity")
 
           constructSquares gridSize, gridSize, size
 
-        newSquareTree = (ss, recur_lim=10) ->
+        newSquareTree = (ss, recur_lim=7) ->
           s = canvas.width/2
           new G.SquareTree (new G.AABB [s, s], s), ss, recur_lim
 

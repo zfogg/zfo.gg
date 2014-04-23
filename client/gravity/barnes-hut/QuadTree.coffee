@@ -40,21 +40,21 @@ angular.module("zfoggApp.gravity")
           unless @boundary.containsPoint pp.position
             return false
 
-            @update pp
+          @update pp
 
-            if @pointp == null and @external
-              @pointp = pp
-              return true
+          if @pointp == null and @external
+            @pointp = pp
+            return true
 
-            if @_nw == null
-              @subdivide()
-            qs = @getQuadrents()
+          if @_nw == null
+            @subdivide()
+          qs = @getQuadrents()
 
-            if @external and true in q.insert @pointp for q in qs
-              @pointp = null
-              @external = false
+          if @external and true in q.insert @pointp for q in qs
+            @pointp = null
+            @external = false
 
-            return true in (q.insert pp for q in qs)
+          return true in (q.insert pp for q in qs)
 
         #:: pointp -> void
         #Called on pointps that are at or in this tree.
