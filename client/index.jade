@@ -30,7 +30,7 @@ html(ng-app="zfoggApp")
     link(rel="stylesheet" href="gravity/gravity.css")
     <!-- endbuild -->
 
-  body(ng-controller="BodyCtrl", ng-style="BodyStyle")
+  body(ng-controller="BodyCtrl", ng-style="bodyStyle")
 
     #buffer(ng-if="animReady")
       #wrapper
@@ -38,7 +38,7 @@ html(ng-app="zfoggApp")
 
       footer#footer.wrapper.ng-cloak( ng-include="" src=" 'layout/footer.html' ")
 
-    <!-- build:js(./) scripts/plugins.js -->
+    <!-- build:js({./,.tmp}) scripts/plugins.js -->
     script(src="components/jquery/dist/jquery.js")
 
     script(src="components/angular/angular.js")
@@ -46,6 +46,8 @@ html(ng-app="zfoggApp")
     script(src="components/flowtype/flowtype.js")
 
     script(src="components/mousetrap/mousetrap.js")
+
+    script(src="layout/color-0.5.0.min.js")
     <!-- endbuild -->
 
     <!-- build:js(./) scripts/modules.js -->

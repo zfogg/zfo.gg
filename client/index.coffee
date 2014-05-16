@@ -37,12 +37,28 @@ angular.module("zfoggApp", [
     console.log "Looking for this? http://github.com/zfogg/zfo.gg"
 
 
-  .controller "BodyCtrl", ($http, $scope, $rootScope, $window, $location, $timeout) ->
+  .controller "BodyCtrl", ($http, $scope, $rootScope, $window, $location, $timeout, $interval) ->
+
+    window.Color = net.brehaut.Color
 
     $rootScope.isLoaded  = true
     $rootScope.viewReady = true
 
     $scope.animReady = false
+
+    $scope.bodyStyle = {}
+
+    bg = $('body').css 'background-color'
+
+    $c = window.C$
+    $interval (->
+      $scope.bodyStyle['background-color'] = Color(bg)
+        .shiftHue(           $c.Math.randomBetween -180, 180 )
+        .lightenByAmount(    $c.Math.randomBetween -.035, .035 )
+        .saturateByAmount(   $c.Math.randomBetween -.04, .04 )
+        .toString()
+    ), 1000
+
 
     $http.get("/api/zfogg")
       .success ->
