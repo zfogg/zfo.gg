@@ -79,7 +79,7 @@ module.exports = (grunt) ->
 
       css:
         files: ["<%= zfogg.app %>/**/*.css"]
-        tasks: [ "newer:copy:styles_tmp", "autoprefixer" ]
+        tasks: [ "newer:copy:tmp", "autoprefixer" ]
 
       gruntfile: files: ["Gruntfile.{js,coffee}"]
 
@@ -193,10 +193,13 @@ module.exports = (grunt) ->
 
 
     copy:
-      styles_tmp:
+      tmp:
         expand: true
         cwd:  "<%= zfogg.app %>"
-        src:  "**/*.css"
+        src:  [
+          "**/*.css"
+          "**/*.js"
+        ]
         dest: "<%= zfogg.tmp %>"
       components_dist:
         expand: true
@@ -224,13 +227,13 @@ module.exports = (grunt) ->
       dist1_dev: [
         "compass:dev"
         "coffee:dev"
-        "copy:styles_tmp"
+        "copy:tmp"
       ]
       dist1: [
         "jade"
         "compass:prod"
         "coffee:dist"
-        "copy:styles_tmp"
+        "copy:tmp"
       ]
       dist2: [
         "ngmin"
