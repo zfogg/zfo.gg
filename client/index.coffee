@@ -54,10 +54,10 @@ angular.module("zfoggApp", [
     $interval (->
       $scope.bodyStyle['background-color'] = Color(bg)
         .shiftHue(           $c.Math.randomBetween -180, 180 )
-        .lightenByAmount(    $c.Math.randomBetween -.035, .035 )
-        .saturateByAmount(   $c.Math.randomBetween -.04, .04 )
+        .lightenByAmount(    $c.Math.randomBetween -.025, .025 )
+        .saturateByAmount(   $c.Math.randomBetween -.035, .035 )
         .toString()
-    ), 1000
+    ), 2000
 
 
     $http.get("/api/zfogg")
