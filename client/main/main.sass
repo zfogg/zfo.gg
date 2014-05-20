@@ -2,34 +2,33 @@
 @import '../layout/variables'
 
 
-#main
-  #content
-    &:before
-      display: block
-      content: ""
-      height: 18.5vw
-    &, p, .p, .thing-inner
-      transition: all 0.35s ease-out
+#content
+  text-align: center
+  p, .p
+    transition: color 0.35s ease-out
+  .things-wrapper
+    display: flex
+    flex-flow: row wrap
+    justify-content: center
+    .thing-row
+      flex: 5 100%
+      padding: 1em 0
     .thing
-      display: inline-block
+      flex: 1
       position: relative
-      width: 100%
-      max-width: 15rem
-      vertical-align: middle
-
-      height: 5rem
-      p
-        line-height: 5rem
-
+      min-width: 10em
+      max-width: 15em
+      min-height: 3em
       .thing-inner
+        z-index: -1
         position: absolute
         top: 0
         left: 0
         width: 100%
         height: 100%
-      &:hover
-        .thing-inner
-          transform: translateY(17px) scale(1.4) rotateX(360deg)
+        transition: transform 0.25s ease-out
+      &:hover .thing-inner
+        transform: translateY(0.85em) scale(1.35)
 
 @keyframes moveUp
   0%

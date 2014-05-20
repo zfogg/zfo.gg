@@ -2,7 +2,7 @@ angular.module("zfoggApp.gravity", [
 
 ])
 
-  .controller "GravityCtrl", (namespace) ->
+  .controller "GravityCtrl", (namespace, $timeout) ->
     namespace "Gravity", (G, top) ->
       canvas        = ($ "#canvas")[0]
 
@@ -10,7 +10,7 @@ angular.module("zfoggApp.gravity", [
       canvas.height = canvas.width * 1 #(9/16)
 
       if canvas.getContext
-        G.Gravity canvas
+        $timeout (-> G.Gravity canvas), 1000
 
         ($ "#canvas-controls-container").show()
         link = $ ".toggle-menu a"
