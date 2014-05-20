@@ -17,19 +17,25 @@ html, body, #buffer
 body
   z-index: -99
   overflow-x: hidden
-  transition: background-color 1s ease
+  overflow-y: scroll
+  transition: background-color 1.4s ease
 
 #wrapper
   white-space: pre-line
+  margin-top: -16px
+
+  margin-bottom: -1*$footer-height
+  padding-bottom: $footer-height
+  width: 100%
   min-height: 100%
 
-#wrapper
-  margin-bottom: -1*$footer-height
-  width: 100%
-
-#wrapper:after
-  content: ""
-  display: block
+  display: flex
+  flex-direction: column
+  justify-content: center
+  #header, #content
+    flex: 1
+  #header
+    padding-top: $footer-height/2 - 10px
 
 #footer, #wrapper:after
   height: $footer-height
@@ -46,9 +52,6 @@ input
 .vspace
   height: 1rem
 
-
-#content
-  text-align: center
 
 #footer
   .footer-link
@@ -110,4 +113,4 @@ body
     top:    -13px
   &:after
     box-shadow: 0px -10px 17px rgba(0,0,0,0.7)
-    bottom: -17px
+    bottom: -20px
