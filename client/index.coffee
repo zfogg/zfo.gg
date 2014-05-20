@@ -30,7 +30,7 @@ angular.module("zfoggApp", [
       minimum   : 320
       maximum   : 1200
       minFont   : 17
-      maxFont   : 22
+      maxFont   : 32
       fontRatio : 40
       lineRatio : 1.45
 
