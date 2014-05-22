@@ -3,4 +3,4 @@
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-ga('create', 'UA-48305612-1', 'zachfogg.com');
+ga('create', 'UA-51238372-1', 'zfo.gg');
