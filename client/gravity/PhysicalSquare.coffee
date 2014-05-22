@@ -1,4 +1,4 @@
-angular.module("zfoggApp.gravity")
+angular.module("zfogg.gravity")
 
 .factory "PhysicalSquare", (PhysicalBody, canvas$, G) ->
   class PhysicalSquare extends PhysicalBody

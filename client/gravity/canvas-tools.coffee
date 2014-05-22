@@ -1,6 +1,4 @@
-# A collection of tools to assist in canvas development.
-
-angular.module("zfoggApp.gravity")
+angular.module("zfogg.gravity")
 
 .factory "C$", ->
   C$ = {}

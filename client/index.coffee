@@ -1,8 +1,8 @@
-angular.module("zfoggApp", [
+angular.module("zfogg", [
   "ngAnimate"
   "ngRoute"
 
-  "zfoggApp.gravity"
+  "zfogg.gravity"
 ])
 
 

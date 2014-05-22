@@ -1,4 +1,4 @@
-angular.module("zfoggApp.gravity")
+angular.module("zfogg.gravity")
 
 
 .factory "vectors", (C$) ->
@@ -22,7 +22,6 @@ angular.module("zfoggApp.gravity")
   C$.Math.hypotenuseLookup 3, 0,
     ((Math.pow canvas$().width, 2) + (Math.pow canvas$().height, 2)) / Math.pow 10, 5
     Float64Array
-
 
 
 .factory "G", ->
