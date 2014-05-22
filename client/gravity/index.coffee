@@ -9,7 +9,7 @@ angular.module("zfogg.gravity", [
 
 .controller "GravityCtrl", ($scope, $rootScope, $timeout, gravity, canvas$) ->
   $scope.$on "$viewContentLoaded", ->
-    canvas = canvas()
+    canvas = canvas$()
     canvas.width  = Math.min 1920, ($ "#canvas-container").width()
     canvas.height = canvas.width * 1 #(9/16)
 
