@@ -1,4 +1,4 @@
-angular.module("zfoggApp.gravity")
+angular.module("zfogg.gravity")
 
 .factory "PhysicalCursor", (C$, PhysicalBody, vectors, canvas$, distance, G) ->
   class PhysicalCursor extends PhysicalBody

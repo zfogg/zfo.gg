@@ -1,4 +1,4 @@
-angular.module("zfoggApp.gravity")
+angular.module("zfogg.gravity")
 
 .factory "PhysicalBody", (vectors) ->
   class PhysicalBody

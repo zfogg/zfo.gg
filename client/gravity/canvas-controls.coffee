@@ -1,7 +1,4 @@
-#=require "canvas-tools"
-#=require "../libs/html5slider"
-
-angular.module("zfoggApp.gravity")
+angular.module("zfogg.gravity")
 
 .factory "CanvasControls", (C$) ->
   class CanvasControls

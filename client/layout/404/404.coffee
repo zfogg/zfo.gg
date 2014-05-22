@@ -1,4 +1,4 @@
-angular.module('zfoggApp')
+angular.module('zfogg')
 
   .controller '404Ctrl', ($scope, $http) ->
     console.log "404 :("

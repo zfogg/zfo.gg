@@ -1,9 +1,11 @@
-angular.module("zfoggApp.gravity", [
+angular.module("zfogg.gravity", [
 
 ])
 
+
 .factory "canvas$", ->
   -> ($ "#canvas")[0]
+
 
 .controller "GravityCtrl", ($scope, $rootScope, $timeout, gravity, canvas$) ->
   $scope.$on "$viewContentLoaded", ->
