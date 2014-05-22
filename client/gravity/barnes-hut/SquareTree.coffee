@@ -1,4 +1,4 @@
-angular.module("zfoggApp.gravity")
+angular.module("zfogg.gravity")
 
 .factory "SquareTree", (C$, QuadTree, distance, vectors, G) ->
   class SquareTree extends QuadTree

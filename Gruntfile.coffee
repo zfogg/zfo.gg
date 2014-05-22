@@ -253,7 +253,7 @@ module.exports = (grunt) ->
 
 
     ngtemplates:
-      zfoggApp:
+      zfogg:
         cwd:  "<%= zfogg.tmp %>"
         src:  [ "**/*.html", "!index.html" ]
         dest: "<%= zfogg.dist %>/scripts/templates.js"

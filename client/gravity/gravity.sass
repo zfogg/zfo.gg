@@ -1,4 +1,9 @@
+#content
+  width: 100%
 #gravity
+  position: relative
+  width: 100%
+
   a
     cursor: pointer
 
@@ -7,10 +12,12 @@
     margin: 0 auto
     display: block
     max-width: 960px
+    width: 100%
 
     canvas
       margin: 0 auto
       display: block
+      width: 100%
 
 
   #canvas-controls-container
@@ -76,3 +83,17 @@
         font-weight: bold
         border-radius: 5px
         box-shadow: inset  2px  2px 4px rgb(50, 50, 90), inset -2px -2px 4px rgb(110, 140, 150)
+
+  #gravity-readme
+    position: absolute
+    top: 0
+    left: 0
+    z-index: -1
+    width: 100%
+    height: 100%
+    #gravity-readme-inner
+      height: 100%
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center

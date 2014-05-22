@@ -1,6 +1,4 @@
-#= require "AABB"
-
-angular.module("zfoggApp.gravity")
+angular.module("zfogg.gravity")
 
 .factory "QuadTree", ->
   class QuadTree

@@ -32,10 +32,20 @@ body
   display: flex
   flex-direction: column
   justify-content: center
-  #header, #content
+  align-items: center
+  #content
     flex: 1
+    display: flex
+    justify-content: center
+    align-items: center
+  #content
+    min-height: $footer-height
   #header
-    padding-top: $footer-height/2 - 10px
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    height: $footer-height*1.5
 
 #footer, #wrapper:after
   height: $footer-height
@@ -54,18 +64,25 @@ input
 
 
 #footer
+  font-size: 1.4em
+  display: flex
+  flex-direction: row
+  justify-content: center
+  align-items: center
   .footer-link
+    flex: 1
+    padding: 0.7em
+    color: $gray-dark
+    transition: transform 0.14s
     &:hover
-      animation: flash 0.4s
-  #footer-inner
-    height: 100%
-    width: 100%
-    display: table
-    #footer-content
-      white-space: pre-line
-      display: table-cell
-      vertical-align: middle
-      text-align: center
+      transform: translateY(-10px)
+    .fa
+      animation: popUp 6s infinite ease-out
+  @for $i from 1 through 3
+    a:nth-child(#{4-$i}) .fa
+      animation-delay: #{0.14*$i}s
+    a:nth-child(#{3+$i}) .fa
+      animation-delay: #{0.14*$i}s
 
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
@@ -74,7 +91,7 @@ input
 
 #buffer
   &.ng-enter
-    animation: fadeIn 0.4s
+    animation: fadeIn 2.4s
 
 .main-view
   $enterTime: 0.5s
@@ -89,9 +106,7 @@ input
 
 
 .text-truncate
-  width: 100%
   white-space: nowrap
-  overflow: hidden
   text-overflow: ellipsis
 
 .v-center-view
@@ -114,3 +129,14 @@ body
   &:after
     box-shadow: 0px -10px 17px rgba(0,0,0,0.7)
     bottom: -20px
+
+
+@keyframes popUp
+  10%
+    transform: translateY(0)
+  12.5%
+    transform: translateY(-0.3em)
+  15%
+    transform: translateY(-0.25em)
+  20%
+    transform: translateY(0)
