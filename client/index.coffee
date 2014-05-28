@@ -28,10 +28,10 @@ angular.module("zfogg", [
 
   $("body").flowtype
     minimum   : 320
-    maximum   : 1200
-    minFont   : 18
+    maximum   : 960
+    minFont   : 20
     maxFont   : 32
-    fontRatio : 42
+    fontRatio : 32
     lineRatio : 1.45
 
   console.log "Looking for this? http://github.com/zfogg/zfo.gg"
