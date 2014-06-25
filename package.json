@@ -6,10 +6,11 @@
   },
   "repository": "http://github.com/zfogg/zfo.gg",
   "dependencies": {
+    "coffee-script": "^1.7.1",
     "express": "~3.4.3",
     "jade": "~1.1.5",
-    "socket.io": "~0.9.16",
     "q": "~0.9.7",
+    "socket.io": "^1.0.6",
     "supermarked": "~1.1.0"
   },
   "devDependencies": {
@@ -37,6 +38,6 @@
     "grunt-banner": "~0.2.0"
   },
   "scripts": {
-      "postinstall": "bower install"
+    "postinstall": "bower install"
   }
 }
