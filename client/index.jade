@@ -78,3 +78,13 @@ html(ng-app="zfogg")
 
     <!-- Google Analytics: analytics.js -->
     <!-- inject -->
+
+    script
+      :coffee
+        window._yoData =
+          username: "ZFODOTGG"
+          trigger: "he's feeling saucy"
+        s = document.createElement("script")
+        s.type = "text/javascript"
+        s.src = "//yoapp.s3.amazonaws.com/js/yo-button.js"
+        (document.head or document.getElementsByTagName("head")[0]).appendChild s
