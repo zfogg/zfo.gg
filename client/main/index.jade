@@ -1,9 +1,21 @@
+
 header#header.text-center
   a(href="/")
     .h1 zfogg
 
+
 section#content.text-center
+
   .things-wrapper
+
+    #yo
+      #yo1(ng-if="yos.length && yo1")
+        p Yo from {{yos[0]}}
+      #yo2(ng-if="yos.length && !yo1")
+        p Yo from {{yos[0]}}
+      #yo3(ng-if="!yos.length")
+        p Send a Yo to zfoDOTgg!
+
     .thing-row
       h3 I make things, like
     a(href="//github.com/zfogg/ascii-chat" target="_blank")

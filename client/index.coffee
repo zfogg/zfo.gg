@@ -3,6 +3,8 @@ angular.module("zfogg", [
   "ngRoute"
 
   "zfogg.gravity"
+
+  "btford.socket-io"
 ])
 
 
@@ -58,7 +60,6 @@ angular.module("zfogg", [
       .toString()
   ), 2000
 
-
   $http.get("/api/zfogg")
     .success ->
       $scope.animReady = true
@@ -74,9 +75,13 @@ angular.module("zfogg", [
     $window.ga? "set", "page", $location.path()
     $window.ga? "send", "pageview"
 
+
 .directive "scrollTo", ->
   (scope, element, attrs) ->
     element.bind "click", (event) ->
       location = attrs.scrollTo
       $.scrollTo location, +attrs.scrollSpeed or 300
 
+
+.factory "socket", (socketFactory) ->
+  socketFactory()

@@ -6,6 +6,7 @@ ready.then ->
 
   # API Routes
   app.get  "/api/zfogg", main.zfogg
+  app.get  "/api/yo",    main.yo
 
   # Angular Routes
   app.get "/",              indexRoute

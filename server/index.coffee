@@ -7,7 +7,7 @@ q       = require "q"
 
 exports.app    = app    = express()
 exports.server = server = require("http").createServer app
-exports.io     = io     = require("socket.io").listen server, log: false
+exports.io     = io     = require("socket.io").listen server, log: true
 
 
 exports.cacheTime = cacheTime = 86400000
