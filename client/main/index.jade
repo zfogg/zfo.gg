@@ -1,9 +1,13 @@
+
 header#header.text-center
   a(href="/")
     .h1 zfogg
 
+
 section#content.text-center
+
   .things-wrapper
+
     .thing-row
       h3 I make things, like
     a(href="//github.com/zfogg/ascii-chat" target="_blank")
@@ -26,3 +30,19 @@ section#content.text-center
       .thing
         .thing-inner
           p bopit.io
+
+    #yo
+      #yo1(ng-if="yos.length && yo1")
+        p
+          span.yo-text Yo
+          | from {{yos[0]}}
+      #yo2(ng-if="yos.length && !yo1")
+        p
+          span.yo-text Yo
+          | from {{yos[0]}}
+      #yo3(ng-if="!yos.length")
+        .p
+          | Send a
+          #yo-button
+          | to zfoDOTgg!
+
