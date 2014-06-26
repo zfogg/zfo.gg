@@ -83,5 +83,8 @@ angular.module("zfogg", [
       $.scrollTo location, +attrs.scrollSpeed or 300
 
 
-.factory "socket", (socketFactory) ->
-  socketFactory()
+.factory "socket", (socketFactory, $location) ->
+  options = {}
+  unless $location.host() is "localhost"
+    options.address = "http://50.22.11.232:13891/"
+  socketFactory options
