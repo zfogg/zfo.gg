@@ -48,7 +48,8 @@ angular.module("zfogg", [
 
   $scope.animReady = false
 
-  $scope.bodyStyle = {}
+  $scope.bodyStyle   = {}
+  $rootScope.bgStyle = {}
 
   bg = $('body').css 'background-color'
 
