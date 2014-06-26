@@ -1,5 +1,5 @@
 angular.module('zfogg')
-  .controller 'MainCtrl', ($scope, socket, $interval) ->
+  .controller 'MainCtrl', ($scope, socket, $interval, $timeout, $rootScope) ->
 
     $scope.$on "$viewContentLoaded", ->
       window._yoData =
@@ -14,8 +14,9 @@ angular.module('zfogg')
     $scope.yo1 = true
 
     yoInterval = null
-    $scope.$on "$destroy", ->
+    cancelYo = ->
       yoInterval = not $interval.cancel yoInterval
+    $scope.$on "$destroy", cancelYo
 
     playSound = (username) ->
       if username is "ZFOGG"
@@ -27,21 +28,31 @@ angular.module('zfogg')
 
     yoSound   = sound "yo"
     yoyoSound = sound "yoyo"
+    yoyoSound.setSpeed 2
 
-    i = 0
+    $rootScope.bgStyle["opacity"] = "0.4"
+    pulsePurple = ->
+      $rootScope.bgStyle["background-color"] = "#c6a0d5"
+      $timeout ->
+        $rootScope.bgStyle["background-color"] = ""
+      , 450
+    $scope.$on "yo", pulsePurple
+
+    doYo = ->
+      playSound $scope.yos[0]
+      $scope.$emit "yo"
+
     yo = (y) ->
-      console.log "yo" + i++
       $scope.yos.push y
       unless yoInterval
-        playSound $scope.yos[0]
+        doYo()
         yoInterval = $interval ->
           $scope.yos.shift()
           $scope.yo1 = not $scope.yo1
           if $scope.yos.length
-            playSound $scope.yos[0]
-          else
-            yoInterval = not $interval.cancel yoInterval
-        , 900
+          then doYo()
+          else cancelYo()
+        , 800
 
     socket.on "yo", yo
     $scope.$on "$destroy", ->
