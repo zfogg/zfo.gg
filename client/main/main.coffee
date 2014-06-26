@@ -14,18 +14,24 @@ angular.module('zfogg')
     $scope.yo1 = true
 
     yoInterval = null
-
-    yoSound = new buzz.sound "/audio/yo", formats: ["ogg", "mp3"]
-
-    yoyoSound = new buzz.sound "/audio/yoyo", formats: ["ogg", "mp3"]
+    $scope.$on "$destroy", ->
+      yoInterval = not $interval.cancel yoInterval
 
     playSound = (username) ->
       if username is "ZFOGG"
       then yoyoSound.play()
       else yoSound.play()
 
-    socket.on "yo", (yo) ->
-      $scope.yos.push(yo)
+    sound = (s) ->
+      new buzz.sound "/audio/#{s}", formats: ["ogg", "mp3"]
+
+    yoSound   = sound "yo"
+    yoyoSound = sound "yoyo"
+
+    i = 0
+    yo = (y) ->
+      console.log "yo" + i++
+      $scope.yos.push y
       unless yoInterval
         playSound $scope.yos[0]
         yoInterval = $interval ->
@@ -35,4 +41,9 @@ angular.module('zfogg')
             playSound $scope.yos[0]
           else
             yoInterval = not $interval.cancel yoInterval
-        , 600
+        , 900
+
+    socket.on "yo", yo
+    $scope.$on "$destroy", ->
+      socket.removeListener "yo", yo
+

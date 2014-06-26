@@ -36,12 +36,9 @@ section#content.text-center
         | Send a
         #yo-button
         | to zfoDOTgg!
-      #yo1(ng-if="yos.length && yo1")
+      .yo(ng-repeat="yo in yos track by $index")
         p
+          | {{yos.length}} : 
           span.yo-text Yo 
-          | from {{yos[0]}}
-      #yo2(ng-if="yos.length && !yo1")
-        p
-          span.yo-text Yo 
-          | from {{yos[0]}}
+          | from {{yo}}
 
