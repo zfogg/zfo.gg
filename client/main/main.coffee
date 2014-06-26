@@ -35,4 +35,4 @@ angular.module('zfogg')
             playSound $scope.yos[0]
           else
             yoInterval = not $interval.cancel yoInterval
-        , 2200
+        , 600
