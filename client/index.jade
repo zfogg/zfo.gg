@@ -28,6 +28,7 @@ html(ng-app="zfogg")
     <!-- endbuild -->
 
   body(ng-controller="BodyCtrl", ng-style="bodyStyle")
+    #bg(ng-style="bgStyle")
 
     #buffer(ng-if="animReady")
       #wrapper.main-view(ng-view)
