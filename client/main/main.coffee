@@ -15,17 +15,17 @@ angular.module('zfogg')
 
     yoInterval = null
 
-    yoSound = -> new buzz.sound "/audio/yo", formats: ["ogg", "mp3"]
+    yoSound = new buzz.sound "/audio/yo", formats: ["ogg", "mp3"]
 
     socket.on "yo", (yo) ->
       $scope.yos.push(yo)
       unless yoInterval
-        yoSound().play()
+        yoSound.play()
         yoInterval = $interval ->
           $scope.yos.shift()
           $scope.yo1 = not $scope.yo1
           if $scope.yos.length
-            yoSound().play()
+            yoSound.play()
           else
             yoInterval = not $interval.cancel yoInterval
         , 2200
