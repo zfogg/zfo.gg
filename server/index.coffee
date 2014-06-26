@@ -7,7 +7,6 @@ q       = require "q"
 
 exports.app    = app    = express()
 exports.server = server = require("http").createServer app
-exports.io     = io     = require("socket.io").listen server, log: true
 
 
 exports.cacheTime = cacheTime = 86400000
@@ -19,6 +18,7 @@ staticDir = (p) ->
 
 
 app.configure "development", ->
+  exports.io     = io     = require("socket.io").listen server
   app.use require("connect-livereload")()
   app.use express.errorHandler()
   app.use express.logger "dev"
@@ -29,6 +29,7 @@ app.configure "development", ->
 
 
 app.configure "production", ->
+  exports.io     = io     = require("socket.io")(13891)
   app.use (req, res, next) ->
     res.setHeader "Cache-Control", "public, max-age=#{cacheTime}"
     res.setHeader "Expires"      , cacheTime

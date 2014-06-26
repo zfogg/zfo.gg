@@ -12,7 +12,7 @@
     "mousetrap": "~1.4.6",
     "jquery.scrollTo": "~1.4.11",
     "fontawesome": "~4.1.0",
-    "angular-socket-io": "git@github.com:zfogg/angular-socket-io.git",
+    "angular-socket-io": "git@github.com:zfogg/angular-socket-io.git#master",
     "socket.io-client": "~1.0.6"
   }
 }
