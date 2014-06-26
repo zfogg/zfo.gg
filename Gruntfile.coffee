@@ -213,6 +213,7 @@ module.exports = (grunt) ->
           "*.{ico,txt}"
           "images/**/*"
           "fonts/**/*"
+          "audio/**/*"
         ]
 
 
