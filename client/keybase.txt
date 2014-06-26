@@ -1,0 +1,66 @@
+==================================================================
+https://keybase.io/zfogg
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://zfo.gg
+  * I am zfogg (https://keybase.io/zfogg) on keybase.
+  * I have a public key with fingerprint 20A5 A16B AFEA E60B C906  2612 EC96 825B 93D7 D925
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "20a5a16bafeae60bc9062612ec96825b93d7d925",
+            "host": "keybase.io",
+            "key_id": "ec96825b93d7d925",
+            "uid": "54c0526dcaef23d774a0450c164c5c00",
+            "username": "zfogg"
+        },
+        "service": {
+            "hostname": "zfo.gg",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1403780218,
+    "expire_in": 157680000,
+    "prev": "04cb092e4343bf2895bb04a0e85d38a38ef4fb4ff01b90430f598e76d71ed96d",
+    "seqno": 3,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v0.1.22
+Comment: https://keybase.io/crypto
+
+yMHgAnicbVFbSBRdHN813VISksJ8yH049tBllTPXnVnMy1Kw2Z1KKbV1LmfW2dad
+dXZW2xULiZSoDz6JogfDyAcL0wcljAo1DRSkUDBLDYn6+LIvEMWevKyekeJ76bwc
+zu96/vzfpG6xpFhPKN5W29T1CuvowFzEcrZjNVYHRE2OAlcduIw2L0UN+pAe0tWg
+AVyAhAIjEKwoKEhALBQlHrIkS5BI4lmOZESekp0yTzLAASq1sOnAMaIQRjmqhjH8
+8KoyRv+gj2wSDC1BhmRlSUAKiUknLUCagRLB0hIjQWgKw0gPClUIq2OK5vOBegfA
+UI0qYahus/d/OgfzDhDSNUOTtADGKg0j5DItRjRkamqR6P3l9opqUMbjYkMN0sOq
+FgQuAislQzXjCBpSTg6SBOcA6EpI1ZFXNRWMk+UgPmYNqsGRkJZEyJOIpmhKVEiO
+Z0QR4jkQx8gUJ1AcUmhFpBUFEiIPaQoqDM8hJys7CSTzrIz7w6g6qAEXhb8p+HBk
+WPUFBSOiI1A/OFCWaLGmWGxJCebCLCnJO36vMSF5m+V1et/7rOSJ2UfZ/Q8P5i4/
+r7749821knPHlru/VeXvnBp/6S4fdZPF7V09zNx6esP+ZvtM0WTH0NbxazPf1+42
+tFa1kkdPt0/X5yVtj07+4099V9zZ+8QzWFF+NbB3ZMkViN4ezW8xCtCPxv6JvtjH
+HPlM29JKYMFT6z/cc+hf5B5TI66hV/xT64MvZeG0ycr56Xm2LDPuH+Hf3v8vDscW
+c/WutNiR0MLs5+aeA+viPY+tNK+pe/eaxz58Y7W6IJ5xspBbLLzF+OeVKErMtLiL
+XtjbbPELX3tbOsHg6r49dz5k/FX6s3nifNazQHbJ8UufGnc97hyOn1ppYim7dwMo
+bxQY
+=4I4U
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/zfogg
+
+==================================================================
+
