@@ -32,17 +32,16 @@ section#content.text-center
           p bopit.io
 
     #yo
+      .p
+        | Send a
+        #yo-button
+        | to zfoDOTgg!
       #yo1(ng-if="yos.length && yo1")
         p
-          span.yo-text Yo
+          span.yo-text Yo 
           | from {{yos[0]}}
       #yo2(ng-if="yos.length && !yo1")
         p
-          span.yo-text Yo
+          span.yo-text Yo 
           | from {{yos[0]}}
-      #yo3(ng-if="!yos.length")
-        .p
-          | Send a
-          #yo-button
-          | to zfoDOTgg!
 
