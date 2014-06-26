@@ -19,9 +19,8 @@ angular.module('zfogg')
 
     socket.on "yo", (yo) ->
       $scope.yos.push(yo)
-      if yoInterval
+      unless yoInterval
         yoSound().play()
-      else
         yoInterval = $interval ->
           $scope.yos.shift()
           $scope.yo1 = not $scope.yo1
