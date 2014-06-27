@@ -13,12 +13,12 @@
 
 html, body, #buffer
   height: 100%
+  overflow: hidden
 
 body
   z-index: -99
-  overflow-x: hidden
-  overflow-y: scroll
   transition: background-color 1.4s ease
+  overflow: hidden
 
   position: relative
   #bg
@@ -30,9 +30,14 @@ body
     height: 101.9%
     transition: all 0.3s ease-out
 
+  #buffer
+    overflow-x: hidden
+    overflow-y: scroll
+
 #wrapper
   white-space: pre-line
   margin-top: -16px
+  overflow-x: hidden
 
   margin-bottom: -1*$footer-height
   padding-bottom: $footer-height
