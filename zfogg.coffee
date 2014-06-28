@@ -7,6 +7,7 @@ ready.then ->
   # API Routes
   app.get  "/api/zfogg", main.zfogg
   app.get  "/api/yo",    main.yo
+  app.get  "/api/yo/:yoAppAccount",  main.yoFirebase
 
   # Angular Routes
   app.get "/",              indexRoute

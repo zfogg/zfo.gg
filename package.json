@@ -8,6 +8,7 @@
   "dependencies": {
     "coffee-script": "^1.7.1",
     "express": "~3.4.3",
+    "firebase": "^1.0.17",
     "jade": "~1.1.5",
     "q": "~0.9.7",
     "socket.io": "^1.0.6",
