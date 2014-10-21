@@ -58,14 +58,17 @@ app.configure ->
 # Start server
 ready = q.defer()
 
-port = process.env.PORT or 8000
-server.listen port, ->
-  console.log "Listening on port %d in %s mode", port, app.get("env")
-  ready.resolve()
+
+#port = process.env.PORT or 8000
+#server.listen "localhost:#{port}", ->
+#  console.log "Listening on port %d in %s mode", port, app.get("env")
+#  ready.resolve()
+ready.resolve()
+
 
 exports.ready = ready.promise
 
+
 exports.indexRoute = (req, res) ->
   res.sendfile path.resolve "#{__dirname}/../public/index.html"
-
 

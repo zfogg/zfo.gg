@@ -17,19 +17,18 @@ module.exports = (grunt) ->
 
     express:
       options:
-        cmd: "/usr/bin/coffee"
+        hostname: 'localhost'
+        port: process.env.PORT or 8000
+        server: "zfogg.coffee"
+        cmd: "node_modules/.bin/coffee"
 
       dev:
         options:
-          script: "zfogg.coffee"
           node_env: "development"
-          port: process.env.PORT or 8000
 
       prod:
         options:
-          script: "zfogg.coffee"
           node_env: "production"
-          port: process.env.PORT or 80
 
 
     prettify:

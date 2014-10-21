@@ -51,16 +51,6 @@ angular.module("zfogg", [
   $scope.bodyStyle   = {}
   $rootScope.bgStyle = {}
 
-  bg = $('body').css 'background-color'
-
-  $interval (->
-    $scope.bodyStyle['background-color'] = Color(bg)
-      .shiftHue(           C$.Math.randomBetween -180, 180 )
-      .lightenByAmount(    C$.Math.randomBetween -.025, .025 )
-      .saturateByAmount(   C$.Math.randomBetween -.035, .035 )
-      .toString()
-  ), 2000
-
   $http.get("/api/zfogg")
     .success ->
       $scope.animReady = true

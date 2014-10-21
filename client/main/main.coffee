@@ -1,5 +1,5 @@
 angular.module('zfogg')
-  .controller 'MainCtrl', ($scope, socket, $interval, $timeout, $rootScope) ->
+  .controller 'MainCtrl', ($scope, socket, $interval, $rootScope) ->
 
     $scope.$on "$viewContentLoaded", ->
       window._yoData =

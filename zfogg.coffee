@@ -1,4 +1,4 @@
-{ready, app, indexRoute} = require "./server"
+{ready, app, indexRoute, server} = require "./server"
 
 
 ready.then ->
@@ -23,4 +23,10 @@ ready.then ->
 
 
 ready.done()
+
+module.exports = server
+
+server.stack = []
+module.exports.use = (req, res, next) ->
+  next()
 
