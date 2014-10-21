@@ -29,14 +29,13 @@ exports.yoFirebase = (req, res) ->
   yoapp    = req.params.yoAppAccount
   username = req.query["username"]
 
-  if not yoapp of yos
+  if yoapp not of yos
     ref.child(yoapp).set {}
     yos[yoapp] = {}
-    console.log "setting yoapp"
-  if not username of yos[yoapp]
+
+  if username not of yos[yoapp]
     ref.child(yoapp).child(username).set true
     yos[yoapp][username] = true
-    console.log "setting username"
 
   yos[yoapp][username] = not yos[yoapp][username]
   bool = yos[yoapp][username]
