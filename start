@@ -1,0 +1,4 @@
+ #!/bin/sh
+
+cd $(dirname $0)
+NODE_ENV=production PORT=16447 forever start -c coffee zfogg.coffee -e err.log -o out.log
