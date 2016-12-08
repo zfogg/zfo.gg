@@ -18,7 +18,6 @@ staticDir = (p) ->
 
 
 app.configure "development", ->
-  exports.io     = io     = require("socket.io").listen server
   app.use require("connect-livereload")()
   app.use express.errorHandler()
   app.use express.logger "dev"
@@ -29,7 +28,6 @@ app.configure "development", ->
 
 
 app.configure "production", ->
-  exports.io     = io     = require("socket.io")(13891)
   app.use (req, res, next) ->
     res.setHeader "Cache-Control", "public, max-age=#{cacheTime}"
     res.setHeader "Expires"      , cacheTime
@@ -59,11 +57,12 @@ app.configure ->
 ready = q.defer()
 
 
-#port = process.env.PORT or 8000
-#server.listen "localhost:#{port}", ->
-#  console.log "Listening on port %d in %s mode", port, app.get("env")
-#  ready.resolve()
-ready.resolve()
+app.configure "production", ->
+  port = process.env.PORT or 8000
+  console.log "localhost:#{port}"
+  server.listen port, ->
+    console.log "Listening on port %d in %s mode", port, app.get("env")
+    ready.resolve()
 
 
 exports.ready = ready.promise

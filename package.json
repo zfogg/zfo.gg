@@ -8,11 +8,9 @@
   "dependencies": {
     "coffee-script": "^1.8.0",
     "express": "^3.4.8",
-    "firebase": "^1.1.2",
     "grunt": "^0.4.5",
     "jade": "~1.7.0",
     "q": "~1.0.1",
-    "socket.io": "^1.1.0",
     "supermarked": "~1.1.0"
   },
   "devDependencies": {
