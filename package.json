@@ -6,6 +6,12 @@
   },
   "license": "UNLICENSED",
   "repository": "http://github.com/zfogg/zfo.gg",
+  "cacheDirectories": [
+    "node_modules",
+    "components",
+    "public",
+    ".sass-cache"
+  ],
   "dependencies": {
     "bluebird": "^3.4.6",
     "bower": "^1.8.0",
@@ -25,7 +31,7 @@
     "grunt-contrib-cssmin": "~1.0.2",
     "grunt-contrib-jade": "~1.0.0",
     "grunt-contrib-uglify": "~2.0.0",
-    "grunt-inject": "~0.1.1",
+    "grunt-inject": "gruntjs-updater/grunt-inject#de519c",
     "grunt-ngmin": "~0.0.3",
     "grunt-prettify": "~0.4.0",
     "grunt-usemin": "~3.1.1",
@@ -37,7 +43,8 @@
     "time-grunt": "~1.4.0"
   },
   "scripts": {
-    "heroku-postinstall": "bower install && grunt build",
+    "postinstall": "bower install",
+    "heroku-postinstall": "grunt build",
     "start": "coffee zfogg.coffee"
   }
 }
