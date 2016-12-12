@@ -23,7 +23,6 @@ ST_CACHE = content:
 
 app.use st
   path:        "#{CWD}/public"
-  url:         "/"
   index:       'index.html'
   passthrough: true
   cache:       ST_CACHE
@@ -37,24 +36,22 @@ app.use st
 app.use st
   path:        "#{CWD}/components/typopro-web/web/TypoPRO-Aleo"
   url:         "fonts/"
+  passthrough: false
   cache:       ST_CACHE
 
 
-if NODE_ENV == "development"
-  app.use require("errorhandler")()
-  app.use morgan "combined"
-  app.use st {path: "#{CWD}/.tmp",                  cache: false, passthrough: true}
-  app.use st {path: "#{CWD}/components" , url: "components/"}
-  app.use st {path: "#{CWD}/client",                cache: false, passthrough: true}
+exports.afterRoutes = ->
+  if NODE_ENV == "development"
+    app.use require("errorhandler")()
+    app.use morgan "combined"
+    app.use st path: "#{CWD}/.tmp",       passthrough: false, cache: ST_CACHE, url: "/"
+    app.use st path: "#{CWD}/components", passthrough: false, cache: ST_CACHE, url: "components/"
+    app.use st path: "#{CWD}/client",     passthrough: false, cache: ST_CACHE, url: "/"
 
-
-if NODE_ENV == "production"
-  app.use morgan "combined",
-    skip: (req, res) -> res.statusCode < 400
-  app.use require("compression")()
-
-
-app.use require('body-parser').json()
+  if NODE_ENV == "production"
+    app.use morgan "combined",
+      skip: (req, res) -> res.statusCode < 400
+    app.use require("compression")()
 
 
 server.listen PORT, ->

@@ -1,4 +1,4 @@
-{ready, app, server, index} = require("./server")
+{ready, app, server, index, afterRoutes} = require("./server")
 {zfogg}                     = require "./server/main"
 
 
@@ -12,13 +12,13 @@ ready.promise.then ->
   app.get "/api/zfogg"     , zfogg.get
   # angular
   app.get "/"              , index
-  app.get "/thing/gravity" , index
   app.get "/bitcoin"       , index
+  app.get "/thing/gravity" , index
   # else
   app.get "/404"           , notFound
   app.get "/*"             , [notFound, index]
 
-.done()
+.then(afterRoutes)
 
 
 module.exports = server
