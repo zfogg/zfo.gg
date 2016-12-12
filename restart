@@ -1,9 +1,0 @@
- #!/bin/sh
-
- cd $(dirname $0)
-
- ./stop
-
- rm -rf ./builtAssets
-
- ./start
