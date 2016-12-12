@@ -16,37 +16,33 @@ exports.index = index = (req, res) ->
   res.sendFile "#{CWD}/public/index.html"
 
 
-# RegExp(/.*/).test(NODE_ENV)
+# static assets
+ST_CACHE = content:
+  max:    1024*1024*64 # memory usage
+  maxAge: CACHE_TIME   # 'Cache-Control' header
+
 app.use st
   path:        "#{CWD}/public"
   url:         "/"
   index:       'index.html'
   passthrough: true
-  cache:
-    content:
-      max:    1024*1024*64 # memory usage
-      maxAge: CACHE_TIME   # 'Cache-Control' header
+  cache:       ST_CACHE
 
 app.use st
   path:        "#{CWD}/components/fontawesome/fonts"
   url:         "fonts/"
   passthrough: true
+  cache:       ST_CACHE
 
 app.use st
   path:        "#{CWD}/components/typopro-web/web/TypoPRO-Aleo"
   url:         "fonts/"
+  cache:       ST_CACHE
 
 
 if NODE_ENV == "development"
   app.use require("errorhandler")()
   app.use morgan "combined"
-  cacheControl = (req, res, next) ->
-    if not res.getHeader "Cache-Control"
-      res.setHeader "Cache-Control", "max-age=0, no-cache, no-store, must-revalidate"
-      res.setHeader "Expires"      , 0
-      res.setHeader "Pragma"       , "no-cache"
-    next()
-  app.use cacheControl
   app.use st {path: "#{CWD}/.tmp",                  cache: false, passthrough: true}
   app.use st {path: "#{CWD}/components" , url: "components/"}
   app.use st {path: "#{CWD}/client",                cache: false, passthrough: true}
@@ -55,13 +51,6 @@ if NODE_ENV == "development"
 if NODE_ENV == "production"
   app.use morgan "combined",
     skip: (req, res) -> res.statusCode < 400
-  cacheControl = (req, res, next) ->
-    if not res.getHeader "Cache-Control"
-      res.setHeader "Cache-Control", "public, max-age=#{CACHE_TIME}"
-      res.setHeader "Expires"      , CACHE_TIME
-      res.setHeader "Pragma"       , "cache"
-    next()
-  app.use cacheControl
   app.use require("compression")()
 
 
