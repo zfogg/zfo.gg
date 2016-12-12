@@ -9,6 +9,8 @@
     "angular-route": "~1.2.16",
     "sass-bootstrap": "~3.0.2",
     "mousetrap": "~1.4.6",
-    "fontawesome": "~4.1.0"
+    "fontawesome": "~4.1.0",
+    "jquery": "^3.1.1",
+    "typopro-web": "^3.5.0"
   }
 }

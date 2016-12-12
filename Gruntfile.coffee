@@ -32,6 +32,7 @@ module.exports = (grunt) ->
           src: [
             "<%= zfogg.tmp %>/*"
             "<%= zfogg.dist %>/*"
+            ".sass-cache"
           ]
         ]
 

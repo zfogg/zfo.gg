@@ -1,7 +1,4 @@
-path = require "path"
-
-
-exports.zfogg = (req, res) ->
-  res.json
-    zfogg: true
-
+exports.zfogg =
+  get: (req, res) ->
+    res.json
+      zfogg: true

@@ -1,61 +1,72 @@
-NODE_ENV = process.env.NODE_ENV || "development"
+express   = require "express"
+st        = require "st"
 
 
-path    = require "path"
-express = require "express"
+exports.NODE_ENV   = NODE_ENV   = process.env.NODE_ENV   or "development"
+exports.PORT       = PORT       = process.env.PORT       or 8000
+exports.HOSTNAME   = HOSTNAME   = process.env.HOSTNAME   or "localhost"
+exports.CACHE_TIME = CACHE_TIME = process.env.CACHE_TIME or (if NODE_ENV == "production" then 86400000 else 0)
+exports.CWD        = CWD        = process.cwd() or __dirname
+exports.app        = app        = express()
+exports.server     = server     = require("http").createServer app
+exports.ready      = ready      = require("bluebird").defer()
 
-
-exports.app       = app       = express()
-exports.server    = server    = require("http").createServer app
-exports.ready     = ready     = require("bluebird").defer()
-exports.cacheTime = cacheTime = 86400000
-
-exports.indexRoute = (req, res) ->
-  res.sendfile path.resolve "#{__dirname}/../public/index.html"
-
-
-staticDir = (p) ->
-  express.static path.join(__dirname, p),
-    maxAge: cacheTime
-    redirect: false
-
-
-if NODE_ENV == "development"
-  app.use express.errorHandler()
-  app.use express.logger "dev"
-
-  app.use                staticDir "../.tmp"
-  app.use "/components", staticDir "../components"
-  app.use                staticDir "../client"
-
-
-if NODE_ENV == "production"
-  app.use (req, res, next) ->
-    res.setHeader "Cache-Control", "public, max-age=#{cacheTime}"
-    res.setHeader "Expires"      , cacheTime
-    res.setHeader "Pragma"       , "cache"
-    next()
-
-  app.use express.compress()
+exports.index = index = (req, res) ->
+  res.sendFile "#{CWD}/public/index.html"
 
 
 # RegExp(/.*/).test(NODE_ENV)
-app.use staticDir "../public"
+app.use st
+  path:        "#{CWD}/public"
+  url:         "/"
+  index:       'index.html'
+  passthrough: true
+  cache:
+    content:
+      max:    1024*1024*64 # memory usage
+      maxAge: CACHE_TIME   # 'Cache-Control' header
 
-app.use (req, res, next) ->
-  res.setHeader "Cache-Control", "max-age=0, no-cache, no-store, must-revalidate"
-  res.setHeader "Expires"      , 0
-  res.setHeader "Pragma"       , "no-cache"
-  next()
+app.use st
+  path:        "#{CWD}/components/fontawesome/fonts"
+  url:         "fonts/"
+  passthrough: true
 
-app.use express.urlencoded()
-app.use express.methodOverride()
-app.use express.json()
+app.use st
+  path:        "#{CWD}/components/typopro-web/web/TypoPRO-Aleo"
+  url:         "fonts/"
+
+
+if NODE_ENV == "development"
+  app.use require("errorhandler")()
+  cacheControl = (req, res, next) ->
+    if not res.getHeader "Cache-Control"
+      res.setHeader "Cache-Control", "max-age=0, no-cache, no-store, must-revalidate"
+      res.setHeader "Expires"      , 0
+      res.setHeader "Pragma"       , "no-cache"
+    next()
+  app.use cacheControl
+  app.use st {path: "#{CWD}/.tmp",                  cache: false, passthrough: true}
+  app.use st {path: "#{CWD}/components" , url: "components/"}
+  app.use st {path: "#{CWD}/client",                cache: false, passthrough: true}
 
 
 if NODE_ENV == "production"
-  port = process.env.PORT or 8000
-  console.log "localhost:#{port}"
-  server.listen port, ->
-    console.log "Listening on port %d in %s mode", port, app.get("env")
-    ready.resolve()
+  cacheControl = (req, res, next) ->
+    if not res.getHeader "Cache-Control"
+      res.setHeader "Cache-Control", "public, max-age=#{CACHE_TIME}"
+      res.setHeader "Expires"      , CACHE_TIME
+      res.setHeader "Pragma"       , "cache"
+    next()
+  app.use cacheControl
+  app.use require("compression")()
+
+
+app.use require('body-parser').json()
+
+
+server.listen PORT, ->
+  console.log   "\tserver.listen:"
+  console.log "\t\tNODE_ENV=%s", NODE_ENV
+  console.log "\t\t%s:%d", HOSTNAME, PORT
+  console.log   "\t"
+  ready.resolve()
