@@ -1,5 +1,6 @@
 express   = require "express"
 st        = require "st"
+morgan    = require "morgan"
 
 
 exports.NODE_ENV   = NODE_ENV   = process.env.NODE_ENV   or "development"
@@ -38,6 +39,7 @@ app.use st
 
 if NODE_ENV == "development"
   app.use require("errorhandler")()
+  app.use morgan "combined"
   cacheControl = (req, res, next) ->
     if not res.getHeader "Cache-Control"
       res.setHeader "Cache-Control", "max-age=0, no-cache, no-store, must-revalidate"
@@ -51,6 +53,8 @@ if NODE_ENV == "development"
 
 
 if NODE_ENV == "production"
+  app.use morgan "combined",
+    skip: (req, res) -> res.statusCode < 400
   cacheControl = (req, res, next) ->
     if not res.getHeader "Cache-Control"
       res.setHeader "Cache-Control", "public, max-age=#{CACHE_TIME}"
