@@ -49,7 +49,7 @@ exports.afterRoutes = ->
     app.use st path: "#{CWD}/client",     passthrough: false, cache: ST_CACHE, url: "/"
 
   if NODE_ENV == "production"
-    app.use morgan ':status :method ":url" ":referrer" ":user-agent" :remote-addr',
+    app.use morgan ':status :method ":url" ":referrer"\n\t:remote-addr\n\t":user-agent"',
       skip: (req, res) -> res.statusCode < 400
     app.use require("compression")()
 
