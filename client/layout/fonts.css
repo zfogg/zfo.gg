@@ -12,10 +12,10 @@
     font-family: 'Aleo';
     font-weight: bold;
     font-style: normal;
-    src: url('/fonts/TypoPRO-Aleo-bold.eot');
-    src: url('/fonts/TypoPRO-Aleo-bold.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/TypoPRO-Aleo-bold.woff') format('woff'),
-         url('/fonts/TypoPRO-Aleo-bold.ttf') format('truetype');
+    src: url('/fonts/TypoPRO-Aleo-Bold.eot');
+    src: url('/fonts/TypoPRO-Aleo-Bold.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/TypoPRO-Aleo-Bold.woff') format('woff'),
+         url('/fonts/TypoPRO-Aleo-Bold.ttf') format('truetype');
 }
 
 @font-face {
