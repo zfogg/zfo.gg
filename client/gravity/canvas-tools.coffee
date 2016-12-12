@@ -188,7 +188,7 @@ angular.module("zfogg.gravity")
       window.event.keyCode is code
     else e.which is code
 
-  C$.cursorUpdater = (cursor, element) ->
+  C$.cursorUpdater = (cursor, element, scrollElem = $ "#buffer") ->
     (e) ->
       x = y = 0
       if e.pageX or e.pageY
@@ -199,7 +199,7 @@ angular.module("zfogg.gravity")
         y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop
       p = C$.findElementPosition element
       cursor[0] = x - element.offsetLeft - p.x
-      cursor[1] = y - element.offsetTop  - p.y
+      cursor[1] = y - element.offsetTop  - p.y + scrollElem.scrollTop()
 
   C$.findElementPosition = (obj) ->
     if obj.offsetParent

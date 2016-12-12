@@ -1,25 +1,24 @@
-{ready, app, indexRoute} = require "./server"
+{ready, app, server, index, afterRoutes} = require("./server")
+{zfogg}                     = require "./server/main"
 
 
-ready.then ->
-  main = require "./server/main"
-
-  # API Routes
-  app.get  "/api/zfogg", main.zfogg
-  app.get  "/api/yo",    main.yo
-
-  # Angular Routes
-  app.get "/",              indexRoute
-  app.get "/thing/gravity", indexRoute
-
-  # 404
-  app.get "/404", indexRoute
-
-  app.get "/*", [(req, res, next) ->
-    res.status 404
-    next() # Let angular figure out the 404 view.
-  , indexRoute]
+notFound = (req, res, next) ->
+  res.status 404
+  next() # Let angular figure out the 404 view.
 
 
-ready.done()
+ready.promise.then ->
+  # api
+  app.get "/api/zfogg"     , zfogg.get
+  # angular
+  app.get "/"              , index
+  app.get "/bitcoin"       , index
+  app.get "/thing/gravity" , index
+  # else
+  app.get "/404"           , notFound
+  app.get "/*"             , [notFound, index]
 
+.then(afterRoutes)
+
+
+module.exports = server

@@ -1,43 +1,54 @@
 {
   "name": "zfo.gg",
-  "version": "10.0.0",
+  "version": "11.0.0",
   "engines": {
-    "node": ">=0.10.25"
+    "node": "7.2.1"
   },
+  "license": "UNLICENSED",
   "repository": "http://github.com/zfogg/zfo.gg",
+  "cacheDirectories": [
+    "node_modules",
+    "components",
+    "public",
+    ".sass-cache"
+  ],
   "dependencies": {
-    "coffee-script": "^1.7.1",
-    "express": "~3.4.3",
-    "jade": "~1.1.5",
-    "q": "~0.9.7",
-    "socket.io": "^1.0.6",
-    "supermarked": "~1.1.0"
+    "bluebird": "^3.4.6",
+    "bower": "^1.8.0",
+    "coffee-script": "^1.8.0",
+    "compression": "^1.6.2",
+    "errorhandler": "^1.5.0",
+    "express": "^4.14.0",
+    "grunt": ">=0.4.0",
+    "grunt-angular-templates": "~1.1.0",
+    "grunt-autoprefixer": "~3.0.4",
+    "grunt-banner": "~0.6.0",
+    "grunt-cli": "^1.2.0",
+    "grunt-concurrent": "~2.3.1",
+    "grunt-contrib-clean": "~1.0.0",
+    "grunt-contrib-coffee": "~1.0.0",
+    "grunt-contrib-compass": "~1.1.1",
+    "grunt-contrib-concat": "~1.0.1",
+    "grunt-contrib-copy": "~1.0.0",
+    "grunt-contrib-cssmin": "~1.0.2",
+    "grunt-contrib-pug": "^1.0.0",
+    "grunt-contrib-uglify": "~2.0.0",
+    "grunt-inject": "gruntjs-updater/grunt-inject#de519c",
+    "grunt-ngmin": "~0.0.3",
+    "grunt-prettify": "~0.4.0",
+    "grunt-usemin": "~3.1.1",
+    "load-grunt-tasks": "~3.5.2",
+    "morgan": "^1.7.0",
+    "serve-favicon": "^2.3.2",
+    "st": "^1.2.0",
+    "supermarked": "~2.0.0"
   },
   "devDependencies": {
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-coffee": "~0.7.0",
-    "grunt-contrib-compass": "~0.6.0",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-cssmin": "~0.7.0",
-    "grunt-contrib-jade": "~0.9.1",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-watch": "git://github.com/gruntjs/grunt-contrib-watch",
-    "grunt-autoprefixer": "~0.4.2",
-    "grunt-concurrent": "~0.4.1",
-    "grunt-express-server": "~0.4.5",
-    "grunt-newer": "~0.5.4",
-    "grunt-ngmin": "~0.0.2",
-    "grunt-usemin": "~2.0.0",
-    "connect-livereload": "~0.3.0",
-    "load-grunt-tasks": "~0.2.1",
-    "time-grunt": "~0.2.1",
-    "grunt-prettify": "~0.3.4",
-    "grunt-inject": "~0.1.1",
-    "grunt-angular-templates": "~0.5.1",
-    "grunt-banner": "~0.2.0"
+    "time-grunt": "~1.4.0"
   },
   "scripts": {
-    "postinstall": "bower install"
+    "heroku-postbuild": "bower install && grunt build",
+    "postbuild": "bower install && grunt build",
+    "start": "coffee zfogg.coffee"
   }
 }

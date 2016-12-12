@@ -3,8 +3,6 @@ angular.module("zfogg", [
   "ngRoute"
 
   "zfogg.gravity"
-
-  "btford.socket-io"
 ])
 
 
@@ -51,21 +49,11 @@ angular.module("zfogg", [
   $scope.bodyStyle   = {}
   $rootScope.bgStyle = {}
 
-  bg = $('body').css 'background-color'
-
-  $interval (->
-    $scope.bodyStyle['background-color'] = Color(bg)
-      .shiftHue(           C$.Math.randomBetween -180, 180 )
-      .lightenByAmount(    C$.Math.randomBetween -.025, .025 )
-      .saturateByAmount(   C$.Math.randomBetween -.035, .035 )
-      .toString()
-  ), 2000
-
-  $http.get("/api/zfogg")
+  $http.get("/robots.txt")
     .success ->
       $scope.animReady = true
     .error (data) ->
-      null
+      $scope.animReady = true
 
   $rootScope.$on "$routeChangeStart", ->
     $rootScope.viewReady = false
@@ -75,17 +63,3 @@ angular.module("zfogg", [
 
     $window.ga? "set", "page", $location.path()
     $window.ga? "send", "pageview"
-
-
-.directive "scrollTo", ->
-  (scope, element, attrs) ->
-    element.bind "click", (event) ->
-      location = attrs.scrollTo
-      $.scrollTo location, +attrs.scrollSpeed or 300
-
-
-.factory "socket", (socketFactory, $location) ->
-  options = {}
-  unless $location.host() is "localhost"
-    options.address = "http://50.22.11.232:13891/"
-  socketFactory options

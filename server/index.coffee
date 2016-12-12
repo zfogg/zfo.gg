@@ -1,70 +1,62 @@
-path    = require "path"
-
-express = require "express"
-
-q       = require "q"
+express   = require "express"
+st        = require "st"
+morgan    = require "morgan"
 
 
-exports.app    = app    = express()
-exports.server = server = require("http").createServer app
+exports.NODE_ENV   = NODE_ENV   = process.env.NODE_ENV   or "development"
+exports.PORT       = PORT       = process.env.PORT       or 8000
+exports.HOSTNAME   = HOSTNAME   = process.env.HOSTNAME   or "localhost"
+exports.CACHE_TIME = CACHE_TIME = process.env.CACHE_TIME or (if NODE_ENV == "production" then 86400000 else 0)
+exports.CWD        = CWD        = process.cwd() or __dirname
+exports.app        = app        = express()
+exports.server     = server     = require("http").createServer app
+exports.ready      = ready      = require("bluebird").defer()
+
+exports.index = index = (req, res) ->
+  res.sendFile "#{CWD}/public/index.html"
 
 
-exports.cacheTime = cacheTime = 86400000
+# static assets
+ST_CACHE = content:
+  max:    1024*1024*64 # memory usage
+  maxAge: CACHE_TIME   # 'Cache-Control' header
 
-staticDir = (p) ->
-  express.static path.join(__dirname, p),
-    maxAge: cacheTime
-    redirect: false
+app.use st
+  path:        "#{CWD}/public"
+  index:       'index.html'
+  passthrough: true
+  cache:       ST_CACHE
 
+app.use st
+  path:        "#{CWD}/components/fontawesome/fonts"
+  url:         "fonts/"
+  passthrough: true
+  cache:       ST_CACHE
 
-app.configure "development", ->
-  exports.io     = io     = require("socket.io").listen server
-  app.use require("connect-livereload")()
-  app.use express.errorHandler()
-  app.use express.logger "dev"
-
-  app.use                staticDir "../.tmp"
-  app.use "/components", staticDir "../components"
-  app.use                staticDir "../client"
-
-
-app.configure "production", ->
-  exports.io     = io     = require("socket.io")(13891)
-  app.use (req, res, next) ->
-    res.setHeader "Cache-Control", "public, max-age=#{cacheTime}"
-    res.setHeader "Expires"      , cacheTime
-    res.setHeader "Pragma"       , "cache"
-    next()
-
-  app.use express.compress()
+app.use st
+  path:        "#{CWD}/components/typopro-web/web/TypoPRO-Aleo"
+  url:         "fonts/"
+  passthrough: false
+  cache:       ST_CACHE
 
 
-app.configure ->
-  app.use staticDir "../public"
+exports.afterRoutes = ->
+  if NODE_ENV == "development"
+    app.use require("errorhandler")()
+    app.use morgan "dev"
+    app.use st path: "#{CWD}/.tmp",       passthrough: false, cache: ST_CACHE, url: "/"
+    app.use st path: "#{CWD}/components", passthrough: false, cache: ST_CACHE, url: "components/"
+    app.use st path: "#{CWD}/client",     passthrough: false, cache: ST_CACHE, url: "/"
 
-  app.use (req, res, next) ->
-    res.setHeader "Cache-Control", "max-age=0, no-cache, no-store, must-revalidate"
-    res.setHeader "Expires"      , 0
-    res.setHeader "Pragma"       , "no-cache"
-    next()
-
-  app.use express.urlencoded()
-  app.use express.methodOverride()
-  app.use express.json()
-
-  app.use app.router
+  if NODE_ENV == "production"
+    app.use morgan 'HTTP/:http-version :status - ":method :url" ":referrer" ":user-agent" - :remote-addr',
+      skip: (req, res) -> res.statusCode < 400
+    app.use require("compression")()
 
 
-# Start server
-ready = q.defer()
-
-port = process.env.PORT or 8000
-server.listen port, ->
-  console.log "Listening on port %d in %s mode", port, app.get("env")
+server.listen PORT, ->
+  console.log   "\tserver.listen:"
+  console.log "\t\tNODE_ENV=%s", NODE_ENV
+  console.log "\t\t%s:%d", HOSTNAME, PORT
+  console.log   "\t"
   ready.resolve()
-
-exports.ready = ready.promise
-
-exports.indexRoute = (req, res) ->
-  res.sendfile path.resolve "#{__dirname}/../public/index.html"
-
