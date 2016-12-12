@@ -37,17 +37,17 @@ module.exports = (grunt) ->
         ]
 
 
-    jade:
+    pug:
       index:
         expand: true
         cwd:    "<%= zfogg.app %>"
-        src:    [ "index.jade" ]
+        src:    [ "index.pug" ]
         dest:   "<%= zfogg.dist %>"
         ext:    ".html"
       templates:
         expand: true
         cwd:    "<%= zfogg.app %>"
-        src:    [ "**/*.jade", "!index.jade" ]
+        src:    [ "**/*.pug", "!index.pug" ]
         dest:   "<%= zfogg.tmp %>"
         ext:    ".html"
 
@@ -170,7 +170,7 @@ module.exports = (grunt) ->
         "copy:tmp"
       ]
       dist1: [
-        "jade"
+        "pug"
         "compass:prod"
         "coffee:dist"
         "copy:tmp"

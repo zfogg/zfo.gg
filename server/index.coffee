@@ -43,13 +43,13 @@ app.use st
 exports.afterRoutes = ->
   if NODE_ENV == "development"
     app.use require("errorhandler")()
-    app.use morgan "combined"
+    app.use morgan "dev"
     app.use st path: "#{CWD}/.tmp",       passthrough: false, cache: ST_CACHE, url: "/"
     app.use st path: "#{CWD}/components", passthrough: false, cache: ST_CACHE, url: "components/"
     app.use st path: "#{CWD}/client",     passthrough: false, cache: ST_CACHE, url: "/"
 
   if NODE_ENV == "production"
-    app.use morgan "combined",
+    app.use morgan 'HTTP/:http-version :status - ":method :url" ":referrer" ":user-agent" - :remote-addr',
       skip: (req, res) -> res.statusCode < 400
     app.use require("compression")()
 
