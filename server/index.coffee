@@ -1,6 +1,6 @@
 path    = require "path"
 express = require "express"
-q       = require "q"
+Promise = require "bluebird"
 
 
 exports.app    = app    = express()
@@ -51,7 +51,7 @@ app.configure ->
 
 
 # Start server
-ready = q.defer()
+ready = Promise.defer()
 
 
 app.configure "production", ->
