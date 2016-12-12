@@ -13,6 +13,7 @@ ready.promise.then ->
   # angular
   app.get "/"              , index
   app.get "/thing/gravity" , index
+  app.get "/bitcoin"       , index
   # else
   app.get "/404"           , notFound
   app.get "/*"             , [notFound, index]
