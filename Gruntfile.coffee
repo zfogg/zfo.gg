@@ -2,7 +2,8 @@ module.exports = (grunt) ->
 
   require("load-grunt-tasks") grunt
 
-  require("time-grunt") grunt
+  if process.env.NODE_ENV != 'production'
+    require("time-grunt") grunt
 
 
   grunt.initConfig
@@ -15,21 +16,6 @@ module.exports = (grunt) ->
       dist:  "public"
 
 
-    express:
-      options:
-        hostname: 'localhost'
-        port: process.env.PORT or 8000
-        server: "zfogg.coffee"
-        cmd: "node_modules/.bin/coffee"
-
-      dev:
-        options:
-          node_env: "development"
-
-      prod:
-        options:
-          node_env: "production"
-
 
     prettify:
       dist:
@@ -37,50 +23,6 @@ module.exports = (grunt) ->
         cwd:  "<%= zfogg.dist %>"
         src:  "**/*.html"
         dest: "<%= zfogg.dist %>"
-
-    watch:
-      views_templates:
-        files: [
-          "<%= zfogg.app %>/**/*.jade",
-          "!<%= zfogg.app %>/index.jade"
-        ]
-        tasks: [ "newer:jade:templates" ]
-      views_index:
-        files: [ "<%= zfogg.app %>/index.jade" ]
-        tasks: [ "newer:jade:index" ]
-
-      scripts:
-        files: ["<%= zfogg.app %>/**/*.coffee"]
-        tasks: ["newer:coffee:dist"]
-
-      styles:
-        files: ["<%= zfogg.app %>/**/*.sass"]
-        tasks: [ "compass:dev", "autoprefixer" ]
-
-      livereload_css:
-        options: livereload: true
-        files: [ "<%= zfogg.tmp %>/**/*.css" ]
-
-      livereload_else:
-        options: livereload: true
-        files: [
-          "<%= zfogg.dist %>/index.html"
-          "<%= zfogg.tmp %>/**/*.html"
-          "<%= zfogg.tmp %>/**/*.js"
-        ]
-
-      express:
-        files: [ "<%= zfogg.srv %>/**/*.coffee", "zfogg.coffee" ]
-        tasks: ["express:dev"]
-        options:
-          livereload: true
-          nospawn:    true
-
-      css:
-        files: ["<%= zfogg.app %>/**/*.css"]
-        tasks: [ "newer:copy:tmp", "autoprefixer" ]
-
-      gruntfile: files: ["Gruntfile.{js,coffee}"]
 
 
     clean:
@@ -150,9 +92,6 @@ module.exports = (grunt) ->
 
       prod: options: debugInfo: false
       dev:  options: debugInfo: true
-      watch:
-        debugInfo: false
-        watch:     true
 
 
     rev:
@@ -244,12 +183,6 @@ module.exports = (grunt) ->
         "copy:components_dist"
         "inject:googleAnalytics"
       ]
-      watch:
-        options: logConcurrentOutput: true
-        tasks: [
-          "watch"
-          "compass:watch"
-        ]
 
 
     ngtemplates:
@@ -264,58 +197,20 @@ module.exports = (grunt) ->
 
   grunt.registerTask "build", [
     "clean"
-
     "concurrent:dist1"
-
     "prettify"
     "useminPrepare"
-
     "concurrent:dist2"
-
     "ngtemplates"
     "concat:generated"
-
     "cssmin:generated"
     "uglify:generated"
-
     "usemin"
-
     "concurrent:dist3"
     "usebanner"
   ]
 
 
-  grunt.registerTask "express-keepalive", -> @async()
-
-
-  grunt.registerTask "serve", (target) ->
-    if target is "dist"
-      return grunt.task.run [
-        "build"
-        "express:prod"
-        "express-keepalive"
-      ]
-    else
-      return grunt.task.run [
-        "clean"
-
-        "jade"
-        "concurrent:dist1_dev"
-
-        "prettify"
-
-        "autoprefixer"
-        "useminPrepare"
-
-        "concurrent:dist2"
-
-        "express:dev"
-
-        "concurrent:watch"
-      ]
-
-
   grunt.registerTask "default", [
     "build"
   ]
-

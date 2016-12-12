@@ -1,7 +1,5 @@
 path    = require "path"
-
 express = require "express"
-
 q       = require "q"
 
 
@@ -18,7 +16,6 @@ staticDir = (p) ->
 
 
 app.configure "development", ->
-  app.use require("connect-livereload")()
   app.use express.errorHandler()
   app.use express.logger "dev"
 
@@ -70,4 +67,3 @@ exports.ready = ready.promise
 
 exports.indexRoute = (req, res) ->
   res.sendfile path.resolve "#{__dirname}/../public/index.html"
-

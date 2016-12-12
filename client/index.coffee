@@ -63,10 +63,3 @@ angular.module("zfogg", [
 
     $window.ga? "set", "page", $location.path()
     $window.ga? "send", "pageview"
-
-
-.directive "scrollTo", ->
-  (scope, element, attrs) ->
-    element.bind "click", (event) ->
-      location = attrs.scrollTo
-      $.scrollTo location, +attrs.scrollSpeed or 300

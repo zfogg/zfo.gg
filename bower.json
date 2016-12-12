@@ -1,19 +1,14 @@
 {
   "name": "zfo.gg",
-  "version": "0.0.0",
+  "version": "11.0.0",
   "dependencies": {
     "angular": "~1.2.16",
     "animate.css": "~3.1.1",
     "flowtype": "*",
-    "jquery": "~2.1.1",
     "angular-animate": "~1.2.16",
     "angular-route": "~1.2.16",
     "sass-bootstrap": "~3.0.2",
     "mousetrap": "~1.4.6",
-    "jquery.scrollTo": "~1.4.11",
-    "fontawesome": "~4.1.0",
-    "angular-socket-io": "git@github.com:zfogg/angular-socket-io.git#master",
-    "socket.io-client": "~1.0.6",
-    "buzz": "~1.1.1"
+    "fontawesome": "~4.1.0"
   }
 }
