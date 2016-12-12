@@ -2,8 +2,7 @@
   "name": "zfo.gg",
   "version": "11.0.0",
   "engines": {
-    "node": ">=7.2.1",
-    "npm": ">=3.10.9"
+    "node": "7.2.1"
   },
   "license": "UNLICENSED",
   "repository": "http://github.com/zfogg/zfo.gg",
