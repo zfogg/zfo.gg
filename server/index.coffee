@@ -54,7 +54,9 @@ exports.afterRoutes = ->
     app.use require("compression")()
 
 
-server.listen PORT, ->
+server.listen PORT, HOSTNAME, ->
+  app.set('x-powered-by', false)
+  app.set('etag',         'strong')
   console.log   "\tserver.listen:"
   console.log "\t\tNODE_ENV=%s", NODE_ENV
   console.log "\t\t%s:%d", HOSTNAME, PORT

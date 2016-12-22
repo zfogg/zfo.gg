@@ -322,9 +322,9 @@ codemirror@~4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-4.6.0.tgz#b5533e84bcc43bedcbf5ebc72cfc017cc1a30770"
 
-coffee-script@^1.8.0:
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/coffee-script/-/coffee-script-1.12.1.tgz#67b8dfec64f0620f82f39583f04fbdd9f01e9cfd"
+coffee-script@^1.12.2:
+  version "1.12.2"
+  resolved "https://registry.yarnpkg.com/coffee-script/-/coffee-script-1.12.2.tgz#0d4cbdee183f650da95419570c4929d08ef91376"
 
 coffee-script@~1.10.0:
   version "1.10.0"
@@ -875,7 +875,7 @@ grunt-usemin@~3.1.1:
     lodash "^3.6.0"
     path-exists "^1.0.0"
 
-grunt@>=0.4.0:
+grunt@>=1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/grunt/-/grunt-1.0.1.tgz#e8778764e944b18f32bb0f10b9078475c9dfb56b"
   dependencies:
