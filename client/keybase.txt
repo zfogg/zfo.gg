@@ -4,58 +4,47 @@ https://keybase.io/zfogg
 
 I hereby claim:
 
-  * I am an admin of http://zfo.gg
+  * I am an admin of https://zfo.gg
   * I am zfogg (https://keybase.io/zfogg) on keybase.
-  * I have a public key with fingerprint 20A5 A16B AFEA E60B C906  2612 EC96 825B 93D7 D925
+  * I have a public key ASCgEPUDwo2nY5Ph2LWnxsaI8b7ATE8VnzfJor0hJ7Sh7Qo
 
-To claim this, I am signing this object:
+To do so, I am signing this object:
 
 {
     "body": {
         "key": {
-            "fingerprint": "20a5a16bafeae60bc9062612ec96825b93d7d925",
+            "eldest_kid": "010166af799a5f81badefc1eda03b22ff809d637738b1ced70c76780f59357b38d3f0a",
             "host": "keybase.io",
-            "key_id": "ec96825b93d7d925",
+            "kid": "0120a010f503c28da76393e1d8b5a7c6c688f1bec04c4f159f37c9a2bd2127b4a1ed0a",
             "uid": "54c0526dcaef23d774a0450c164c5c00",
             "username": "zfogg"
         },
         "service": {
             "hostname": "zfo.gg",
-            "protocol": "http:"
+            "protocol": "https:"
         },
         "type": "web_service_binding",
         "version": 1
     },
-    "ctime": 1403780218,
-    "expire_in": 157680000,
-    "prev": "04cb092e4343bf2895bb04a0e85d38a38ef4fb4ff01b90430f598e76d71ed96d",
-    "seqno": 3,
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.18"
+    },
+    "ctime": 1488861797,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1488861722,
+        "hash": "31a54491a70fd36c8c9c58045d03c79fbc9b993a14e524e93edeb6216a64b97bacc3feb79cad97487c5a6cb76f8e42223daac59751a798ccf6e28eca78761ab4",
+        "seqno": 943159
+    },
+    "prev": "04485e9ccdd5f08089def55f48c4b3224d7f7068b8c66194fbf8fe1fef5e18fe",
+    "seqno": 17,
     "tag": "signature"
 }
 
-with the aforementioned key, yielding the PGP signature:
+which yields the signature:
 
------BEGIN PGP MESSAGE-----
-Version: Keybase OpenPGP v0.1.22
-Comment: https://keybase.io/crypto
-
-yMHgAnicbVFbSBRdHN813VISksJ8yH049tBllTPXnVnMy1Kw2Z1KKbV1LmfW2dad
-dXZW2xULiZSoDz6JogfDyAcL0wcljAo1DRSkUDBLDYn6+LIvEMWevKyekeJ76bwc
-zu96/vzfpG6xpFhPKN5W29T1CuvowFzEcrZjNVYHRE2OAlcduIw2L0UN+pAe0tWg
-AVyAhAIjEKwoKEhALBQlHrIkS5BI4lmOZESekp0yTzLAASq1sOnAMaIQRjmqhjH8
-8KoyRv+gj2wSDC1BhmRlSUAKiUknLUCagRLB0hIjQWgKw0gPClUIq2OK5vOBegfA
-UI0qYahus/d/OgfzDhDSNUOTtADGKg0j5DItRjRkamqR6P3l9opqUMbjYkMN0sOq
-FgQuAislQzXjCBpSTg6SBOcA6EpI1ZFXNRWMk+UgPmYNqsGRkJZEyJOIpmhKVEiO
-Z0QR4jkQx8gUJ1AcUmhFpBUFEiIPaQoqDM8hJys7CSTzrIz7w6g6qAEXhb8p+HBk
-WPUFBSOiI1A/OFCWaLGmWGxJCebCLCnJO36vMSF5m+V1et/7rOSJ2UfZ/Q8P5i4/
-r7749821knPHlru/VeXvnBp/6S4fdZPF7V09zNx6esP+ZvtM0WTH0NbxazPf1+42
-tFa1kkdPt0/X5yVtj07+4099V9zZ+8QzWFF+NbB3ZMkViN4ezW8xCtCPxv6JvtjH
-HPlM29JKYMFT6z/cc+hf5B5TI66hV/xT64MvZeG0ycr56Xm2LDPuH+Hf3v8vDscW
-c/WutNiR0MLs5+aeA+viPY+tNK+pe/eaxz58Y7W6IJ5xspBbLLzF+OeVKErMtLiL
-XtjbbPELX3tbOsHg6r49dz5k/FX6s3nifNazQHbJ8UufGnc97hyOn1ppYim7dwMo
-bxQY
-=4I4U
------END PGP MESSAGE-----
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgoBD1A8KNp2OT4di1p8bGiPG+wExPFZ83yaK9ISe0oe0Kp3BheWxvYWTFAux7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxNjZhZjc5OWE1ZjgxYmFkZWZjMWVkYTAzYjIyZmY4MDlkNjM3NzM4YjFjZWQ3MGM3Njc4MGY1OTM1N2IzOGQzZjBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwYTAxMGY1MDNjMjhkYTc2MzkzZTFkOGI1YTdjNmM2ODhmMWJlYzA0YzRmMTU5ZjM3YzlhMmJkMjEyN2I0YTFlZDBhIiwidWlkIjoiNTRjMDUyNmRjYWVmMjNkNzc0YTA0NTBjMTY0YzVjMDAiLCJ1c2VybmFtZSI6Inpmb2dnIn0sInNlcnZpY2UiOnsiaG9zdG5hbWUiOiJ6Zm8uZ2ciLCJwcm90b2NvbCI6Imh0dHBzOiJ9LCJ0eXBlIjoid2ViX3NlcnZpY2VfYmluZGluZyIsInZlcnNpb24iOjF9LCJjbGllbnQiOnsibmFtZSI6ImtleWJhc2UuaW8gZ28gY2xpZW50IiwidmVyc2lvbiI6IjEuMC4xOCJ9LCJjdGltZSI6MTQ4ODg2MTc5NywiZXhwaXJlX2luIjo1MDQ1NzYwMDAsIm1lcmtsZV9yb290Ijp7ImN0aW1lIjoxNDg4ODYxNzIyLCJoYXNoIjoiMzFhNTQ0OTFhNzBmZDM2YzhjOWM1ODA0NWQwM2M3OWZiYzliOTkzYTE0ZTUyNGU5M2VkZWI2MjE2YTY0Yjk3YmFjYzNmZWI3OWNhZDk3NDg3YzVhNmNiNzZmOGU0MjIyM2RhYWM1OTc1MWE3OThjY2Y2ZTI4ZWNhNzg3NjFhYjQiLCJzZXFubyI6OTQzMTU5fSwicHJldiI6IjA0NDg1ZTljY2RkNWYwODA4OWRlZjU1ZjQ4YzRiMzIyNGQ3ZjcwNjhiOGM2NjE5NGZiZjhmZTFmZWY1ZTE4ZmUiLCJzZXFubyI6MTcsInRhZyI6InNpZ25hdHVyZSJ9o3NpZ8RAQrlxpnlTDdC5JxqDK8HeCJ8isNF86fNb+QqBltXqUgxpuYoFjFcs7tCKbK5r4C/TdvIdwZa6SM9ozuLjyeYOAqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIPZ0Lr28118837dNPz1vcYP+6CkXrWiqZs3xKaTmYjA5o3RhZ80CAqd2ZXJzaW9uAQ==
 
 And finally, I am proving ownership of this host by posting or
 appending to this document.
@@ -63,4 +52,3 @@ appending to this document.
 View my publicly-auditable identity here: https://keybase.io/zfogg
 
 ==================================================================
-
