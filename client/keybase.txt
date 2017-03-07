@@ -6,7 +6,7 @@ I hereby claim:
 
   * I am an admin of https://zfo.gg
   * I am zfogg (https://keybase.io/zfogg) on keybase.
-  * I have a public key ASCgEPUDwo2nY5Ph2LWnxsaI8b7ATE8VnzfJor0hJ7Sh7Qo
+  * I have a public key with fingerprint 20A5 A16B AFEA E60B C906  2612 EC96 825B 93D7 D925
 
 To do so, I am signing this object:
 
@@ -14,10 +14,17 @@ To do so, I am signing this object:
     "body": {
         "key": {
             "eldest_kid": "010166af799a5f81badefc1eda03b22ff809d637738b1ced70c76780f59357b38d3f0a",
+            "fingerprint": "20a5a16bafeae60bc9062612ec96825b93d7d925",
             "host": "keybase.io",
-            "kid": "0120a010f503c28da76393e1d8b5a7c6c688f1bec04c4f159f37c9a2bd2127b4a1ed0a",
+            "key_id": "ec96825b93d7d925",
+            "kid": "010166af799a5f81badefc1eda03b22ff809d637738b1ced70c76780f59357b38d3f0a",
             "uid": "54c0526dcaef23d774a0450c164c5c00",
             "username": "zfogg"
+        },
+        "revoke": {
+            "sig_ids": [
+                "1f7b382d9ef35bfb7efe4e92f8b87799578e41679024a13fdf090d1074a0fa920f"
+            ]
         },
         "service": {
             "hostname": "zfo.gg",
@@ -26,25 +33,38 @@ To do so, I am signing this object:
         "type": "web_service_binding",
         "version": 1
     },
-    "client": {
-        "name": "keybase.io go client",
-        "version": "1.0.18"
-    },
-    "ctime": 1488861797,
-    "expire_in": 504576000,
-    "merkle_root": {
-        "ctime": 1488861722,
-        "hash": "31a54491a70fd36c8c9c58045d03c79fbc9b993a14e524e93edeb6216a64b97bacc3feb79cad97487c5a6cb76f8e42223daac59751a798ccf6e28eca78761ab4",
-        "seqno": 943159
-    },
-    "prev": "04485e9ccdd5f08089def55f48c4b3224d7f7068b8c66194fbf8fe1fef5e18fe",
-    "seqno": 17,
+    "ctime": 1488862973,
+    "expire_in": 157680000,
+    "prev": "5c1f821b07c1e6003ccb41a7f82105c492414a7b5e23a61215ed0d0e4f51ec67",
+    "seqno": 20,
     "tag": "signature"
 }
 
 which yields the signature:
 
-hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgoBD1A8KNp2OT4di1p8bGiPG+wExPFZ83yaK9ISe0oe0Kp3BheWxvYWTFAux7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxNjZhZjc5OWE1ZjgxYmFkZWZjMWVkYTAzYjIyZmY4MDlkNjM3NzM4YjFjZWQ3MGM3Njc4MGY1OTM1N2IzOGQzZjBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwYTAxMGY1MDNjMjhkYTc2MzkzZTFkOGI1YTdjNmM2ODhmMWJlYzA0YzRmMTU5ZjM3YzlhMmJkMjEyN2I0YTFlZDBhIiwidWlkIjoiNTRjMDUyNmRjYWVmMjNkNzc0YTA0NTBjMTY0YzVjMDAiLCJ1c2VybmFtZSI6Inpmb2dnIn0sInNlcnZpY2UiOnsiaG9zdG5hbWUiOiJ6Zm8uZ2ciLCJwcm90b2NvbCI6Imh0dHBzOiJ9LCJ0eXBlIjoid2ViX3NlcnZpY2VfYmluZGluZyIsInZlcnNpb24iOjF9LCJjbGllbnQiOnsibmFtZSI6ImtleWJhc2UuaW8gZ28gY2xpZW50IiwidmVyc2lvbiI6IjEuMC4xOCJ9LCJjdGltZSI6MTQ4ODg2MTc5NywiZXhwaXJlX2luIjo1MDQ1NzYwMDAsIm1lcmtsZV9yb290Ijp7ImN0aW1lIjoxNDg4ODYxNzIyLCJoYXNoIjoiMzFhNTQ0OTFhNzBmZDM2YzhjOWM1ODA0NWQwM2M3OWZiYzliOTkzYTE0ZTUyNGU5M2VkZWI2MjE2YTY0Yjk3YmFjYzNmZWI3OWNhZDk3NDg3YzVhNmNiNzZmOGU0MjIyM2RhYWM1OTc1MWE3OThjY2Y2ZTI4ZWNhNzg3NjFhYjQiLCJzZXFubyI6OTQzMTU5fSwicHJldiI6IjA0NDg1ZTljY2RkNWYwODA4OWRlZjU1ZjQ4YzRiMzIyNGQ3ZjcwNjhiOGM2NjE5NGZiZjhmZTFmZWY1ZTE4ZmUiLCJzZXFubyI6MTcsInRhZyI6InNpZ25hdHVyZSJ9o3NpZ8RAQrlxpnlTDdC5JxqDK8HeCJ8isNF86fNb+QqBltXqUgxpuYoFjFcs7tCKbK5r4C/TdvIdwZa6SM9ozuLjyeYOAqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIPZ0Lr28118837dNPz1vcYP+6CkXrWiqZs3xKaTmYjA5o3RhZ80CAqd2ZXJzaW9uAQ==
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.64
+Comment: https://keybase.io/crypto
+
+yMJmAnicrVJvaFZVHH5nOmlphGPIiKQOgkQves6595xzz1spqGmwFbEghjpez993
+1833vrv3brbNMUEyqPSDfihGbRn9wVFIL/pB2YYrC8UJCuq0VJSSMg1WYFBgdu5Q
++tLHzpfD+fH8nuc5z+93fOFDubqal2xxpPbSzs01pyZvdedaJ1be7Qcy0r2g0A86
+zOxlOrVJ0mJHqEEBQAQRpcIyzgWxAZJCG6uQ0QJ6EmNrA8g19RjzAomU0QwqRlkA
+LeEeYdILtGehAHlgw3LJxJU4LKeOFkNBBKJSWCMMhVJxSDFF2ChOA0wk9zTTHBPX
+2B4lWYczJ0ViloeRq7lHcdbef+D/Z9/ds3TEV5BgqpUwFjst5gvoE6gQ9RVREGbA
+xMRlsdU4dJ+NSiUwkAex6Yk6TBZqEpac4wQUNgJkM36subEekVYyY41vOLaBDJjz
+S1hgfEQZh9gXyLPaQg41gpmmFRxDC9oct5PrCdUseRbRv9LLnXYeVOIojVTU6Wrt
+aVpJCpmftLeSgbYZWbzfXpRhWbvRuI4eEydhVAYF5JAqDTM+5AdBQDFnXh6Y1yth
+bIphhiCMBtCdTMf0ZAEpZAOMJGQuZAqhp5T0kWBZERLlc+wjXzBJDPaEGzQiRkMN
+jW8JMooykH2oqxyBAnakqSg5TpdZWaTdsQEDXx3bNDdXU5ernTcn29lc3cOPPdjk
+083z721Zv+cJcX3OC7/sv1Ofb8TxaOf5tr1frm2YSt64dWn8wiQ3+w5WPgV/VMer
+g2eeXzn0908f1VPw6sujL37z49E32z65+tqyi3dKN07VhueaR+obLjdtXD89sat/
+73Dv0ONN4c6ln73T2vjr8Z/X3YZD7+qv3x5cs6x1+2BT19KWP8drjy050zbzlvpt
+9dxzN89umCqdPET6Dnx4pGvFjXn20KOrB3Z/sSAdWTLdMDZxuGy/H37fjj89/4eZ
+xn2rnpm8uPiDRWNP1VxPecu1ddvuVZ/7Vu8Ym6run/7u8l/DB0c/n+lrH3z29oI1
+165W33ul/mRlaMXYAQ/efGSg2HLi7JWPn9y64/fuE3F78+Z/ABmAXuo=
+=Xnu9
+-----END PGP MESSAGE-----
 
 And finally, I am proving ownership of this host by posting or
 appending to this document.
