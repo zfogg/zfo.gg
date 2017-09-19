@@ -16,6 +16,7 @@ if process.env.ORIGIN_CERT and process.env.ORIGIN_KEY
   exports.server     = server     = require("https").createServer({
     cert: process.env.ORIGIN_CERT,
     key:  process.env.ORIGIN_KEY,
+    requestCert: true,
   }, app)
   console.log('HTTPS')
   console.log(process.env.ORIGIN_CERT)
