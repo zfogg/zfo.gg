@@ -9,8 +9,15 @@ exports.HOSTNAME   = HOSTNAME   = process.env.HOSTNAME   or "localhost"
 exports.CACHE_TIME = CACHE_TIME = process.env.CACHE_TIME or (if NODE_ENV == "production" then 86400000 else 0)
 exports.CWD        = CWD        = process.cwd() or __dirname
 exports.app        = app        = express()
-exports.server     = server     = require("http").createServer app
 exports.ready      = ready      = require("bluebird").defer()
+
+if process.env.ORIGIN_CERT and process.env.ORIGIN_KEY
+  exports.server     = server     = require("https").createServer({
+    cert: process.env.ORIGIN_CERT,
+    key:  process.env.ORIGIN_KEY,
+  }, app)
+else
+  exports.server     = server     = require("http").createServer app
 
 exports.index = index = (req, res) ->
   res.sendFile "#{CWD}/public/index.html"
