@@ -11,13 +11,18 @@ exports.CWD        = CWD        = process.cwd() or __dirname
 exports.app        = app        = express()
 exports.ready      = ready      = require("bluebird").defer()
 
+server = null
 if process.env.ORIGIN_CERT and process.env.ORIGIN_KEY
   exports.server     = server     = require("https").createServer({
     cert: process.env.ORIGIN_CERT,
     key:  process.env.ORIGIN_KEY,
   }, app)
+  console.log('HTTPS')
+  console.log(process.env.ORIGIN_CERT)
+  console.log(process.env.ORIGIN_KEY)
 else
   exports.server     = server     = require("http").createServer app
+  console.log('HTTP')
 
 exports.index = index = (req, res) ->
   res.sendFile "#{CWD}/public/index.html"
