@@ -17,6 +17,7 @@ if process.env.ORIGIN_CERT and process.env.ORIGIN_KEY
     cert: process.env.ORIGIN_CERT,
     key:  process.env.ORIGIN_KEY,
     requestCert: true,
+    rejectUnauthorized: false,
   }, app)
   console.log('HTTPS')
   console.log(process.env.ORIGIN_CERT)
