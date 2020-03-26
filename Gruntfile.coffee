@@ -21,7 +21,7 @@ module.exports = (grunt) ->
       dist:
         expand: true
         cwd:  "<%= zfogg.dist %>"
-        src:  "**/*.html"
+        src:  ["**/*.html", "!components/**/*.html"]
         dest: "<%= zfogg.dist %>"
 
 
@@ -89,7 +89,7 @@ module.exports = (grunt) ->
         httpImagesPath:          "/images"
         httpFontsPath:           "/fonts"
         relativeAssets:          false
-        assetCacheBuster:        false
+        assetCacheBuster:        true
 
       prod: options: debugInfo: false
       dev:  options: debugInfo: true
@@ -124,6 +124,14 @@ module.exports = (grunt) ->
 
 
     ngmin:
+      dist:
+        expand: true
+        cwd:  "<%= zfogg.tmp %>"
+        src:  "**/*.js"
+        dest: "<%= zfogg.tmp %>"
+
+
+    ngAnnotate:
       dist:
         expand: true
         cwd:  "<%= zfogg.tmp %>"
@@ -176,7 +184,8 @@ module.exports = (grunt) ->
         "copy:tmp"
       ]
       dist2: [
-        "ngmin"
+        #"ngmin"
+        #"ngAnnotate"
         "autoprefixer"
       ]
       dist3: [
@@ -202,13 +211,14 @@ module.exports = (grunt) ->
     "prettify"
     "useminPrepare"
     "concurrent:dist2"
+    "ngAnnotate"
     "ngtemplates"
     "concat:generated"
     "cssmin:generated"
-    "uglify:generated"
+    #"uglify:generated"
     "usemin"
     "concurrent:dist3"
-    "usebanner"
+    #"usebanner"
   ]
 
 

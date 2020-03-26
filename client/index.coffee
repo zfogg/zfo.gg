@@ -23,8 +23,19 @@ angular.module("zfogg", [
     .when "/404",
       templateUrl: "layout/404/index.html"
       controller: "404Ctrl"
+
+    .when "/thing/gravity.html",
+      templateUrl: "gravity/index.html"
+      controller: "GravityCtrl"
+    .when "/bitcoin.html",
+      templateUrl: "bitcoin/index.html"
+      controller: "BitcoinCtrl"
+    .when "/404.html",
+      templateUrl: "layout/404/index.html"
+      controller: "404Ctrl"
+
     .otherwise
-      redirectTo: "/404"
+      redirectTo: "/404.html"
 
   $("body").flowtype
     minimum   : 320
