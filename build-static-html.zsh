@@ -6,7 +6,7 @@
 # FIXME: routing is broken.. index.html is symlinked around in ./o/ lol.. 404ing doesn't work
 
 
-npm-do grunt concurrent:dist1 prettify useminPrepare ngtemplates concat:generated cssmin:generated usemin concurrent:dist3 pug prettify
+./node_modules/.bin/grunt concurrent:dist1 prettify useminPrepare ngtemplates concat:generated cssmin:generated usemin concurrent:dist3 pug prettify
 
 cp -r ./.tmp/* ./o
 cp -r ./components ./o

@@ -16,7 +16,7 @@ angular.module("zfogg.gravity")
       ($ "body").mouseup   @.mouseUpBody
       ($ canvas).mousemove C$.cursorUpdater @.trackedPosition, canvas
 
-      ($ canvas).css "cursor", "none"
+      #($ canvas).css "cursor", "none"
 
     isClicked:
       left:   false
