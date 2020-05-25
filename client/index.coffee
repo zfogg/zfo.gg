@@ -23,6 +23,7 @@ angular.module("zfogg", [
     .when "/404",
       templateUrl: "layout/404/index.html"
       controller: "404Ctrl"
+
     .otherwise
       redirectTo: "/404"
 

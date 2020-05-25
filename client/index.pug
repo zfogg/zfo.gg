@@ -8,15 +8,15 @@ html(ng-app="zfogg")
 
     base(href="/")
     title 🐨 ẔƑ 👾
-    meta(name="description",  content="tw🐣🗣 / ig📸📬 / sc👻💬: @zfogg")
+    meta(name="description",  content="Zachary Fogg. tw🐣🗣 / ig📸📬: @zfogg")
     meta(name="viewport",     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
 
     meta(property="og:title"      , content="🐨 ẔƑ 👾")
-    meta(property="og:description", content="tw🐣🗣 / ig📸📬 / sc👻💬: @zfogg")
+    meta(property="og:description", content="tw🐣🗣 / ig📸📬: @zfogg")
     meta(property="og:type"       , content="website")
     meta(property="og:url"        , content="https://zfo.gg/")
     meta(property="og:image"      , content="https://gravatar.com/userimage/13798601/8b36dffdac586c62f4d7eb849721e163?size=1200")
-    meta(property="fb:app_id"     , content="259199077600892")
+    meta(property="fb:app_id"     , content="2590666097839261")
 
     <!-- build:css(./) styles/vendor.css -->
     link(rel="stylesheet" href="components/animate.css/animate.css")
@@ -32,6 +32,10 @@ html(ng-app="zfogg")
     link(rel="stylesheet" href="gravity/gravity.css")
     <!-- endbuild -->
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-51238372-1"></script>
+    <!-- inject -->
+
   body(ng-controller="BodyCtrl", ng-style="bodyStyle")
     #bg(ng-style="bgStyle")
 
@@ -40,7 +44,7 @@ html(ng-app="zfogg")
       footer#footer.wrapper.ng-cloak( ng-include="" src=" 'layout/footer.html' ")
 
     <!-- build:js({./,.tmp}) scripts/plugins.js -->
-    script(src="components/jquery/dist/jquery.slim.js")
+    script(src="components/jquery/dist/jquery.min.js")
     script(src="components/angular/angular.js")
     script(src="components/flowtype/flowtype.js")
     script(src="components/mousetrap/mousetrap.js")
@@ -69,5 +73,3 @@ html(ng-app="zfogg")
     script(src="gravity/gravity.js")
     <!-- endbuild -->
 
-    <!-- Google Analytics: analytics.js -->
-    <!-- inject -->

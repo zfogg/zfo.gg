@@ -21,18 +21,20 @@ module.exports = (grunt) ->
       dist:
         expand: true
         cwd:  "<%= zfogg.dist %>"
-        src:  "**/*.html"
+        src:  ["**/*.html", "!components/**/*.html"]
         dest: "<%= zfogg.dist %>"
 
 
     clean:
       dist:
         files: [
-          dot: true
+          dot: false
           src: [
             "<%= zfogg.tmp %>/*"
             "<%= zfogg.dist %>/*"
             ".sass-cache"
+            "!now.json"
+            "!.now/*"
           ]
         ]
 
@@ -89,7 +91,7 @@ module.exports = (grunt) ->
         httpImagesPath:          "/images"
         httpFontsPath:           "/fonts"
         relativeAssets:          false
-        assetCacheBuster:        false
+        assetCacheBuster:        true
 
       prod: options: debugInfo: false
       dev:  options: debugInfo: true
@@ -127,7 +129,15 @@ module.exports = (grunt) ->
       dist:
         expand: true
         cwd:  "<%= zfogg.tmp %>"
-        src:  "**/*.js"
+        src:  ["**/*.js", "!concat/**", "!gravity/barnes-hut/*",  "!gravity/canvas-*.js"]
+        dest: "<%= zfogg.tmp %>"
+
+
+    ngAnnotate:
+      dist:
+        expand: true
+        cwd:  "<%= zfogg.tmp %>"
+        src:  ["**/*.js", "!concat/**", "!gravity/barnes-hut/*",  "!gravity/canvas-*.js"]
         dest: "<%= zfogg.tmp %>"
 
 
@@ -154,6 +164,20 @@ module.exports = (grunt) ->
           "fonts/**/*"
           "audio/**/*"
         ]
+      concat_dist:
+        expand: true
+        cwd: "<%= zfogg.tmp %>/concat"
+        dest: "<%= zfogg.dist %>"
+        src: [
+          "scripts/*.js",
+        ]
+      fontawesome_dist:
+        expand: true
+        cwd: "<%= zfogg.dist %>/components/fontawesome/fonts"
+        dest: "<%= zfogg.dist %>/fonts"
+        src: [
+          "*",
+        ]
 
 
     inject:
@@ -176,12 +200,15 @@ module.exports = (grunt) ->
         "copy:tmp"
       ]
       dist2: [
-        "ngmin"
+        #"ngmin"
+        #"ngAnnotate"
         "autoprefixer"
       ]
       dist3: [
         "copy:app_dist"
+        "copy:concat_dist"
         "copy:components_dist"
+        "copy:fontawesome_dist"
         "inject:googleAnalytics"
       ]
 
@@ -197,18 +224,19 @@ module.exports = (grunt) ->
 
 
   grunt.registerTask "build", [
-    "clean"
+    #"clean"
     "concurrent:dist1"
     "prettify"
     "useminPrepare"
     "concurrent:dist2"
+    #"ngAnnotate"
     "ngtemplates"
     "concat:generated"
     "cssmin:generated"
-    "uglify:generated"
+    #"uglify:generated"
     "usemin"
     "concurrent:dist3"
-    "usebanner"
+    #"usebanner"
   ]
 
 

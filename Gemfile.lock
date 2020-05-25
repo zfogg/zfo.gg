@@ -29,7 +29,7 @@ DEPENDENCIES
   sass
 
 RUBY VERSION
-   ruby 2.3.7p456
+   ruby 2.6.3p62
 
 BUNDLED WITH
-   1.16.2
+   2.1.2
