@@ -178,6 +178,13 @@ module.exports = (grunt) ->
         src: [
           "*",
         ]
+      sitemap_dist:
+        expand: true
+        cwd: ""
+        dest: "<%= zfogg.dist %>/sitemap.xml"
+        src: [
+          "sitemap.xml",
+        ]
 
 
     inject:
