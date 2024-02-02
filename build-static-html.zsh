@@ -11,3 +11,6 @@
 cp -r ./.tmp/* ./o
 cp -r ./components ./o
 cp -r ./public/{index.html,robots.txt,keybase.txt,favicon.ico,fonts} ./o
+
+mkdir -p ./o/thing/gravity
+cp ./o/index.html ./o/thing/gravity/index.html
