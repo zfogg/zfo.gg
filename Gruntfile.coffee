@@ -21,20 +21,27 @@ module.exports = (grunt) ->
       dist:
         expand: true
         cwd:  "<%= zfogg.dist %>"
-        src:  "**/*.html"
+        src:  ["**/*.html", "!components/**/*.html"]
         dest: "<%= zfogg.dist %>"
 
 
     clean:
       dist:
         files: [
-          dot: true
+          dot: false
           src: [
             "<%= zfogg.tmp %>/*"
             "<%= zfogg.dist %>/*"
             ".sass-cache"
+            "!now.json"
+            "!.now/*"
           ]
         ]
+
+
+    shell:
+      bower:
+        command: '[ -d components ] || bun x bower install'
 
 
     pug:
@@ -78,21 +85,26 @@ module.exports = (grunt) ->
         files: "<%= coffee.dist.files %>"
 
 
-    compass:
+    sass:
       options:
-        sassDir:                 "<%= zfogg.app %>"
-        cssDir:                  "<%= zfogg.tmp %>"
-        imagesDir:               "<%= zfogg.app %>"
-        javascriptsDir:          "<%= zfogg.app %>"
-        fontsDir:                "<%= zfogg.app %>"
-        importPath:              "components"
-        httpImagesPath:          "/images"
-        httpFontsPath:           "/fonts"
-        relativeAssets:          false
-        assetCacheBuster:        false
+        implementation: require('sass')
+        sourceMap: false
+        loadPaths: ["components"]
+        style: 'compressed'
 
-      prod: options: debugInfo: false
-      dev:  options: debugInfo: true
+      prod:
+        files: [
+          expand: true
+          cwd: "<%= zfogg.app %>"
+          src: ["**/*.sass", "**/*.scss"]
+          dest: "<%= zfogg.tmp %>"
+          ext: ".css"
+        ]
+      dev:
+        options:
+          sourceMap: true
+          style: 'expanded'
+        files: "<%= sass.prod.files %>"
 
 
     rev:
@@ -127,7 +139,15 @@ module.exports = (grunt) ->
       dist:
         expand: true
         cwd:  "<%= zfogg.tmp %>"
-        src:  "**/*.js"
+        src:  ["**/*.js", "!concat/**", "!gravity/barnes-hut/*",  "!gravity/canvas-*.js"]
+        dest: "<%= zfogg.tmp %>"
+
+
+    ngAnnotate:
+      dist:
+        expand: true
+        cwd:  "<%= zfogg.tmp %>"
+        src:  ["**/*.js", "!concat/**", "!gravity/barnes-hut/*",  "!gravity/canvas-*.js"]
         dest: "<%= zfogg.tmp %>"
 
 
@@ -154,6 +174,27 @@ module.exports = (grunt) ->
           "fonts/**/*"
           "audio/**/*"
         ]
+      concat_dist:
+        expand: true
+        cwd: "<%= zfogg.tmp %>/concat"
+        dest: "<%= zfogg.dist %>"
+        src: [
+          "scripts/*.js",
+        ]
+      fontawesome_dist:
+        expand: true
+        cwd: "<%= zfogg.dist %>/components/fontawesome/fonts"
+        dest: "<%= zfogg.dist %>/fonts"
+        src: [
+          "*",
+        ]
+      sitemap_dist:
+        expand: true
+        cwd: ""
+        dest: "<%= zfogg.dist %>/sitemap.xml"
+        src: [
+          "sitemap.xml",
+        ]
 
 
     inject:
@@ -165,23 +206,26 @@ module.exports = (grunt) ->
 
     concurrent:
       dist1_dev: [
-        "compass:dev"
+        "sass:dev"
         "coffee:dev"
         "copy:tmp"
       ]
       dist1: [
         "pug"
-        "compass:prod"
+        "sass:prod"
         "coffee:dist"
         "copy:tmp"
       ]
       dist2: [
-        "ngmin"
+        #"ngmin"
+        #"ngAnnotate"
         "autoprefixer"
       ]
       dist3: [
         "copy:app_dist"
+        "copy:concat_dist"
         "copy:components_dist"
+        "copy:fontawesome_dist"
         "inject:googleAnalytics"
       ]
 
@@ -197,18 +241,20 @@ module.exports = (grunt) ->
 
 
   grunt.registerTask "build", [
-    "clean"
+    #"clean"
+    "shell:bower"
     "concurrent:dist1"
     "prettify"
     "useminPrepare"
     "concurrent:dist2"
+    #"ngAnnotate"
     "ngtemplates"
     "concat:generated"
     "cssmin:generated"
-    "uglify:generated"
+    #"uglify:generated"
     "usemin"
     "concurrent:dist3"
-    "usebanner"
+    #"usebanner"
   ]
 
 

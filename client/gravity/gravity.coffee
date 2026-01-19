@@ -182,7 +182,7 @@ angular.module("zfogg.gravity")
     do main = ->
       #Update
       cursor.update()
-      mapPairs applyGravity, squares
+      #mapPairs applyGravity, squares
       square.update gameTime for square in squares
 
       qt.clear()

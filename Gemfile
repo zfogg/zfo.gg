@@ -1,4 +1,4 @@
-ruby "2.3.7"
+ruby "3.3.0"
 source "https://rubygems.org"
 gem "sass"
 gem "compass"

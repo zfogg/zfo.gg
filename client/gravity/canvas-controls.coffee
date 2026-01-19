@@ -31,7 +31,7 @@ angular.module("zfogg.gravity")
       @resets.push -> numberInput.value = defaultValue
       numberInput
 
-    RangeInput: (name, defaultValue, min = 1, max = 100, step = 10) ->
+    RangeInput: (name, defaultValue, min=1, max=100, step=10) ->
       control = @divElement "canvas-control"
       @pElement name, ($ control)
       rangeInput = @inputElement "range", defaultValue, ($ control)
@@ -52,14 +52,15 @@ angular.module("zfogg.gravity")
     controlLimit: (limit) ->
       -> @value = C$.Math.clipValues @value, limit.lower, limit.upper
 
-    propertyUpdater: (obj, objProperty, modifier = 1) ->
-      -> obj[objProperty] = @value / modifier
+    propertyUpdater: (obj, objProperty, modifier=1) ->
+      -> obj[objProperty.toString()] = @value / modifier
 
     controlValueObj: (value, limitRange) ->
       default: value
       current: value
       modifier: C$.Math.commonRangeCoefficient value, limitRange
-      setFromControl: -> @current = @getFromControl()
+      setFromControl: () ->
+        @current = @getFromControl()
       getFromControl: (control = @self) -> control.value / @modifier
       # self: set this to the parent object after creation if you like.
 

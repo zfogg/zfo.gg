@@ -196,17 +196,19 @@ angular.module("zfogg.gravity")
         y = e.pageY
       else
         x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft
-        y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop
+        y = e.clientY + document.body.scrollTop  + document.documentElement.scrollTop
       p = C$.findElementPosition element
       cursor[0] = x - element.offsetLeft - p.x
       cursor[1] = y - element.offsetTop  - p.y + scrollElem.scrollTop()
+      null
 
   C$.findElementPosition = (obj) ->
     if obj.offsetParent
+      obj = obj.offsetParent
       curleft = curtop = 0
       loop
         curleft += obj.offsetLeft
-        curtop += obj.offsetTop
+        curtop  += obj.offsetTop
         break unless obj = obj.offsetParent
       x: curleft, y: curtop
     else undefined

@@ -1,59 +1,41 @@
 @font-face {
-    font-family: 'Aleo';
-    font-weight: normal;
-    font-style: normal;
-    src: url('/fonts/TypoPRO-Aleo-Regular.eot');
-    src: url('/fonts/TypoPRO-Aleo-Regular.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/TypoPRO-Aleo-Regular.woff') format('woff'),
-         url('/fonts/TypoPRO-Aleo-Regular.ttf') format('truetype');
+  font-family: 'Aleo';
+  font-weight: normal;
+  font-style: normal;
+  src: url('/fonts/aleo/Aleo-Regular.otf');
 }
 
 @font-face {
-    font-family: 'Aleo';
-    font-weight: bold;
-    font-style: normal;
-    src: url('/fonts/TypoPRO-Aleo-Bold.eot');
-    src: url('/fonts/TypoPRO-Aleo-Bold.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/TypoPRO-Aleo-Bold.woff') format('woff'),
-         url('/fonts/TypoPRO-Aleo-Bold.ttf') format('truetype');
+  font-family: 'Aleo';
+  font-weight: bold;
+  font-style: normal;
+  src: url('/fonts/aleo/Aleo-Bold.otf');
 }
 
 @font-face {
-    font-family: 'Aleo';
-    font-weight: 300;
-    font-style: normal;
-    src: url('/fonts/TypoPRO-Aleo-Light.eot');
-    src: url('/fonts/TypoPRO-Aleo-Light.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/TypoPRO-Aleo-Light.woff') format('woff'),
-         url('/fonts/TypoPRO-Aleo-Light.ttf') format('truetype');
+  font-family: 'Aleo';
+  font-weight: 300;
+  font-style: normal;
+  src: url('/fonts/Aleo-Light.otf');
 }
 
 @font-face {
-    font-family: 'Aleo';
-    font-weight: normal;
-    font-style: italic;
-    src: url('/fonts/TypoPRO-Aleo-Italic.eot');
-    src: url('/fonts/TypoPRO-Aleo-Italic.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/TypoPRO-Aleo-Italic.woff') format('woff'),
-         url('/fonts/TypoPRO-Aleo-Italic.ttf') format('truetype');
+  font-family: 'Aleo';
+  font-weight: normal;
+  font-style: italic;
+  src: url('/fonts/Aleo-Italic.otf');
 }
 
 @font-face {
-    font-family: 'Aleo';
-    font-weight: bold;
-    font-style: italic;
-    src: url('/fonts/TypoPRO-Aleo-BoldItalic.eot');
-    src: url('/fonts/TypoPRO-Aleo-BoldItalic.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/TypoPRO-Aleo-BoldItalic.woff') format('woff'),
-         url('/fonts/TypoPRO-Aleo-BoldItalic.ttf') format('truetype');
+  font-family: 'Aleo';
+  font-weight: bold;
+  font-style: italic;
+  src: url('/fonts/Aleo-BoldItalic.otf');
 }
 
 @font-face {
-    font-family: 'Aleo';
-    font-weight: 300;
-    font-style: italic;
-    src: url('/fonts/TypoPRO-Aleo-LightItalic.eot');
-    src: url('/fonts/TypoPRO-Aleo-LightItalic.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/TypoPRO-Aleo-LightItalic.woff') format('woff'),
-         url('/fonts/TypoPRO-Aleo-LightItalic.ttf') format('truetype');
+  font-family: 'Aleo';
+  font-weight: 300;
+  font-style: italic;
+  src: url('/fonts/Aleo-LightItalic.otf');
 }
