@@ -66,33 +66,7 @@ exports.staticRoutes = ->
       skip: (req, res) -> res.statusCode < 400
     app.use require("compression")()
 
-  if NODE_ENV == "development"
-    app.use st
-      path:        ".tmp"
-      url:         "/"
-      passthrough: false
-      cache:       ST_CACHE
-    app.use st
-      path:        join CWD, "/components"
-      url:         "components/"
-      passthrough: false
-      cache:       ST_CACHE
-    app.use st
-      path:        join CWD, "/client"
-      url:         "/"
-      passthrough: false
-      cache:       ST_CACHE
-
-  app.use st
-    path:        join CWD, "/components/fontawesome/fonts"
-    url:         "fonts/"
-    passthrough: false
-    cache:       ST_CACHE
-  #app.use st
-    #path:        join CWD, "/components/typopro-web/web/TypoPRO-Aleo"
-    #url:         "fonts/"
-    #passthrough: false
-    #cache:       ST_CACHE
+  # In development, use Vite dev server (bun run dev) instead of Express serving client files
 
 
 appServer = new Promise ->

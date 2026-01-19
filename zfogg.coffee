@@ -13,17 +13,18 @@ Promise.resolve(1)
     console.log "app routes"
     # api
     app.get "/api/zfogg",     zfogg.get
-    # angular
+    # react router
     app.get "/",              index
     app.get "/bitcoin",       index
     app.get "/thing/gravity", index
-    app.get "/404",           notFound
+    app.get "/404",           index
 
   .then staticRoutes
 
   .then ->
     console.log "catchall routes"
-    app.get "/*",             [notFound, index]
+    app.use notFound
+    app.use index
 
   .then appServer
 
