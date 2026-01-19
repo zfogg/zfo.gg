@@ -17,3 +17,5 @@
 /bundle/
 /.bundle/
 /o/
+.vercel
+.env*.local

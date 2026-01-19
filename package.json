@@ -2,7 +2,7 @@
   "name": "zfo.gg",
   "version": "11.0.0",
   "engines": {
-    "node": ">=12.16.3 <=14.0.0",
+    "node": ">=12.16.3 <=26.0.0",
     "npm": "~6.14.4"
   },
   "license": "UNLICENSED",
@@ -47,6 +47,9 @@
     "supermarked": "~2.0.0"
   },
   "devDependencies": {
+    "grunt-sass": "^4.0.1",
+    "grunt-shell": "^4.0.0",
+    "sass": "^1.97.2",
     "time-grunt": "~1.4.0"
   },
   "scripts": {

@@ -39,6 +39,11 @@ module.exports = (grunt) ->
         ]
 
 
+    shell:
+      bower:
+        command: '[ -d components ] || npx bower install'
+
+
     pug:
       index:
         expand: true
@@ -80,21 +85,26 @@ module.exports = (grunt) ->
         files: "<%= coffee.dist.files %>"
 
 
-    compass:
+    sass:
       options:
-        sassDir:                 "<%= zfogg.app %>"
-        cssDir:                  "<%= zfogg.tmp %>"
-        imagesDir:               "<%= zfogg.app %>"
-        javascriptsDir:          "<%= zfogg.app %>"
-        fontsDir:                "<%= zfogg.app %>"
-        importPath:              "components"
-        httpImagesPath:          "/images"
-        httpFontsPath:           "/fonts"
-        relativeAssets:          false
-        assetCacheBuster:        true
+        implementation: require('sass')
+        sourceMap: false
+        loadPaths: ["components"]
+        style: 'compressed'
 
-      prod: options: debugInfo: false
-      dev:  options: debugInfo: true
+      prod:
+        files: [
+          expand: true
+          cwd: "<%= zfogg.app %>"
+          src: ["**/*.sass", "**/*.scss"]
+          dest: "<%= zfogg.tmp %>"
+          ext: ".css"
+        ]
+      dev:
+        options:
+          sourceMap: true
+          style: 'expanded'
+        files: "<%= sass.prod.files %>"
 
 
     rev:
@@ -196,13 +206,13 @@ module.exports = (grunt) ->
 
     concurrent:
       dist1_dev: [
-        "compass:dev"
+        "sass:dev"
         "coffee:dev"
         "copy:tmp"
       ]
       dist1: [
         "pug"
-        "compass:prod"
+        "sass:prod"
         "coffee:dist"
         "copy:tmp"
       ]
@@ -232,6 +242,7 @@ module.exports = (grunt) ->
 
   grunt.registerTask "build", [
     #"clean"
+    "shell:bower"
     "concurrent:dist1"
     "prettify"
     "useminPrepare"
