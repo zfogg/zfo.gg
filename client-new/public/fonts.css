@@ -1,0 +1,41 @@
+@font-face {
+  font-family: 'Aleo';
+  font-weight: normal;
+  font-style: normal;
+  src: url('/fonts/aleo/Aleo-Regular.otf');
+}
+
+@font-face {
+  font-family: 'Aleo';
+  font-weight: bold;
+  font-style: normal;
+  src: url('/fonts/aleo/Aleo-Bold.otf');
+}
+
+@font-face {
+  font-family: 'Aleo';
+  font-weight: 300;
+  font-style: normal;
+  src: url('/fonts/aleo/Aleo-Light.otf');
+}
+
+@font-face {
+  font-family: 'Aleo';
+  font-weight: normal;
+  font-style: italic;
+  src: url('/fonts/aleo/Aleo-Italic.otf');
+}
+
+@font-face {
+  font-family: 'Aleo';
+  font-weight: bold;
+  font-style: italic;
+  src: url('/fonts/aleo/Aleo-BoldItalic.otf');
+}
+
+@font-face {
+  font-family: 'Aleo';
+  font-weight: 300;
+  font-style: italic;
+  src: url('/fonts/aleo/Aleo-LightItalic.otf');
+}
