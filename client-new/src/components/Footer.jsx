@@ -20,7 +20,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer id="footer" className="h-[140px] flex-shrink-0 flex justify-center gap-4 p-8">
+    <footer id="footer" className="h-[140px] flex-shrink-0 flex justify-center gap-8 p-8">
       {links.map((link, index) => (
         link.external ? (
           <a

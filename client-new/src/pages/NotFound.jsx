@@ -15,16 +15,16 @@ const NotFound = () => {
         </Link>
       </header>
 
-      <div className="flex-1 flex flex-col items-center justify-center w-full px-4">
-        <h1 className="text-8xl md:text-9xl font-light mb-4">404</h1>
-        <h2 className="text-3xl md:text-4xl font-light mb-8">Page not found</h2>
-        <Link
-          to="/"
-          className="text-xl hover:underline border-2 border-current px-6 py-3 hover:bg-current hover:text-white transition-all"
-        >
-          Go back home
-        </Link>
-      </div>
+      <section id="content" className="flex-1 flex justify-center items-center w-full px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2>404 :/</h2>
+          <h3>
+            Are you lost?
+            <br />
+            You should <Link to="/">head back</Link> to safety.
+          </h3>
+        </div>
+      </section>
     </div>
   );
 };
