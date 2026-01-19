@@ -33,7 +33,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "cd client && vite",
-    "build": "cd client && vite build",
+    "build": "cd client && vite build && cp dist/index.html dist/404.html",
     "preview": "cd client && vite preview",
     "start": "coffee zfogg.coffee"
   },
