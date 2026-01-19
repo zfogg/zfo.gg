@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useGravity } from '../hooks/useGravity';
 
 const Gravity = () => {
+  const canvasRef = useGravity();
+
   // Update page title
   useEffect(() => {
     document.title = 'Gravity - zfo.gg';
@@ -24,9 +27,8 @@ const Gravity = () => {
           </h3>
           <div id="canvas-container" className="relative block max-w-[960px] w-full mx-auto">
             <canvas
+              ref={canvasRef}
               id="canvas"
-              width="800"
-              height="800"
               className="block mx-auto cursor-none"
               onContextMenu={(e) => e.preventDefault()}
             />
