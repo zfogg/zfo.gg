@@ -41,7 +41,7 @@ module.exports = (grunt) ->
 
     shell:
       bower:
-        command: '[ -d components ] || npx bower install'
+        command: '[ -d components ] || bun x bower install'
 
 
     pug:

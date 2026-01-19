@@ -2,8 +2,7 @@
   "name": "zfo.gg",
   "version": "11.0.0",
   "engines": {
-    "node": ">=18.0.0 <=26.0.0",
-    "npm": "~6.14.4"
+    "bun": "@latest"
   },
   "license": "UNLICENSED",
   "repository": "http://github.com/zfogg/zfo.gg",
@@ -55,7 +54,7 @@
   "scripts": {
     "heroku-postbuild": "bower install && grunt build",
     "postbuild": "bower install && grunt build",
-    "build": "npm run postbuild",
+    "build": "bun run postbuild",
     "start": "coffee zfogg.coffee"
   }
 }
