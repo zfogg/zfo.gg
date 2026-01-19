@@ -39,7 +39,7 @@ else
   console.log('HTTP')
 
 exports.index = index = (req, res) ->
-  res.sendFile join CWD, "/public/index.html"
+  res.sendFile join CWD, "/client/dist/index.html"
 
 
 # static assets
@@ -51,7 +51,7 @@ ST_CACHE = content:
 exports.staticRoutes = ->
   console.log "static routes"
   app.use st
-    path:        join CWD, "/public"
+    path:        join CWD, "/client/dist"
     index:       'index.html'
     passthrough: true
     cache:       ST_CACHE

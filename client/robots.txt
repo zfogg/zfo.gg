@@ -1,7 +1,0 @@
-# robotstxt.org
-
-# All robots allowed
-User-agent: *
-Disallow:
-
-Sitemap: https://zfo.gg/sitemap.xml

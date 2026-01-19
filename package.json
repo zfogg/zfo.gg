@@ -1,60 +1,56 @@
 {
   "name": "zfo.gg",
   "version": "11.0.0",
-  "engines": {
-    "bun": "@latest"
-  },
-  "license": "UNLICENSED",
   "repository": "http://github.com/zfogg/zfo.gg",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-brands-svg-icons": "^7.1.0",
+    "@fortawesome/react-fontawesome": "^3.1.1",
+    "@tanstack/react-query": "^5.90.19",
+    "@vercel/analytics": "^1.6.1",
+    "bluebird": "^3.7.2",
+    "compression": "^1.8.1",
+    "errorhandler": "^1.5.2",
+    "express": "^5.2.1",
+    "morgan": "^1.10.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router-dom": "^7.12.0",
+    "serve-favicon": "^2.5.1",
+    "sitemap-generator": "^8.5.1",
+    "st": "^3.0.3",
+    "supermarked": "~2.0.0"
+  },
   "cacheDirectories": [
     "node_modules",
     "components",
     "public",
     ".sass-cache"
   ],
-  "dependencies": {
-    "bluebird": "^3.7.2",
-    "bower": "^1.8.14",
-    "coffeescript": "^2.7.0",
-    "compression": "^1.8.1",
-    "errorhandler": "^1.5.2",
-    "express": "^5.2.1",
-    "grunt": "^1.6.1",
-    "grunt-angular-templates": "~1.2.0",
-    "grunt-autoprefixer": "~3.0.4",
-    "grunt-banner": "~0.6.0",
-    "grunt-cli": "^1.5.0",
-    "grunt-concurrent": "~3.0.0",
-    "grunt-contrib-clean": "~2.0.1",
-    "grunt-contrib-coffee": "~2.1.0",
-    "grunt-contrib-compass": "~1.1.1",
-    "grunt-contrib-concat": "~2.1.0",
-    "grunt-contrib-copy": "~1.0.0",
-    "grunt-contrib-cssmin": "~5.0.0",
-    "grunt-contrib-pug": "^3.0.0",
-    "grunt-contrib-uglify": "~5.2.2",
-    "grunt-inject": "github:gruntjs-updater/grunt-inject#de519c",
-    "grunt-ng-annotate": "^4.0.0",
-    "grunt-ngmin": "~0.0.3",
-    "grunt-prettify": "~0.4.0",
-    "grunt-usemin": "~3.1.1",
-    "load-grunt-tasks": "~5.1.0",
-    "morgan": "^1.10.1",
-    "serve-favicon": "^2.5.1",
-    "sitemap-generator": "^8.5.1",
-    "st": "^3.0.3",
-    "supermarked": "~2.0.0"
+  "engines": {
+    "bun": "@latest"
+  },
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "cd client && vite",
+    "build": "cd client && vite build",
+    "preview": "cd client && vite preview",
+    "start": "coffee zfogg.coffee"
   },
   "devDependencies": {
-    "grunt-sass": "^4.0.1",
-    "grunt-shell": "^4.0.0",
-    "sass": "^1.97.2",
-    "time-grunt": "~2.0.0"
-  },
-  "scripts": {
-    "heroku-postbuild": "bower install && grunt build",
-    "postbuild": "bower install && grunt build",
-    "build": "bun run postbuild",
-    "start": "coffee zfogg.coffee"
+    "@eslint/js": "^9.39.2",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.26",
+    "globals": "^17.0.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "vite": "^7.3.1",
+    "vite-plugin-sitemap": "^0.8.2"
   }
 }
