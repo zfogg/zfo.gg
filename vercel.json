@@ -1,7 +1,19 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/bitcoin",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/thing/gravity",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/404",
       "destination": "/index.html"
     }
   ]
