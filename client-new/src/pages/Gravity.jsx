@@ -1,14 +1,36 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useGravity } from '../hooks/useGravity';
+import CanvasControls from '../components/CanvasControls';
+
+const randomBetween = (min, max) => Math.random() * (max - min) + min;
+
+const getDefaultConfig = () => ({
+  gravity: randomBetween(4, 9) * Math.pow(10, -1),
+  friction: randomBetween(2, 6) * Math.pow(10, -4),
+  distance: randomBetween(5, 9),
+  cursorFriction: randomBetween(1, 4),
+  cursorMass: 1750,
+  cursorForce: 0.15,
+  particlesN: 13,
+});
 
 const Gravity = () => {
-  const canvasRef = useGravity();
+  const [config, setConfig] = useState(getDefaultConfig());
+  const { canvasRef, resetSquares } = useGravity(config);
 
   // Update page title
   useEffect(() => {
     document.title = 'Gravity - zfo.gg';
   }, []);
+
+  const handleResetDefaults = () => {
+    setConfig(getDefaultConfig());
+  };
+
+  const handleResetSquares = () => {
+    resetSquares();
+  };
 
   return (
     <div className="flex-1 flex flex-col w-full">
@@ -31,6 +53,12 @@ const Gravity = () => {
               id="canvas"
               className="block mx-auto cursor-none"
               onContextMenu={(e) => e.preventDefault()}
+            />
+            <CanvasControls
+              config={config}
+              onConfigChange={setConfig}
+              onResetSquares={handleResetSquares}
+              onResetDefaults={handleResetDefaults}
             />
           </div>
         </div>

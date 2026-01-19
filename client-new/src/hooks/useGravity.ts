@@ -6,7 +6,7 @@ import { PhysicalCursor } from '../gravity/bodies/PhysicalCursor';
 import { AABB } from '../gravity/barnes-hut/AABB';
 import { SquareTree } from '../gravity/barnes-hut/SquareTree';
 
-interface GravityConfig {
+export interface GravityConfig {
   gravity: number;
   friction: number;
   distance: number;
@@ -22,13 +22,14 @@ const defaultConfig: GravityConfig = {
   distance: randomBetween(5, 9),
   cursorFriction: randomBetween(1, 4),
   cursorMass: 1750,
-  cursorForce: 0.65,
+  cursorForce: 0.15,
   particlesN: 13,
 };
 
-export const useGravity = () => {
+export const useGravity = (externalConfig?: GravityConfig) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationIdRef = useRef<number | null>(null);
+  const resetSquaresCallbackRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -46,7 +47,7 @@ export const useGravity = () => {
 
     // Initialize
     const vectors = new Vector2Pool(1000);
-    const config = { ...defaultConfig };
+    const config = externalConfig || { ...defaultConfig };
     let gameTime = 0;
     let squares: PhysicalSquare[] = [];
     let cursor: PhysicalCursor;
@@ -178,6 +179,12 @@ export const useGravity = () => {
     squares = resetSquares(config.particlesN);
     qt = newSquareTree(squares, 5);
 
+    // Expose reset callback
+    resetSquaresCallbackRef.current = () => {
+      squares = resetSquares(config.particlesN);
+      qt = newSquareTree(squares, 5);
+    };
+
     // Keyboard handler for spacebar
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
@@ -249,7 +256,7 @@ export const useGravity = () => {
       }
       vectors.clear();
     };
-  }, []);
+  }, [externalConfig]);
 
-  return canvasRef;
+  return { canvasRef, resetSquares: () => resetSquaresCallbackRef.current?.() };
 };
