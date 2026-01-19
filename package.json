@@ -30,7 +30,7 @@
   "engines": {
     "bun": "@latest"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "dev": "cd client && vite",
     "build": "cd client && vite build",
