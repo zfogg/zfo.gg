@@ -19,7 +19,7 @@ export interface GravityConfig {
 const defaultConfig: GravityConfig = {
   gravity: randomBetween(4, 9) * Math.pow(10, -1),
   friction: randomBetween(2, 6) * Math.pow(10, -4),
-  distance: randomBetween(5, 9),
+  distance: randomBetween(30, 50),
   cursorFriction: randomBetween(1, 4),
   cursorMass: 1750,
   cursorForce: 0.15,

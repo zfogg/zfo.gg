@@ -57,10 +57,10 @@ const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefault
               <input
                 type="range"
                 min="10"
-                max="100"
+                max="200"
                 step="3"
-                value={config.distance * 10}
-                onChange={(e) => handleChange('distance', e.target.value / 10)}
+                value={config.distance}
+                onChange={(e) => handleChange('distance', e.target.value)}
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
               />
             </div>
