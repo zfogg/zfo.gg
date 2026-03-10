@@ -47,7 +47,7 @@ export const useGravity = (externalConfig?: GravityConfig) => {
 
     // Initialize
     const vectors = new Vector2Pool(1000);
-    const config = externalConfig || { ...defaultConfig };
+    const config = { ...(externalConfig || defaultConfig) };
     let gameTime = 0;
     let squares: PhysicalSquare[] = [];
     let cursor: PhysicalCursor;
