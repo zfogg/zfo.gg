@@ -83,6 +83,9 @@ export const useGravity = (externalConfig?: GravityConfig) => {
 
     cursor.onMouseUpCanvas = (isLeft: boolean) => {
       if (isLeft) {
+        console.log('onMouseUpCanvas called, deadzone:', config.distance);
+        let blockCount = 0;
+        let applyCount = 0;
         for (const s of squares) {
           const dist = Math.sqrt(
             Math.pow(s.position[0] - cursor.position[0], 2) +
@@ -96,11 +99,14 @@ export const useGravity = (externalConfig?: GravityConfig) => {
               s.applyForce(f);
               vectors.put(f);
               vectors.put(d);
+              applyCount++;
             } else {
               console.log('Cursor deadzone blocked force:', { dist, deadzone: config.distance });
+              blockCount++;
             }
           }
         }
+        console.log('Mouse release summary:', { applied: applyCount, blocked: blockCount });
       }
     };
 
