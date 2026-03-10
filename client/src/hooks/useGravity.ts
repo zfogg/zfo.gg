@@ -114,6 +114,8 @@ export const useGravity = (externalConfig?: GravityConfig) => {
         normalize(d, r);
         v[0] = -d[0] * g;
         v[1] = -d[1] * g;
+      } else if (r !== 0 && r <= config.distance && b2.mass > 0) {
+        console.log('Cursor drag deadzone blocked:', { r, deadzone: config.distance });
       }
 
       vectors.put(d);
