@@ -88,7 +88,7 @@ export const useGravity = (externalConfig?: GravityConfig) => {
             Math.pow(s.position[0] - cursor.position[0], 2) +
             Math.pow(s.position[1] - cursor.position[1], 2)
           );
-          if (dist < 25) {
+          if (dist < 25 && dist > config.distance) {
             const d = direction(s.position, cursor.position, vectors);
             normalize(d);
             const f = vectors.get(-d[0] * config.cursorForce, -d[1] * config.cursorForce);
