@@ -88,13 +88,17 @@ export const useGravity = (externalConfig?: GravityConfig) => {
             Math.pow(s.position[0] - cursor.position[0], 2) +
             Math.pow(s.position[1] - cursor.position[1], 2)
           );
-          if (dist < 25 && dist > config.distance) {
-            const d = direction(s.position, cursor.position, vectors);
-            normalize(d);
-            const f = vectors.get(-d[0] * config.cursorForce, -d[1] * config.cursorForce);
-            s.applyForce(f);
-            vectors.put(f);
-            vectors.put(d);
+          if (dist < 25) {
+            if (dist > config.distance) {
+              const d = direction(s.position, cursor.position, vectors);
+              normalize(d);
+              const f = vectors.get(-d[0] * config.cursorForce, -d[1] * config.cursorForce);
+              s.applyForce(f);
+              vectors.put(f);
+              vectors.put(d);
+            } else {
+              console.log('Cursor deadzone blocked force:', { dist, deadzone: config.distance });
+            }
           }
         }
       }
@@ -114,8 +118,6 @@ export const useGravity = (externalConfig?: GravityConfig) => {
         normalize(d, r);
         v[0] = -d[0] * g;
         v[1] = -d[1] * g;
-      } else if (r !== 0 && r <= config.distance) {
-        console.log('Deadzone activated:', { r, deadzone: config.distance });
       }
 
       vectors.put(d);
