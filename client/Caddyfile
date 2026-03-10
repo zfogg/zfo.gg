@@ -1,0 +1,7 @@
+:5176
+
+root * /srv
+file_server
+
+# SPA routing - rewrite non-existent files to index.html
+try_files {path} /index.html
