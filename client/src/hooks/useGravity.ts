@@ -136,14 +136,18 @@ export const useGravity = (externalConfig?: GravityConfig) => {
     };
 
     const applyGravity = (
-      body1: PhysicalSquare,
-      body2: PhysicalSquare,
+      body1: PhysicalSquare | { position: Vector2; mass: number },
+      body2: PhysicalSquare | { position: Vector2; mass: number },
     ): void => {
       const f = attractionOfGravity(body1, body2);
-      body1.applyForce(f);
+      if ("applyForce" in body1) {
+        body1.applyForce(f);
+      }
       f[0] = -f[0];
       f[1] = -f[1];
-      body2.applyForce(f);
+      if ("applyForce" in body2) {
+        body2.applyForce(f);
+      }
       vectors.put(f);
     };
 
@@ -238,7 +242,7 @@ export const useGravity = (externalConfig?: GravityConfig) => {
         square.update(
           config.friction,
           cursorPressed,
-          cursorPressed ? () => applyGravity(square, cursor as any) : undefined,
+          cursorPressed ? () => applyGravity(square, cursor) : undefined,
         );
       }
 
