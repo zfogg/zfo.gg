@@ -83,30 +83,20 @@ export const useGravity = (externalConfig?: GravityConfig) => {
 
     cursor.onMouseUpCanvas = (isLeft: boolean) => {
       if (isLeft) {
-        console.log('onMouseUpCanvas called, deadzone:', config.distance);
-        let blockCount = 0;
-        let applyCount = 0;
         for (const s of squares) {
           const dist = Math.sqrt(
             Math.pow(s.position[0] - cursor.position[0], 2) +
             Math.pow(s.position[1] - cursor.position[1], 2)
           );
-          if (dist < 25) {
-            if (dist > config.distance) {
-              const d = direction(s.position, cursor.position, vectors);
-              normalize(d);
-              const f = vectors.get(-d[0] * config.cursorForce, -d[1] * config.cursorForce);
-              s.applyForce(f);
-              vectors.put(f);
-              vectors.put(d);
-              applyCount++;
-            } else {
-              console.log('Cursor deadzone blocked force:', { dist, deadzone: config.distance });
-              blockCount++;
-            }
+          if (dist < 25 && dist > config.distance) {
+            const d = direction(s.position, cursor.position, vectors);
+            normalize(d);
+            const f = vectors.get(-d[0] * config.cursorForce, -d[1] * config.cursorForce);
+            s.applyForce(f);
+            vectors.put(f);
+            vectors.put(d);
           }
         }
-        console.log('Mouse release summary:', { applied: applyCount, blocked: blockCount });
       }
     };
 
@@ -124,9 +114,6 @@ export const useGravity = (externalConfig?: GravityConfig) => {
         normalize(d, r);
         v[0] = -d[0] * g;
         v[1] = -d[1] * g;
-      } else if (r !== 0 && r <= config.distance && b2.mass > 0) {
-        // Only log when cursor (b2) is active (mass > 0)
-        console.log('Attraction deadzone (cursor drag):', { r, deadzone: config.distance });
       }
 
       vectors.put(d);
