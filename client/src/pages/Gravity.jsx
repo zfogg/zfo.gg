@@ -48,6 +48,9 @@ const Gravity = () => {
             <small>a 2d n-body simulation</small>
           </h3>
           <div id="canvas-container" className="relative block max-w-[960px] w-full mx-auto">
+            <a href="https://arborjs.org/docs/barnes-hut" target="_blank" rel="noopener noreferrer" className="absolute top-0 right-0 text-sm hover:underline z-10 p-2">
+              📝 barnes-hut algorithm
+            </a>
             <canvas
               ref={canvasRef}
               id="canvas"
