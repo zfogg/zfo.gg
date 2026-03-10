@@ -1,5 +1,5 @@
-import { PhysicalBody } from './PhysicalBody';
-import type { Vector2, Vector2Pool } from '../utils/Vector2';
+import { PhysicalBody } from "./PhysicalBody";
+import type { Vector2, Vector2Pool } from "../utils/Vector2";
 
 export class PhysicalCursor extends PhysicalBody {
   trackedPosition: Vector2;
@@ -11,7 +11,7 @@ export class PhysicalCursor extends PhysicalBody {
     canvas: HTMLCanvasElement,
     pool: Vector2Pool,
     position: Vector2,
-    velocity: Vector2
+    velocity: Vector2,
   ) {
     super(position, 0, 10, 1, velocity);
     this.canvas = canvas;
@@ -23,11 +23,11 @@ export class PhysicalCursor extends PhysicalBody {
   }
 
   private setupEventListeners(): void {
-    this.canvas.addEventListener('mousedown', this.handleMouseDown);
-    document.body.addEventListener('mouseup', this.handleMouseUpBody);
-    this.canvas.addEventListener('mouseup', this.handleMouseUpCanvas);
-    this.canvas.addEventListener('mousemove', this.handleMouseMove);
-    this.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+    this.canvas.addEventListener("mousedown", this.handleMouseDown);
+    document.body.addEventListener("mouseup", this.handleMouseUpBody);
+    this.canvas.addEventListener("mouseup", this.handleMouseUpCanvas);
+    this.canvas.addEventListener("mousemove", this.handleMouseMove);
+    this.canvas.addEventListener("contextmenu", (e) => e.preventDefault());
   }
 
   onMouseDown?: (isLeft: boolean, isRight: boolean) => void;
@@ -41,7 +41,7 @@ export class PhysicalCursor extends PhysicalBody {
     }
   };
 
-  private handleMouseUpBody = (e: MouseEvent): void => {
+  private handleMouseUpBody = (_e: MouseEvent): void => {
     this.mass = 0;
     this.isClicked.left = this.isClicked.middle = this.isClicked.right = false;
     if (this.onMouseUp) {
@@ -49,7 +49,7 @@ export class PhysicalCursor extends PhysicalBody {
     }
   };
 
-  private handleMouseUpCanvas = (e: MouseEvent): void => {
+  private handleMouseUpCanvas = (_e: MouseEvent): void => {
     if (this.onMouseUpCanvas) {
       this.onMouseUpCanvas(this.isClicked.left);
     }
@@ -94,7 +94,7 @@ export class PhysicalCursor extends PhysicalBody {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = "#000000";
     ctx.beginPath();
     ctx.arc(this.position[0], this.position[1], 10, 0, Math.PI * 2, true);
     ctx.closePath();
@@ -102,9 +102,9 @@ export class PhysicalCursor extends PhysicalBody {
   }
 
   cleanup(): void {
-    this.canvas.removeEventListener('mousedown', this.handleMouseDown);
-    document.body.removeEventListener('mouseup', this.handleMouseUpBody);
-    this.canvas.removeEventListener('mouseup', this.handleMouseUpCanvas);
-    this.canvas.removeEventListener('mousemove', this.handleMouseMove);
+    this.canvas.removeEventListener("mousedown", this.handleMouseDown);
+    document.body.removeEventListener("mouseup", this.handleMouseUpBody);
+    this.canvas.removeEventListener("mouseup", this.handleMouseUpCanvas);
+    this.canvas.removeEventListener("mousemove", this.handleMouseMove);
   }
 }

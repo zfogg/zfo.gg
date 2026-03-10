@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 /**
  * Custom hook that replicates FlowType.js functionality
@@ -32,10 +32,10 @@ export const useFlowType = (options = {}) => {
     };
 
     updateFontSize();
-    window.addEventListener('resize', updateFontSize);
+    window.addEventListener("resize", updateFontSize);
 
     return () => {
-      window.removeEventListener('resize', updateFontSize);
+      window.removeEventListener("resize", updateFontSize);
     };
   }, [minimum, maximum, minFont, maxFont, fontRatio, lineRatio]);
 };

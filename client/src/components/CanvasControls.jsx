@@ -1,6 +1,11 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefaults }) => {
+const CanvasControls = ({
+  config,
+  onConfigChange,
+  onResetSquares,
+  onResetDefaults,
+}) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const handleChange = (key, value) => {
@@ -8,22 +13,25 @@ const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefault
   };
 
   return (
-    <div id="canvas-controls-container" className="absolute top-[15px] left-[20px] font-bold text-[13.5px]">
+    <div
+      id="canvas-controls-container"
+      className="absolute top-[15px] left-[20px] font-bold text-[13.5px]"
+    >
       <h4 className="text-[1.61em] cursor-default">
-        <a
-          onClick={() => setIsVisible(!isVisible)}
-          className="cursor-pointer"
-        >
-          {isVisible ? 'hide' : 'show'}
+        <a onClick={() => setIsVisible(!isVisible)} className="cursor-pointer">
+          {isVisible ? "hide" : "show"}
         </a>
-        {' controls'}
+        {" controls"}
       </h4>
 
       {isVisible && (
         <div
           id="canvas-controls"
           className="max-w-[501px] bg-black/70 text-white text-[13px] font-bold p-[20px_9px_0] rounded mt-[10px]"
-          style={{ boxShadow: '3px 3px 6px rgb(50, 50, 90), -3px -3px 6px rgb(90, 180, 140)' }}
+          style={{
+            boxShadow:
+              "3px 3px 6px rgb(50, 50, 90), -3px -3px 6px rgb(90, 180, 140)",
+          }}
         >
           <div className="grid grid-cols-3 gap-2">
             <div className="canvas-control text-center relative min-h-[80px]">
@@ -34,7 +42,7 @@ const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefault
                 max="100"
                 step="3"
                 value={config.gravity * 100}
-                onChange={(e) => handleChange('gravity', e.target.value / 100)}
+                onChange={(e) => handleChange("gravity", e.target.value / 100)}
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
               />
             </div>
@@ -47,7 +55,9 @@ const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefault
                 max="100"
                 step="3"
                 value={config.friction * 100000}
-                onChange={(e) => handleChange('friction', e.target.value / 100000)}
+                onChange={(e) =>
+                  handleChange("friction", e.target.value / 100000)
+                }
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
               />
             </div>
@@ -60,7 +70,7 @@ const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefault
                 max="200"
                 step="3"
                 value={config.distance}
-                onChange={(e) => handleChange('distance', e.target.value)}
+                onChange={(e) => handleChange("distance", e.target.value)}
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
               />
             </div>
@@ -73,7 +83,9 @@ const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefault
                 max="100"
                 step="3"
                 value={config.cursorFriction * 10}
-                onChange={(e) => handleChange('cursorFriction', e.target.value / 10)}
+                onChange={(e) =>
+                  handleChange("cursorFriction", e.target.value / 10)
+                }
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
               />
             </div>
@@ -86,7 +98,9 @@ const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefault
                 max="100"
                 step="3"
                 value={config.cursorMass * 0.01}
-                onChange={(e) => handleChange('cursorMass', e.target.value / 0.01)}
+                onChange={(e) =>
+                  handleChange("cursorMass", e.target.value / 0.01)
+                }
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
               />
             </div>
@@ -99,7 +113,9 @@ const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefault
                 max="100"
                 step="3"
                 value={config.cursorForce * 100}
-                onChange={(e) => handleChange('cursorForce', e.target.value / 100)}
+                onChange={(e) =>
+                  handleChange("cursorForce", e.target.value / 100)
+                }
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
               />
             </div>
@@ -111,7 +127,12 @@ const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefault
                 min="1"
                 max="40"
                 value={config.particlesN}
-                onChange={(e) => handleChange('particlesN', Math.max(1, Math.min(40, e.target.value)))}
+                onChange={(e) =>
+                  handleChange(
+                    "particlesN",
+                    Math.max(1, Math.min(40, e.target.value)),
+                  )
+                }
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px] bg-white/75 text-black border border-[#85b1de] p-1"
               />
             </div>
@@ -122,7 +143,10 @@ const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefault
                 value="Default Values"
                 onClick={onResetDefaults}
                 className="absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px] px-[6px] py-[6px] font-bold rounded-[5px] cursor-pointer bg-white text-black border border-[#85b1de]"
-                style={{ boxShadow: 'inset 2px 2px 4px rgb(50, 50, 90), inset -2px -2px 4px rgb(110, 140, 150)' }}
+                style={{
+                  boxShadow:
+                    "inset 2px 2px 4px rgb(50, 50, 90), inset -2px -2px 4px rgb(110, 140, 150)",
+                }}
               />
             </div>
 
@@ -132,7 +156,10 @@ const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefault
                 value="Reset Squares"
                 onClick={onResetSquares}
                 className="absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px] px-[6px] py-[6px] font-bold rounded-[5px] cursor-pointer bg-white text-black border border-[#85b1de]"
-                style={{ boxShadow: 'inset 2px 2px 4px rgb(50, 50, 90), inset -2px -2px 4px rgb(110, 140, 150)' }}
+                style={{
+                  boxShadow:
+                    "inset 2px 2px 4px rgb(50, 50, 90), inset -2px -2px 4px rgb(110, 140, 150)",
+                }}
               />
             </div>
           </div>

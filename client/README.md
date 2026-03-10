@@ -53,6 +53,7 @@ bun run preview
 ## Migration Notes
 
 ### What's New
+
 - Modern React with hooks instead of Angular.js
 - Tailwind CSS instead of Bootstrap/Sass
 - Vite instead of Grunt build system
@@ -61,6 +62,7 @@ bun run preview
 - Automatic sitemap generation on build
 
 ### What's Preserved
+
 - All custom Aleo fonts
 - Exact same typography settings (18px base, 1.45 line height)
 - FlowType.js responsive sizing (20-32px range)
@@ -71,6 +73,7 @@ bun run preview
 - Page routes and content
 
 ### Next Steps
+
 - Rewrite gravity simulation in TypeScript
 - Add any additional features or pages as needed
 - Deploy to production
@@ -78,6 +81,7 @@ bun run preview
 ## SEO & Analytics
 
 The site includes:
+
 - Google Tag Manager (GTM-T6D5ZZ) - Full tracking suite
 - Google Analytics (G-B3YQT9SSJF) - Direct analytics tracking
 - OpenGraph tags for rich social sharing

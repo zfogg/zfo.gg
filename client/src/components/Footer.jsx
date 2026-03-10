@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTwitter,
   faFacebook,
@@ -6,22 +6,25 @@ import {
   faBitcoin,
   faGithubAlt,
   faSoundcloud,
-} from '@fortawesome/free-brands-svg-icons';
-import { Link } from 'react-router-dom';
+} from "@fortawesome/free-brands-svg-icons";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const links = [
-    { href: '//twitter.com/zfogg_', icon: faTwitter, external: true },
-    { href: '//www.facebook.com/zach.fogg', icon: faFacebook, external: true },
-    { href: '//www.instagr.am/zfogg', icon: faInstagram, external: true },
-    { href: '/bitcoin', icon: faBitcoin, external: false },
-    { href: '//www.github.com/zfogg', icon: faGithubAlt, external: true },
-    { href: '//soundcloud.com/zfogg', icon: faSoundcloud, external: true },
+    { href: "//twitter.com/zfogg_", icon: faTwitter, external: true },
+    { href: "//www.facebook.com/zach.fogg", icon: faFacebook, external: true },
+    { href: "//www.instagr.am/zfogg", icon: faInstagram, external: true },
+    { href: "/bitcoin", icon: faBitcoin, external: false },
+    { href: "//www.github.com/zfogg", icon: faGithubAlt, external: true },
+    { href: "//soundcloud.com/zfogg", icon: faSoundcloud, external: true },
   ];
 
   return (
-    <footer id="footer" className="h-[140px] flex-shrink-0 flex justify-center gap-8 p-8">
-      {links.map((link, index) => (
+    <footer
+      id="footer"
+      className="h-[140px] flex-shrink-0 flex justify-center gap-8 p-8"
+    >
+      {links.map((link, index) =>
         link.external ? (
           <a
             key={index}
@@ -40,8 +43,8 @@ const Footer = () => {
           >
             <FontAwesomeIcon icon={link.icon} />
           </Link>
-        )
-      ))}
+        ),
+      )}
     </footer>
   );
 };

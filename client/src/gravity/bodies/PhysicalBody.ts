@@ -1,4 +1,4 @@
-import type { Vector2, Vector2Pool } from '../utils/Vector2';
+import type { Vector2, Vector2Pool } from "../utils/Vector2";
 
 export class PhysicalBody {
   position: Vector2;
@@ -12,7 +12,7 @@ export class PhysicalBody {
     mass: number = 1,
     size: number = 1,
     restitution: number = 1,
-    velocity: Vector2
+    velocity: Vector2,
   ) {
     this.position = position;
     this.mass = mass;

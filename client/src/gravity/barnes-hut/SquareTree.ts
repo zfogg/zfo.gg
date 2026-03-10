@@ -1,19 +1,23 @@
-import { QuadTree } from './QuadTree';
-import type { AABB } from './AABB';
-import type { PhysicalSquare } from '../bodies/PhysicalSquare';
-import type { Vector2, Vector2Pool } from '../utils/Vector2';
-import { distance } from '../utils/Vector2';
-import { PHI } from '../utils/math';
+import { QuadTree } from "./QuadTree";
+import type { AABB } from "./AABB";
+import type { PhysicalSquare } from "../bodies/PhysicalSquare";
+import type { Vector2, Vector2Pool } from "../utils/Vector2";
+import { distance } from "../utils/Vector2";
+import { PHI } from "../utils/math";
 
 export class SquareTree extends QuadTree {
-  color: string = '#000000';
+  color: string = "#000000";
   mass: number = 0;
   massx: number = 0;
   massy: number = 0;
   theta: number = 1 - PHI;
   private _barycenter: Float64Array;
 
-  constructor(boundary: AABB, pointPointers: PhysicalSquare[] | null, RECUR_LIMIT: number) {
+  constructor(
+    boundary: AABB,
+    pointPointers: PhysicalSquare[] | null,
+    RECUR_LIMIT: number,
+  ) {
     super(boundary, pointPointers, RECUR_LIMIT);
     this._barycenter = new Float64Array(2);
   }
@@ -32,7 +36,11 @@ export class SquareTree extends QuadTree {
   }
 
   getBarycenter(): Vector2 {
-    if (this._barycenter[0] === 0 && this._barycenter[1] === 0 && this.mass !== 0) {
+    if (
+      this._barycenter[0] === 0 &&
+      this._barycenter[1] === 0 &&
+      this.mass !== 0
+    ) {
       this._barycenter[0] = this.massx / this.mass;
       this._barycenter[1] = this.massy / this.mass;
     }
@@ -40,7 +48,10 @@ export class SquareTree extends QuadTree {
   }
 
   ratio(s: PhysicalSquare, pool: Vector2Pool): number {
-    return (this.boundary.half * 2) / distance(s.position, this.getBarycenter(), pool);
+    return (
+      (this.boundary.half * 2) /
+      distance(s.position, this.getBarycenter(), pool)
+    );
   }
 
   applyForceTo(
@@ -48,8 +59,8 @@ export class SquareTree extends QuadTree {
     pool: Vector2Pool,
     attractionOfGravity: (
       b1: PhysicalSquare | { position: Vector2; mass: number },
-      b2: PhysicalSquare | { position: Vector2; mass: number }
-    ) => Vector2
+      b2: PhysicalSquare | { position: Vector2; mass: number },
+    ) => Vector2,
   ): void {
     const netForce = pool.get();
     this._accNetForce(s, netForce, pool, attractionOfGravity);
@@ -63,8 +74,8 @@ export class SquareTree extends QuadTree {
     pool: Vector2Pool,
     attractionOfGravity: (
       b1: PhysicalSquare | { position: Vector2; mass: number },
-      b2: PhysicalSquare | { position: Vector2; mass: number }
-    ) => Vector2
+      b2: PhysicalSquare | { position: Vector2; mass: number },
+    ) => Vector2,
   ): void {
     if (this.external) {
       if (this.pointp === null) {
@@ -111,7 +122,7 @@ export class SquareTree extends QuadTree {
       this.boundary.center[0] - this.boundary.half,
       this.boundary.center[1] - this.boundary.half,
       this.boundary.half * 2,
-      this.boundary.half * 2
+      this.boundary.half * 2,
     );
   }
 
@@ -125,7 +136,7 @@ export class SquareTree extends QuadTree {
     ctx.fillText(
       this.mass.toFixed(2),
       this.boundary.center[0],
-      this.boundary.center[1] - 2
+      this.boundary.center[1] - 2,
     );
   }
 }

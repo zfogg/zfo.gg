@@ -1,10 +1,22 @@
-import { useEffect, useRef } from 'react';
-import { Vector2Pool, normalize, hypotenuse, direction, type Vector2 } from '../gravity/utils/Vector2';
-import { PHI, randomBetween, randomElement, clearCanvas, randomColor } from '../gravity/utils/math';
-import { PhysicalSquare } from '../gravity/bodies/PhysicalSquare';
-import { PhysicalCursor } from '../gravity/bodies/PhysicalCursor';
-import { AABB } from '../gravity/barnes-hut/AABB';
-import { SquareTree } from '../gravity/barnes-hut/SquareTree';
+import { useEffect, useRef } from "react";
+import {
+  Vector2Pool,
+  normalize,
+  hypotenuse,
+  direction,
+  type Vector2,
+} from "../gravity/utils/Vector2";
+import {
+  PHI,
+  randomBetween,
+  randomElement,
+  clearCanvas,
+  randomColor,
+} from "../gravity/utils/math";
+import { PhysicalSquare } from "../gravity/bodies/PhysicalSquare";
+import { PhysicalCursor } from "../gravity/bodies/PhysicalCursor";
+import { AABB } from "../gravity/barnes-hut/AABB";
+import { SquareTree } from "../gravity/barnes-hut/SquareTree";
 
 export interface GravityConfig {
   gravity: number;
@@ -35,7 +47,7 @@ export const useGravity = (externalConfig?: GravityConfig) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Resize canvas
@@ -58,7 +70,7 @@ export const useGravity = (externalConfig?: GravityConfig) => {
       canvas,
       vectors,
       vectors.get(0, 0),
-      vectors.get(0, 0)
+      vectors.get(0, 0),
     );
 
     // Set up cursor callbacks
@@ -86,12 +98,15 @@ export const useGravity = (externalConfig?: GravityConfig) => {
         for (const s of squares) {
           const dist = Math.sqrt(
             Math.pow(s.position[0] - cursor.position[0], 2) +
-            Math.pow(s.position[1] - cursor.position[1], 2)
+              Math.pow(s.position[1] - cursor.position[1], 2),
           );
           if (dist < 25 && dist > config.distance) {
             const d = direction(s.position, cursor.position, vectors);
             normalize(d);
-            const f = vectors.get(-d[0] * config.cursorForce, -d[1] * config.cursorForce);
+            const f = vectors.get(
+              -d[0] * config.cursorForce,
+              -d[1] * config.cursorForce,
+            );
             s.applyForce(f);
             vectors.put(f);
             vectors.put(d);
@@ -103,7 +118,7 @@ export const useGravity = (externalConfig?: GravityConfig) => {
     // Gravity calculation
     const attractionOfGravity = (
       b1: PhysicalSquare | { position: Vector2; mass: number },
-      b2: PhysicalSquare | { position: Vector2; mass: number }
+      b2: PhysicalSquare | { position: Vector2; mass: number },
     ): Vector2 => {
       const d = direction(b1.position, b2.position, vectors);
       const r = hypotenuse(d[0], d[1]);
@@ -120,7 +135,10 @@ export const useGravity = (externalConfig?: GravityConfig) => {
       return v;
     };
 
-    const applyGravity = (body1: PhysicalSquare, body2: PhysicalSquare): void => {
+    const applyGravity = (
+      body1: PhysicalSquare,
+      body2: PhysicalSquare,
+    ): void => {
       const f = attractionOfGravity(body1, body2);
       body1.applyForce(f);
       f[0] = -f[0];
@@ -130,7 +148,11 @@ export const useGravity = (externalConfig?: GravityConfig) => {
     };
 
     // Construction helpers
-    const constructSquares = (rows: number, columns: number, size: number | (() => number)): PhysicalSquare[] => {
+    const constructSquares = (
+      rows: number,
+      columns: number,
+      size: number | (() => number),
+    ): PhysicalSquare[] => {
       const xmargin = canvas.width / columns;
       const ymargin = canvas.height / rows;
       const newSquares: PhysicalSquare[] = [];
@@ -139,16 +161,16 @@ export const useGravity = (externalConfig?: GravityConfig) => {
         const x = Math.floor(n / columns) * xmargin + xmargin / 2;
         const y = (n % rows) * ymargin + ymargin / 2;
         const position = vectors.get(x, y);
-        const squareSize = typeof size === 'function' ? size() : size;
+        const squareSize = typeof size === "function" ? size() : size;
         const square = new PhysicalSquare(
           position,
-          squareSize * PHI / 2,
+          (squareSize * PHI) / 2,
           squareSize,
           n,
           randomColor(),
           canvas.width,
           canvas.height,
-          vectors.get(0, 0)
+          vectors.get(0, 0),
         );
         newSquares.push(square);
       }
@@ -164,13 +186,19 @@ export const useGravity = (externalConfig?: GravityConfig) => {
 
       const useVariableSize = Math.random() > 0.5;
       const size = useVariableSize
-        ? () => randomElement(Array.from({ length: 21 }, (_, i) => 4.25 + i * 0.125))
+        ? () =>
+            randomElement(
+              Array.from({ length: 21 }, (_, i) => 4.25 + i * 0.125),
+            )
         : randomElement([4, 5, 6, 7]);
 
       return constructSquares(gridSize, gridSize, size);
     };
 
-    const newSquareTree = (ss: PhysicalSquare[], recurLimit: number = 5): SquareTree => {
+    const newSquareTree = (
+      ss: PhysicalSquare[],
+      recurLimit: number = 5,
+    ): SquareTree => {
       const s = canvas.width / 2;
       return new SquareTree(new AABB([s, s], s), ss, recurLimit);
     };
@@ -187,16 +215,17 @@ export const useGravity = (externalConfig?: GravityConfig) => {
 
     // Keyboard handler for spacebar
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
+      if (e.code === "Space") {
         e.preventDefault();
         for (const s of squares) {
-          const randomForce = () => randomElement([-1, 1]) * randomBetween(0.1 * s.mass, 0.4 * s.mass);
+          const randomForce = () =>
+            randomElement([-1, 1]) * randomBetween(0.1 * s.mass, 0.4 * s.mass);
           s.applyForce(vectors.get(randomForce(), randomForce()));
         }
       }
     };
 
-    document.addEventListener('keydown', handleKeyPress);
+    document.addEventListener("keydown", handleKeyPress);
 
     // Main animation loop
     const main = () => {
@@ -209,7 +238,7 @@ export const useGravity = (externalConfig?: GravityConfig) => {
         square.update(
           config.friction,
           cursorPressed,
-          cursorPressed ? () => applyGravity(square, cursor as any) : undefined
+          cursorPressed ? () => applyGravity(square, cursor as any) : undefined,
         );
       }
 
@@ -224,11 +253,11 @@ export const useGravity = (externalConfig?: GravityConfig) => {
 
       // Render
       clearCanvas(canvas, ctx);
-      ctx.fillStyle = 'rgba(0, 0, 0, 0)';
+      ctx.fillStyle = "rgba(0, 0, 0, 0)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.beginPath();
-      qt.map((t: SquareTree) => t.draw(ctx));
+      qt.map((t) => (t as SquareTree).draw(ctx));
       ctx.closePath();
       ctx.stroke();
 
@@ -249,7 +278,7 @@ export const useGravity = (externalConfig?: GravityConfig) => {
       if (animationIdRef.current !== null) {
         window.cancelAnimationFrame(animationIdRef.current);
       }
-      document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener("keydown", handleKeyPress);
       cursor.cleanup();
       for (const s of squares) {
         s.destructor(vectors);

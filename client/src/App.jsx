@@ -1,12 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Analytics } from '@vercel/analytics/react';
-import { useFlowType } from './hooks/useFlowType';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Bitcoin from './pages/Bitcoin';
-import Gravity from './pages/Gravity';
-import NotFound from './pages/NotFound';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Analytics } from "@vercel/analytics/react";
+import { useFlowType } from "./hooks/useFlowType";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Bitcoin from "./pages/Bitcoin";
+import Gravity from "./pages/Gravity";
+import NotFound from "./pages/NotFound";
 
 // Create a client for React Query
 const queryClient = new QueryClient();

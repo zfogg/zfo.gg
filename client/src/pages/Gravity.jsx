@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useGravity } from '../hooks/useGravity';
-import CanvasControls from '../components/CanvasControls';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useGravity } from "../hooks/useGravity";
+import CanvasControls from "../components/CanvasControls";
 
 const randomBetween = (min, max) => Math.random() * (max - min) + min;
 
@@ -21,7 +21,7 @@ const Gravity = () => {
 
   // Update page title
   useEffect(() => {
-    document.title = 'Gravity - zfo.gg';
+    document.title = "Gravity - zfo.gg";
   }, []);
 
   const handleResetDefaults = () => {
@@ -40,15 +40,26 @@ const Gravity = () => {
         </Link>
       </header>
 
-      <section id="content" className="flex-1 flex flex-col items-center justify-center w-full">
+      <section
+        id="content"
+        className="flex-1 flex flex-col items-center justify-center w-full"
+      >
         <div id="gravity" className="relative w-full min-w-[320px] text-center">
           <h3>
             gravity
             <br />
             <small>a 2d n-body simulation</small>
           </h3>
-          <div id="canvas-container" className="relative block max-w-[960px] w-full mx-auto">
-            <a href="https://arborjs.org/docs/barnes-hut" target="_blank" rel="noopener noreferrer" className="absolute top-0 right-0 text-sm hover:underline z-10 p-2">
+          <div
+            id="canvas-container"
+            className="relative block max-w-[960px] w-full mx-auto"
+          >
+            <a
+              href="https://arborjs.org/docs/barnes-hut"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute top-0 right-0 text-sm hover:underline z-10 p-2"
+            >
               📝 barnes-hut algorithm
             </a>
             <canvas

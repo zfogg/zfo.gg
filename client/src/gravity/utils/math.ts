@@ -8,7 +8,10 @@ export const randomElement = <T>(array: T[]): T => {
   return array[Math.floor(Math.random() * array.length)];
 };
 
-export const clearCanvas = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void => {
+export const clearCanvas = (
+  canvas: HTMLCanvasElement,
+  ctx: CanvasRenderingContext2D,
+): void => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
 

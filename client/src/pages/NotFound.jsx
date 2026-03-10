@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const NotFound = () => {
   // Update page title
   useEffect(() => {
-    document.title = '404 - zfo.gg';
+    document.title = "404 - zfo.gg";
   }, []);
 
   return (
@@ -15,7 +15,10 @@ const NotFound = () => {
         </Link>
       </header>
 
-      <section id="content" className="flex-1 flex justify-center items-center w-full px-4">
+      <section
+        id="content"
+        className="flex-1 flex justify-center items-center w-full px-4"
+      >
         <div className="max-w-4xl mx-auto text-center">
           <h2>404 :/</h2>
           <h3>

@@ -1,5 +1,5 @@
-import { PhysicalBody } from './PhysicalBody';
-import type { Vector2 } from '../utils/Vector2';
+import { PhysicalBody } from "./PhysicalBody";
+import type { Vector2 } from "../utils/Vector2";
 
 export class PhysicalSquare extends PhysicalBody {
   index: number;
@@ -15,7 +15,7 @@ export class PhysicalSquare extends PhysicalBody {
     color: string,
     canvasWidth: number,
     canvasHeight: number,
-    velocity: Vector2
+    velocity: Vector2,
   ) {
     super(position, mass, 1.2 * size, 0.95, velocity);
     this.position = position;
@@ -27,7 +27,11 @@ export class PhysicalSquare extends PhysicalBody {
     this.LIM_H = canvasHeight;
   }
 
-  update(friction: number, cursorIsPressed: boolean, applyGravityToCursor?: () => void): void {
+  update(
+    friction: number,
+    cursorIsPressed: boolean,
+    applyGravityToCursor?: () => void,
+  ): void {
     if (!cursorIsPressed) {
       this.bounceOffLimits(this.LIM_W, this.LIM_H, this.mass * 2);
     } else if (applyGravityToCursor) {

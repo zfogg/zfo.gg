@@ -1,5 +1,5 @@
-import type { AABB } from './AABB';
-import type { PhysicalSquare } from '../bodies/PhysicalSquare';
+import type { AABB } from "./AABB";
+import type { PhysicalSquare } from "../bodies/PhysicalSquare";
 
 export class QuadTree {
   boundary: AABB;
@@ -13,7 +13,11 @@ export class QuadTree {
   protected _se: QuadTree | null = null;
   protected _quadrants: QuadTree[] = [];
 
-  constructor(boundary: AABB, pointPointers: PhysicalSquare[] | null, RECUR_LIMIT: number) {
+  constructor(
+    boundary: AABB,
+    pointPointers: PhysicalSquare[] | null,
+    RECUR_LIMIT: number,
+  ) {
     this.boundary = boundary;
     this.RECUR_LIMIT = RECUR_LIMIT;
 
@@ -75,7 +79,7 @@ export class QuadTree {
     return qs.some((q) => q.insert(pp));
   }
 
-  update(pp: PhysicalSquare): void {
+  update(_pp: PhysicalSquare): void {
     // Override in subclasses
   }
 
