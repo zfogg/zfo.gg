@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const CanvasControls = ({
   config,
@@ -7,13 +7,26 @@ const CanvasControls = ({
   onResetDefaults,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef(null);
 
   const handleChange = (key, value) => {
     onConfigChange({ ...config, [key]: parseFloat(value) });
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setIsVisible(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       id="canvas-controls-container"
       className="absolute top-[15px] left-[20px] font-bold text-[13.5px]"
     >
