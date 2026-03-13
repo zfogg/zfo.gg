@@ -42,8 +42,8 @@ export class PhysicalSquare extends PhysicalBody {
   }
 
   decayVelocity(n: number): void {
-    this.velocity[0] -= this.velocity[0] * n * this.mass;
-    this.velocity[1] -= this.velocity[1] * n * this.mass;
+    this.velocity[0] -= this.velocity[0] * n;
+    this.velocity[1] -= this.velocity[1] * n;
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
