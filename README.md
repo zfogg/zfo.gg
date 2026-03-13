@@ -22,3 +22,4 @@ Zachary's personal website.
 - **Bitcoin** (`/bitcoin`) - Bitcoin donation page
 - **404** (`/404`) - "not found" page
 
+
