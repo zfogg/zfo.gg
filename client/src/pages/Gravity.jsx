@@ -6,12 +6,12 @@ import CanvasControls from "../components/CanvasControls";
 const randomBetween = (min, max) => Math.random() * (max - min) + min;
 
 const getDefaultConfig = () => ({
-  gravity: randomBetween(4, 9) * Math.pow(10, -1),
+  gravity: randomBetween(4, 9) * Math.pow(10, -4),
   friction: randomBetween(2, 6) * Math.pow(10, -4),
   distance: randomBetween(5, 9),
   cursorFriction: randomBetween(1, 4),
   cursorMass: 1750,
-  cursorForce: 0.15,
+  cursorForce: 0.65,
   particlesN: 13,
 });
 
