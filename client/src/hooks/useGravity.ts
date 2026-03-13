@@ -50,6 +50,11 @@ export const useGravity = (externalConfig?: GravityConfig) => {
     // Initialize
     const vectors = new Vector2Pool(1000);
     const config = { ...(externalConfig || getDefaultGravityConfig()) };
+
+    // Scale gravity constant based on canvas size (reference: 960px)
+    const referenceCanvasSize = 960;
+    const sizeScale = canvas.width / referenceCanvasSize;
+    config.gravity *= sizeScale * sizeScale;
     let gameTime = 0;
     let squares: PhysicalSquare[] = [];
     let cursor: PhysicalCursor;
