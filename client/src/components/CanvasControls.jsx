@@ -31,7 +31,13 @@ const CanvasControls = ({
       className="absolute top-[15px] left-[20px] font-bold text-[13.5px]"
     >
       <h4 className="text-[1.61em] cursor-default">
-        <a onClick={() => setIsVisible(!isVisible)} className="cursor-pointer">
+        <a
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsVisible(!isVisible);
+          }}
+          className="cursor-pointer"
+        >
           {isVisible ? "hide" : "show"}
         </a>
         {" controls"}
