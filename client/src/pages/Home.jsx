@@ -5,7 +5,7 @@ import ThingCard from "../components/ThingCard";
 const Home = () => {
   // Update page title
   useEffect(() => {
-    document.title = "zfo.gg - Zachary's personal website";
+    document.title = "zfo.gg - Zachary Fogg's personal website";
   }, []);
 
   return (
@@ -16,9 +16,13 @@ const Home = () => {
         </Link>
       </header>
 
+      <p className="text-2xl text-gray-500 font-sans tracking-wide relative z-10 mt-8 mb-0">
+        Zachary Fogg's personal website
+      </p>
+
       <section
         id="content"
-        className="flex-1 flex justify-center items-center w-full text-center px-4"
+        className="flex-1 flex justify-center items-center w-full text-center px-4 pt-8"
       >
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
