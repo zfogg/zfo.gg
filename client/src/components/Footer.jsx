@@ -22,7 +22,7 @@ const Footer = () => {
   return (
     <footer
       id="footer"
-      className="h-[140px] flex-shrink-0 flex justify-center gap-8 p-8"
+      className="h-20 sm:h-[140px] flex-shrink-0 flex justify-center items-center gap-4 sm:gap-8 px-8 py-4 sm:py-8"
     >
       {links.map((link, index) =>
         link.external ? (
