@@ -8,6 +8,7 @@ import {
 } from "../gravity/utils/Vector2";
 import {
   PHI,
+  randomBetween,
   randomElement,
   clearCanvas,
   randomColor,

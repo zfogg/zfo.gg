@@ -3,7 +3,6 @@ import type { AABB } from "./AABB";
 import type { PhysicalSquare } from "../bodies/PhysicalSquare";
 import type { Vector2, Vector2Pool } from "../utils/Vector2";
 import { distance } from "../utils/Vector2";
-import { PHI } from "../utils/math";
 
 export class SquareTree extends QuadTree {
   color: string = "#000000";
