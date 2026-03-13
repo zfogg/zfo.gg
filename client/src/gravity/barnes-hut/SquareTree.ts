@@ -10,7 +10,7 @@ export class SquareTree extends QuadTree {
   mass: number = 0;
   massx: number = 0;
   massy: number = 0;
-  theta: number = PHI - 1;
+  theta: number = 0.2;
   private _barycenter: Float64Array;
 
   constructor(
