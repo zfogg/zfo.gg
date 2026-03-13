@@ -16,7 +16,7 @@ import { PhysicalSquare } from "../gravity/bodies/PhysicalSquare";
 import { PhysicalCursor } from "../gravity/bodies/PhysicalCursor";
 import { AABB } from "../gravity/barnes-hut/AABB";
 import { SquareTree } from "../gravity/barnes-hut/SquareTree";
-import { getDefaultGravityConfig } from "../gravity/gravityConfig";
+import { getDefaultGravityConfig } from "../gravity/config";
 
 export interface GravityConfig {
   gravity: number;

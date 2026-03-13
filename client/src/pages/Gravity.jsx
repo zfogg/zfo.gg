@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGravity } from "../hooks/useGravity";
 import CanvasControls from "../components/CanvasControls";
-import { getDefaultGravityConfig } from "../gravity/gravityConfig";
+import { getDefaultGravityConfig } from "../gravity/config";
 
 const Gravity = () => {
   const [config, setConfig] = useState(getDefaultGravityConfig());
