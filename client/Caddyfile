@@ -3,5 +3,15 @@
 root * /srv
 file_server
 
-# SPA routing - rewrite non-existent files to index.html
-try_files {path} /index.html
+# Serve named SPA routes as index.html
+@spa_routes {
+	path / /bitcoin /thing/gravity /404
+}
+rewrite @spa_routes /index.html
+
+# Handle 404 errors by serving index.html with 404 status
+handle_errors {
+	@code404 expression `{http.error.status_code} == 404`
+	rewrite @code404 /index.html
+	file_server
+}
