@@ -2,21 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGravity } from "../hooks/useGravity";
 import CanvasControls from "../components/CanvasControls";
-
-const randomBetween = (min, max) => Math.random() * (max - min) + min;
-
-const getDefaultConfig = () => ({
-  gravity: randomBetween(4, 9) * Math.pow(10, -3) * 2,
-  friction: randomBetween(2, 6) * Math.pow(10, -4) * 3,
-  distance: randomBetween(10, 25),
-  cursorFriction: randomBetween(1, 4),
-  cursorMass: 5000,
-  cursorForce: 0.65,
-  particlesN: 13,
-});
+import { getDefaultGravityConfig } from "../gravity/gravityConfig";
 
 const Gravity = () => {
-  const [config, setConfig] = useState(getDefaultConfig());
+  const [config, setConfig] = useState(getDefaultGravityConfig());
   const { canvasRef, resetSquares } = useGravity(config);
 
   // Update page title
@@ -25,7 +14,7 @@ const Gravity = () => {
   }, []);
 
   const handleResetDefaults = () => {
-    setConfig(getDefaultConfig());
+    setConfig(getDefaultGravityConfig());
   };
 
   const handleResetSquares = () => {

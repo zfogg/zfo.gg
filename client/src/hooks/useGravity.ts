@@ -8,7 +8,6 @@ import {
 } from "../gravity/utils/Vector2";
 import {
   PHI,
-  randomBetween,
   randomElement,
   clearCanvas,
   randomColor,
@@ -17,6 +16,7 @@ import { PhysicalSquare } from "../gravity/bodies/PhysicalSquare";
 import { PhysicalCursor } from "../gravity/bodies/PhysicalCursor";
 import { AABB } from "../gravity/barnes-hut/AABB";
 import { SquareTree } from "../gravity/barnes-hut/SquareTree";
+import { getDefaultGravityConfig } from "../gravity/gravityConfig";
 
 export interface GravityConfig {
   gravity: number;
@@ -27,16 +27,6 @@ export interface GravityConfig {
   cursorForce: number;
   particlesN: number;
 }
-
-const defaultConfig: GravityConfig = {
-  gravity: randomBetween(4, 9) * Math.pow(10, -3) * 2,
-  friction: randomBetween(2, 6) * Math.pow(10, -4) * 3,
-  distance: randomBetween(10, 25),
-  cursorFriction: randomBetween(1, 4),
-  cursorMass: 5000,
-  cursorForce: 0.65,
-  particlesN: 13,
-};
 
 export const useGravity = (externalConfig?: GravityConfig) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -59,7 +49,7 @@ export const useGravity = (externalConfig?: GravityConfig) => {
 
     // Initialize
     const vectors = new Vector2Pool(1000);
-    const config = { ...(externalConfig || defaultConfig) };
+    const config = { ...(externalConfig || getDefaultGravityConfig()) };
     let gameTime = 0;
     let squares: PhysicalSquare[] = [];
     let cursor: PhysicalCursor;
