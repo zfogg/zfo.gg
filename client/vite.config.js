@@ -37,6 +37,9 @@ export default defineConfig({
   define: {
     __COMMIT_SHA__: JSON.stringify(commitSha),
   },
+  preview: {
+    middlewareMode: false,
+  },
   plugins: [
     react(),
     sitemap({
