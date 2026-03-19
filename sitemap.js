@@ -1,13 +1,13 @@
-const SitemapGenerator = require('sitemap-generator');
+const SitemapGenerator = require("sitemap-generator");
 
 // create generator
-const generator = SitemapGenerator('https://zfo.gg', {
-  stripQuerystring: false
+const generator = SitemapGenerator("https://zfo.gg", {
+  stripQuerystring: false,
 });
 
 // register event listeners
-generator.on('done', () => {
-  console.log('done!')
+generator.on("done", () => {
+  console.log("done!");
 });
 
 // start the crawler

@@ -20,7 +20,6 @@ COPY client ./client
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
-
 # Run all checks
 RUN vp check client/
 

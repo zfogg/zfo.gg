@@ -21,4 +21,3 @@ Zachary's personal website.
 - **Gravity** (`/thing/gravity`) - Interactive 2D n-body physics simulation
 - **Bitcoin** (`/bitcoin`) - Bitcoin donation page
 - **404** (`/404`) - "not found" page
-
