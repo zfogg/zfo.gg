@@ -13,85 +13,71 @@ This guide walks you through setting up the email signup feature with Supabase a
 1. Go to [supabase.com](https://supabase.com) and create a new project
 2. Note your project URL and anon key (you'll need these)
 
-## Step 2: Create Database Table
+## Step 2: Deploy Edge Functions & Database Migration
 
-In your Supabase project dashboard, go to SQL Editor and run:
+The database schema is committed at `supabase/migrations/20260319000000_create_email_signups.sql`. It will run automatically when you deploy.
 
-```sql
-create table email_signups (
-  id         uuid        primary key default gen_random_uuid(),
-  email      text        not null unique,
-  token      uuid        not null default gen_random_uuid(),
-  confirmed  boolean     not null default false,
-  created_at timestamptz not null default now(),
-  confirmed_at timestamptz
-);
-
-alter table email_signups enable row level security;
--- No public RLS policies — only service role key can access
-```
-
-## Step 3: Deploy Edge Functions
-
-### Install Supabase CLI
+### Quick Setup (Automated)
 
 ```bash
+chmod +x DEPLOY_SUPABASE.sh
+./DEPLOY_SUPABASE.sh
+```
+
+This script will:
+
+1. Link to your Supabase project (requires project ID)
+2. Prompt for Migadu SMTP credentials
+3. Save them as Supabase secrets
+4. Deploy the Edge Functions
+5. Run the database migration
+
+### Manual Setup
+
+If you prefer to do it manually:
+
+```bash
+# Install CLI
 npm install -g supabase
-```
 
-### Initialize Supabase in your project
-
-```bash
-cd /path/to/zfo.gg
+# Initialize and authenticate
 supabase init
 supabase login
-```
 
-### Link to your Supabase project
-
-```bash
+# Link to your project
 supabase link --project-id your_project_id
-```
 
-### Set Secrets
-
-In your Supabase project, go to Project Settings → Secrets and add:
-
-- `SMTP_HOST` → `smtp.migadu.com`
-- `SMTP_PORT` → `587`
-- `SMTP_USER` → Your Migadu username (email)
-- `SMTP_PASS` → Your Migadu password
-- `SMTP_FROM` → Your email address (e.g., `notifications@zfo.gg`)
-
-Or via CLI:
-
-```bash
+# Set SMTP secrets
 supabase secrets set SMTP_HOST=smtp.migadu.com
 supabase secrets set SMTP_PORT=587
-supabase secrets set SMTP_USER=your_email@domain.com
-supabase secrets set SMTP_PASS=your_password
+supabase secrets set SMTP_USER=your_migadu_email@domain.com
+supabase secrets set SMTP_PASS=your_migadu_password
 supabase secrets set SMTP_FROM=notifications@zfo.gg
-```
 
-### Deploy Functions
-
-```bash
+# Deploy Edge Functions
 supabase functions deploy email-signup
 supabase functions deploy email-confirm
 ```
 
-## Step 4: Frontend Environment Variables
+## Step 3: Frontend Environment Variables
 
-Create `.env` in `client/`:
+The frontend needs these environment variables (prefixed with `VITE_` for Vite):
+
+- `VITE_SUPABASE_URL` — Your Supabase project URL
+- `VITE_SUPABASE_ANON_KEY` — Your Supabase anonymous (public) key
+
+You can find these in Supabase Project Settings → API.
+
+### Local Testing
+
+Create `client/.env`:
 
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your_anon_key
 ```
 
-You can find these in Supabase Project Settings → API.
-
-## Step 5: Test Locally
+Then test:
 
 ```bash
 cd client
@@ -101,29 +87,16 @@ pnpm dev
 
 Visit `http://localhost:5173/email` and try signing up.
 
-Check your Supabase dashboard's email_signups table — you should see an unconfirmed row.
+### Production Deployment (Coolify)
 
-Check your email for the confirmation link.
+Set these environment variables in Coolify (or your deployment platform):
 
-## Production Deployment
-
-When deploying with Docker:
-
-```bash
-# Build with env vars
-docker-compose build \
-  --build-arg VITE_SUPABASE_URL=https://... \
-  --build-arg VITE_SUPABASE_ANON_KEY=... \
-  -f docker-compose.yml
+```
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your_anon_key
 ```
 
-Or add to `docker-compose.yml`:
-
-```yaml
-environment:
-  VITE_SUPABASE_URL: https://...
-  VITE_SUPABASE_ANON_KEY: ...
-```
+These will be injected at build time via Vite's `define` option.
 
 ## Troubleshooting
 
@@ -162,5 +135,7 @@ Once emails are confirming successfully, you can:
 
 ## Files Created
 
+- `supabase/migrations/20260319000000_create_email_signups.sql` — Database schema migration
 - `supabase/functions/email-signup/index.ts` — Signup Edge Function
 - `supabase/functions/email-confirm/index.ts` — Confirmation Edge Function
+- `DEPLOY_SUPABASE.sh` — Automated deployment script
