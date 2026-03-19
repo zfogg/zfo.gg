@@ -14,10 +14,10 @@ RUN npm install -g pnpm
 RUN curl -fsSL "https://vite.plus" | bash && cp ~/.vite-plus/bin/vp /usr/local/bin/vp
 
 # Copy package files from root
-COPY package.json pnpm-lock.yaml ./
+COPY ../package.json ../pnpm-lock.yaml ./
 
-# Copy client source
-COPY client ./client
+# Copy client source (current directory becomes /build/client)
+COPY . ./client
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
@@ -29,7 +29,7 @@ RUN vp check client/
 RUN SOURCE_COMMIT=$SOURCE_COMMIT pnpm -C client build
 
 # Copy Caddyfile to builder for later use
-COPY client/Caddyfile /build/client/Caddyfile
+COPY Caddyfile /build/client/Caddyfile
 
 # Runtime stage - Caddy
 FROM caddy:2-alpine
