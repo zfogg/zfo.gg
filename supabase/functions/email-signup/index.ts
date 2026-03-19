@@ -87,10 +87,9 @@ serve(async (req: Request): Promise<Response> => {
     const { data: existing } = await supabase
       .from("email_signups")
       .select("id, confirmed")
-      .eq("email", email)
-      .single();
+      .eq("email", email);
 
-    if (existing?.confirmed) {
+    if (existing && existing.length > 0 && existing[0].confirmed) {
       return new Response(JSON.stringify({ error: "Email already confirmed" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
