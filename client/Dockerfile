@@ -22,7 +22,7 @@ COPY client ./client
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Run checks from client directory where vite-plus is installed
+# Run all checks
 RUN cd /build/client && NODE_PATH=/build/node_modules /usr/local/bin/vp check
 
 # Build the static site
