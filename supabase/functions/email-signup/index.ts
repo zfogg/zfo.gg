@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+// Use Deno.serve for unauthenticated access
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.1";
-import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
+import nodemailer from "npm:nodemailer@6.9.7";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -21,20 +21,31 @@ function isValidEmail(email: string): boolean {
 
 // Send email via SMTP
 async function sendConfirmationEmail(email: string, token: string): Promise<void> {
-  const client = new SmtpClient();
+  const smtpHost = Deno.env.get("SMTP_HOST") || "";
+  const smtpPort = parseInt(Deno.env.get("SMTP_PORT") || "465");
+  const smtpUser = Deno.env.get("SMTP_USER") || "";
+  const smtpPass = Deno.env.get("SMTP_PASS") || "";
+  const smtpFrom = Deno.env.get("SMTP_FROM") || "";
 
-  await client.connectTLS({
-    hostname: Deno.env.get("SMTP_HOST") || "",
-    port: parseInt(Deno.env.get("SMTP_PORT") || "587"),
-    username: Deno.env.get("SMTP_USER") || "",
-    password: Deno.env.get("SMTP_PASS") || "",
+  console.log("Creating nodemailer transport:", { host: smtpHost, port: smtpPort });
+
+  const transporter = nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: true,
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    },
   });
 
-  await client.send({
-    from: Deno.env.get("SMTP_FROM") || "",
+  console.log("Sending email...");
+
+  await transporter.sendMail({
+    from: smtpFrom,
     to: email,
     subject: "Confirm your subscription to zfo.gg",
-    content: `
+    html: `
 <html>
   <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; color: #333;">
     <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -54,10 +65,10 @@ async function sendConfirmationEmail(email: string, token: string): Promise<void
     `.trim(),
   });
 
-  await client.close();
+  console.log("Email sent successfully");
 }
 
-serve(async (req: Request): Promise<Response> => {
+async function handler(req: Request): Promise<Response> {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -112,8 +123,17 @@ serve(async (req: Request): Promise<Response> => {
 
     try {
       await sendConfirmationEmail(email, token);
+      console.log("Email sent successfully to:", email);
     } catch (emailError) {
       console.error("Email error:", emailError);
+      console.error("Error details:", JSON.stringify(emailError));
+      return new Response(
+        JSON.stringify({ error: "Failed to send confirmation email", details: String(emailError) }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
 
     return new Response(JSON.stringify({ ok: true }), {
@@ -127,4 +147,6 @@ serve(async (req: Request): Promise<Response> => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-});
+}
+
+Deno.serve(handler);

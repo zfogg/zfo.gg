@@ -1,0 +1,12 @@
+{
+  "functions": [
+    {
+      "slug": "email-signup",
+      "verifyJwt": false
+    },
+    {
+      "slug": "email-confirm",
+      "verifyJwt": false
+    }
+  ]
+}
