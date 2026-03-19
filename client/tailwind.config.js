@@ -6,6 +6,9 @@ export default {
       fontFamily: {
         aleo: ["Aleo", "serif"],
       },
+      fontSize: {
+        sm: "1.1rem",
+      },
     },
   },
   plugins: [],

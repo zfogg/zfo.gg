@@ -20,7 +20,7 @@ body,
 
 body {
   font-family: var(--font-aleo);
-  font-size: 18px;
+  font-size: 1.24rem;
   line-height: 1.45;
   color: #222222; /* $gray-darker */
   background-color: #f9f9f9; /* $gray-lighter */
@@ -78,7 +78,7 @@ h3 {
 }
 
 p {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
 }
 
 small {
