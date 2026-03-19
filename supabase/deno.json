@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "deploy": "supabase functions deploy"
+  }
+}

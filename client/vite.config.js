@@ -31,6 +31,9 @@ console.log("[vite.config.js] Commit SHA:", commitSha);
 
 // https://vite.dev/config/
 export default defineConfig({
+  lint: {
+    ignorePatterns: ["supabase/**"],
+  },
   define: {
     __COMMIT_SHA__: JSON.stringify(commitSha),
   },

@@ -5,7 +5,7 @@ file_server
 
 # Serve named SPA routes as index.html
 @spa_routes {
-	path / /bitcoin /thing/gravity /404
+	path / /bitcoin /thing/gravity /email /email/confirm /404
 }
 rewrite @spa_routes /index.html
 

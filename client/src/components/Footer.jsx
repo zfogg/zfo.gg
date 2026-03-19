@@ -7,6 +7,7 @@ import {
   faGithubAlt,
   faSoundcloud,
 } from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -15,6 +16,7 @@ const Footer = () => {
     { href: "//www.facebook.com/zach.fogg", icon: faFacebook, external: true },
     { href: "//www.instagr.am/zfogg", icon: faInstagram, external: true },
     { href: "/bitcoin", icon: faBitcoin, external: false },
+    { href: "/email", icon: faEnvelope, external: false },
     { href: "//www.github.com/zfogg", icon: faGithubAlt, external: true },
     { href: "//soundcloud.com/zfogg", icon: faSoundcloud, external: true },
   ];

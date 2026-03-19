@@ -5,6 +5,8 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Bitcoin from "./pages/Bitcoin";
 import Gravity from "./pages/Gravity";
+import Email from "./pages/Email";
+import EmailConfirm from "./pages/EmailConfirm";
 import NotFound from "./pages/NotFound";
 
 // Create a client for React Query
@@ -29,6 +31,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/bitcoin" element={<Bitcoin />} />
             <Route path="/thing/gravity" element={<Gravity />} />
+            <Route path="/email" element={<Email />} />
+            <Route path="/email/confirm" element={<EmailConfirm />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
