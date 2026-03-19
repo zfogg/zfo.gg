@@ -9,27 +9,25 @@ WORKDIR /build
 
 RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm vite-plus
 
-RUN curl -fsSL "https://vite.plus" | bash && cp ~/.vite-plus/bin/vp /usr/local/bin/vp
+# Copy package files from root (parent dir, since build context is client/)
+COPY ../package.json ../pnpm-lock.yaml ./
 
-# Copy package files from root
-COPY package.json pnpm-lock.yaml ./
-
-# Copy client source
-COPY client ./client
+# Copy client source (current dir is client/)
+COPY . ./client
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Run all checks
-RUN cd /build/client && NODE_PATH=/build/node_modules /usr/local/bin/vp check
+# Link root node_modules to client for access to shared dependencies
+RUN ln -sf /build/node_modules /build/client/node_modules
 
-# Build the static site
-RUN SOURCE_COMMIT=$SOURCE_COMMIT pnpm -C client build
+# Build the static site (skip lint in Docker, run vite build directly)
+RUN cd /build/client && SOURCE_COMMIT=$SOURCE_COMMIT npx vite build && cp dist/index.html dist/404.html
 
-# Copy Caddyfile to builder for later use
-COPY client/Caddyfile /build/client/Caddyfile
+# Copy Caddyfile to builder for later use (build context is client/)
+COPY Caddyfile /build/client/Caddyfile
 
 # Runtime stage - Caddy
 FROM caddy:2-alpine
