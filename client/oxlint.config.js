@@ -1,3 +1,3 @@
 module.exports = {
-  ignorePatterns: ["dist", "node_modules", "supabase"],
+  ignorePatterns: ["dist/**", "node_modules/**", "supabase/**", ".next/**"],
 };

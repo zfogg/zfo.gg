@@ -2,8 +2,8 @@ services:
   client:
     image: zfogg/zfo.gg:latest
     build:
-      context: .
-      dockerfile: client/Dockerfile
+      context: client
+      dockerfile: Dockerfile
       args:
         SOURCE_COMMIT: ${SOURCE_COMMIT:-unknown}
     ports:

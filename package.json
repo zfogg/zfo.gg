@@ -4,9 +4,9 @@
   "license": "MIT",
   "repository": "http://github.com/zfogg/zfo.gg",
   "scripts": {
-    "dev": "cd client && vp dev",
-    "build": "cd client && vp build && cp dist/index.html dist/404.html",
-    "preview": "cd client && vp preview",
+    "dev": "cd client && pnpm dev",
+    "build": "cd client && pnpm build && cp dist/index.html dist/404.html",
+    "preview": "cd client && pnpm run preview",
     "start": "coffee zfogg.coffee",
     "prepare": "vp config"
   },
