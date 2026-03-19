@@ -38,8 +38,8 @@ COPY --from=builder /build/client/dist /srv
 # Copy Caddyfile from builder stage
 COPY --from=builder /build/client/Caddyfile /etc/caddy/Caddyfile
 
-# Expose port
-EXPOSE 80
+# Expose port (Coolify maps 5176 by default)
+EXPOSE 5176
 
 # Start Caddy
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
