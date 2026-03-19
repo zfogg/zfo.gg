@@ -4,10 +4,10 @@ set -e
 # Deploy Supabase Edge Functions and set up migrations
 # Run this after setting up your Supabase project
 
-PROJECT_ID="meheipmykrybyfbxudim"
+PROJECT_REF="meheipmykrybyfbxudim"
 
 echo "🔗 Linking to Supabase project..."
-supabase link --project-id "$PROJECT_ID"
+supabase link --project-ref "$PROJECT_REF"
 
 echo "📧 Setting SMTP secrets..."
 read -p "Enter Migadu email: " SMTP_USER
