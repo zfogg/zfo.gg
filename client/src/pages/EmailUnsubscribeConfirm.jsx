@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 
-const EmailConfirm = () => {
+const EmailUnsubscribeConfirm = () => {
   const [searchParams] = useSearchParams();
-  const [status, setStatus] = useState("loading"); // loading | confirmed | error
+  const [status, setStatus] = useState("loading"); // loading | unsubscribed | error
   const [error, setError] = useState("");
 
   useEffect(() => {
-    document.title = "Confirming - zfo.gg";
+    document.title = "Removing - zfo.gg";
   }, []);
 
   useEffect(() => {
-    const confirmEmail = async () => {
+    const confirmUnsubscribe = async () => {
       const token = searchParams.get("token");
 
       if (!token) {
@@ -22,7 +22,7 @@ const EmailConfirm = () => {
 
       try {
         const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const response = await fetch(`${supabaseUrl}/functions/v1/email-confirm`, {
+        const response = await fetch(`${supabaseUrl}/functions/v1/email-unsubscribe-confirm`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -34,19 +34,19 @@ const EmailConfirm = () => {
 
         if (!response.ok) {
           setStatus("error");
-          setError(data.error || "Failed to confirm email");
+          setError(data.error || "Failed to unsubscribe");
           return;
         }
 
-        setStatus("confirmed");
-        document.title = "Confirmed - zfo.gg";
+        setStatus("unsubscribed");
+        document.title = "Unsubscribed - zfo.gg";
       } catch (err) {
         setStatus("error");
         setError(err.message || "Something went wrong");
       }
     };
 
-    void confirmEmail();
+    void confirmUnsubscribe();
   }, [searchParams]);
 
   return (
@@ -61,16 +61,14 @@ const EmailConfirm = () => {
         <div className="max-w-2xl mx-auto w-full text-center">
           {status === "loading" && (
             <div className="text-gray-500">
-              <p className="text-4xl">Confirming your email...</p>
+              <p className="text-4xl">Removing you...</p>
             </div>
           )}
 
-          {status === "confirmed" && (
+          {status === "unsubscribed" && (
             <div className="text-green-600">
-              <h2 className="text-4xl font-serif mb-4">✓ You're subscribed!</h2>
-              <p className="text-gray-500 mb-8">
-                You'll get an email when I write something or release software.
-              </p>
+              <h2 className="text-7xl font-serif mb-4">✓ You've been removed.</h2>
+              <p className="text-gray-500 mb-8">You won't receive any more emails from zfo.gg.</p>
               <Link to="/" className="text-blue-500 hover:text-blue-600 underline">
                 Back home
               </Link>
@@ -82,13 +80,14 @@ const EmailConfirm = () => {
               <h2 className="text-7xl font-serif mb-4">Oops</h2>
               <p className="text-3xl text-gray-500 mb-4">{error}</p>
               <p className="text-2xl text-gray-400 mb-8">
-                {error === "Email already confirmed"
-                  ? "You're already subscribed."
-                  : "The link may have expired. Try signing up again."}
+                The link may have expired. Try unsubscribing again.
               </p>
               <div className="flex gap-4 justify-center">
-                <Link to="/email" className="text-blue-500 hover:text-blue-600 underline">
-                  Sign up again
+                <Link
+                  to="/email/unsubscribe"
+                  className="text-blue-500 hover:text-blue-600 underline"
+                >
+                  Try again
                 </Link>
                 <Link to="/" className="text-blue-500 hover:text-blue-600 underline">
                   Home
@@ -102,4 +101,4 @@ const EmailConfirm = () => {
   );
 };
 
-export default EmailConfirm;
+export default EmailUnsubscribeConfirm;

@@ -7,6 +7,8 @@ import Bitcoin from "./pages/Bitcoin";
 import Gravity from "./pages/Gravity";
 import Email from "./pages/Email";
 import EmailConfirm from "./pages/EmailConfirm";
+import EmailUnsubscribe from "./pages/EmailUnsubscribe";
+import EmailUnsubscribeConfirm from "./pages/EmailUnsubscribeConfirm";
 import NotFound from "./pages/NotFound";
 
 // Create a client for React Query
@@ -33,6 +35,8 @@ function App() {
             <Route path="/thing/gravity" element={<Gravity />} />
             <Route path="/email" element={<Email />} />
             <Route path="/email/confirm" element={<EmailConfirm />} />
+            <Route path="/email/unsubscribe" element={<EmailUnsubscribe />} />
+            <Route path="/email/unsubscribe/confirm" element={<EmailUnsubscribeConfirm />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />

@@ -7,6 +7,14 @@
     {
       "slug": "email-confirm",
       "verifyJwt": false
+    },
+    {
+      "slug": "email-unsubscribe",
+      "verifyJwt": false
+    },
+    {
+      "slug": "email-unsubscribe-confirm",
+      "verifyJwt": false
     }
   ]
 }
