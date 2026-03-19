@@ -77,6 +77,10 @@ h3 {
   padding-bottom: 1rem;
 }
 
+p {
+  font-size: 1.4rem;
+}
+
 small {
   font-size: 0.6em;
   color: #999999; /* $gray-light */
