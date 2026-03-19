@@ -7,7 +7,7 @@ export default {
         aleo: ["Aleo", "serif"],
       },
       fontSize: {
-        sm: "1.1rem",
+        sm: "2rem",
       },
     },
   },
