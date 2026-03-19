@@ -1,6 +1,8 @@
 # Build stage
 FROM node:20-slim AS builder
 
+ARG SOURCE_COMMIT=unknown
+
 SHELL ["/bin/bash", "-c"]
 
 WORKDIR /build
@@ -24,7 +26,7 @@ RUN pnpm install --frozen-lockfile
 RUN vp check client/
 
 # Build the static site
-RUN pnpm -C client build
+RUN VITE_COMMIT_SHA=$SOURCE_COMMIT pnpm -C client build
 
 # Runtime stage - Caddy
 FROM caddy:2-alpine

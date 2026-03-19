@@ -4,5 +4,7 @@ services:
     build:
       context: .
       dockerfile: client/Dockerfile
+      args:
+        SOURCE_COMMIT: ${SOURCE_COMMIT:-unknown}
     ports:
       - "5176:80"
