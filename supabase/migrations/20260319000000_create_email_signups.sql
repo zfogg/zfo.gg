@@ -8,3 +8,10 @@ create table email_signups (
 );
 
 alter table email_signups enable row level security;
+
+-- Allow service role to manage email signups
+create policy "Service role can manage email signups"
+  on email_signups
+  for all
+  using (true)
+  with check (true);
