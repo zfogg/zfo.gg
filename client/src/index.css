@@ -5,6 +5,12 @@
   --font-aleo: "Aleo", serif;
 }
 
+@layer utilities {
+  :root {
+    --text-sm: 2rem !important;
+  }
+}
+
 html,
 body,
 #root {
@@ -16,7 +22,6 @@ body,
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --text-sm: 2rem;
 }
 
 body {
