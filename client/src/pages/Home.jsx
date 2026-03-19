@@ -9,14 +9,14 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col justify-center items-center w-full">
+    <div className="flex-1 flex flex-col justify-center items-center w-full overflow-x-hidden">
       <header id="header" className="text-center">
         <Link to="/">
           <h1>zfogg</h1>
         </Link>
       </header>
 
-      <p className="text-2xl text-gray-500 font-sans tracking-wide relative z-10 mt-8 mb-0">
+      <p className="sm:text-2xl text-gray-500 font-sans tracking-wide relative z-10 mt-8 mb-0">
         Zachary Fogg's personal website
       </p>
 

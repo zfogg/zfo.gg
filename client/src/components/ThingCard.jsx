@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 const ThingCard = ({ href, external = false, children }) => {
-  const containerClasses = "relative min-w-[14em] max-w-[20em] min-h-[4em] group";
+  const containerClasses = "relative min-w-[10em] max-w-[20em] min-h-[4em] group";
   const textClasses =
     "text-3xl md:text-4xl p-8 transition-transform duration-[140ms] group-hover:translate-y-[0.85em] group-hover:scale-[1.5]";
 
