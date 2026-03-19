@@ -41,6 +41,9 @@ async function sendConfirmationEmail(email: string, token: string): Promise<void
 
   console.log("Sending email...");
 
+  const confirmationBaseUrl = Deno.env.get("CONFIRMATION_BASE_URL") || "https://zfo.gg";
+  const confirmationLink = `${confirmationBaseUrl}/email/confirm?token=${token}`;
+
   await transporter.sendMail({
     from: smtpFrom,
     to: email,
@@ -52,7 +55,7 @@ async function sendConfirmationEmail(email: string, token: string): Promise<void
       <h1>Hey!</h1>
       <p>Click below to confirm your email address and get updates from zfo.gg.</p>
       <p style="margin-top: 30px;">
-        <a href="https://zfo.gg/email/confirm?token=${token}" style="display: inline-block; padding: 12px 24px; background-color: #3b82f6; color: white; text-decoration: none; border-radius: 6px; font-weight: 500;">
+        <a href="${confirmationLink}" style="display: inline-block; padding: 12px 24px; background-color: #3b82f6; color: white; text-decoration: none; border-radius: 6px; font-weight: 500;">
           Confirm my email →
         </a>
       </p>
