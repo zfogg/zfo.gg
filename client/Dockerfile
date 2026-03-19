@@ -26,7 +26,7 @@ RUN pnpm install --frozen-lockfile
 RUN vp check client/
 
 # Build the static site
-RUN VITE_COMMIT_SHA=$SOURCE_COMMIT pnpm -C client build
+RUN SOURCE_COMMIT=$SOURCE_COMMIT pnpm -C client build
 
 # Runtime stage - Caddy
 FROM caddy:2-alpine
