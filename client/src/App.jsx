@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Analytics } from "@vercel/analytics/react";
 import { useFlowType } from "./hooks/useFlowType";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -35,7 +34,6 @@ function App() {
           <Footer />
         </div>
       </Router>
-      <Analytics />
     </QueryClientProvider>
   );
 }
