@@ -19,17 +19,14 @@ function isValidEmail(email: string): boolean {
   return emailRegex.test(email);
 }
 
-// Send email via SMTP
-async function sendConfirmationEmail(email: string, token: string): Promise<void> {
+// Create SMTP transporter
+function createTransporter() {
   const smtpHost = Deno.env.get("SMTP_HOST") || "";
   const smtpPort = parseInt(Deno.env.get("SMTP_PORT") || "465");
   const smtpUser = Deno.env.get("SMTP_USER") || "";
   const smtpPass = Deno.env.get("SMTP_PASS") || "";
-  const smtpFrom = Deno.env.get("SMTP_FROM") || "";
 
-  console.log("Creating nodemailer transport:", { host: smtpHost, port: smtpPort });
-
-  const transporter = nodemailer.createTransport({
+  return nodemailer.createTransport({
     host: smtpHost,
     port: smtpPort,
     secure: true,
@@ -38,6 +35,14 @@ async function sendConfirmationEmail(email: string, token: string): Promise<void
       pass: smtpPass,
     },
   });
+}
+
+// Send email via SMTP
+async function sendConfirmationEmail(email: string, token: string): Promise<void> {
+  console.log("Creating nodemailer transport");
+
+  const transporter = createTransporter();
+  const smtpFrom = Deno.env.get("SMTP_FROM") || "";
 
   console.log("Sending email...");
 
@@ -69,6 +74,42 @@ async function sendConfirmationEmail(email: string, token: string): Promise<void
   });
 
   console.log("Email sent successfully");
+}
+
+// Send notification to admin
+async function sendNotification(action: string, email: string): Promise<void> {
+  const notificationEmail = Deno.env.get("NOTIFICATION_EMAIL");
+  if (!notificationEmail) {
+    console.log("NOTIFICATION_EMAIL not configured, skipping notification");
+    return;
+  }
+
+  try {
+    const transporter = createTransporter();
+    const smtpFrom = Deno.env.get("SMTP_FROM") || "";
+
+    await transporter.sendMail({
+      from: smtpFrom,
+      to: notificationEmail,
+      subject: `zfo.gg email notification: ${action}`,
+      html: `
+<html>
+  <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2>${action}</h2>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Time:</strong> ${new Date().toISOString()}</p>
+    </div>
+  </body>
+</html>
+      `.trim(),
+    });
+
+    console.log("Notification sent successfully");
+  } catch (error) {
+    console.error("Failed to send notification:", error);
+    // Don't throw - notification failure shouldn't block the main flow
+  }
 }
 
 async function handler(req: Request): Promise<Response> {
@@ -127,6 +168,7 @@ async function handler(req: Request): Promise<Response> {
     try {
       await sendConfirmationEmail(email, token);
       console.log("Email sent successfully to:", email);
+      await sendNotification("Email signup requested", email);
     } catch (emailError) {
       console.error("Email error:", emailError);
       console.error("Error details:", JSON.stringify(emailError));

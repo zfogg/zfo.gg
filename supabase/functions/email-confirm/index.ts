@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.1";
+import nodemailer from "npm:nodemailer@6.9.7";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,6 +16,60 @@ interface RequestBody {
 interface ResponseData {
   ok?: boolean;
   error?: string;
+}
+
+// Create SMTP transporter
+function createTransporter() {
+  const smtpHost = Deno.env.get("SMTP_HOST") || "";
+  const smtpPort = parseInt(Deno.env.get("SMTP_PORT") || "465");
+  const smtpUser = Deno.env.get("SMTP_USER") || "";
+  const smtpPass = Deno.env.get("SMTP_PASS") || "";
+
+  return nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: true,
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    },
+  });
+}
+
+// Send notification to admin
+async function sendNotification(action: string, email: string): Promise<void> {
+  const notificationEmail = Deno.env.get("NOTIFICATION_EMAIL");
+  if (!notificationEmail) {
+    console.log("NOTIFICATION_EMAIL not configured, skipping notification");
+    return;
+  }
+
+  try {
+    const transporter = createTransporter();
+    const smtpFrom = Deno.env.get("SMTP_FROM") || "";
+
+    await transporter.sendMail({
+      from: smtpFrom,
+      to: notificationEmail,
+      subject: `zfo.gg email notification: ${action}`,
+      html: `
+<html>
+  <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2>${action}</h2>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Time:</strong> ${new Date().toISOString()}</p>
+    </div>
+  </body>
+</html>
+      `.trim(),
+    });
+
+    console.log("Notification sent successfully");
+  } catch (error) {
+    console.error("Failed to send notification:", error);
+    // Don't throw - notification failure shouldn't block the main flow
+  }
 }
 
 serve(async (req: Request): Promise<Response> => {
@@ -48,7 +103,7 @@ serve(async (req: Request): Promise<Response> => {
     // Find the email by token
     const { data: email_signup, error: queryError } = await supabase
       .from("email_signups")
-      .select("id, confirmed")
+      .select("id, email, confirmed")
       .eq("token", token)
       .single();
 
@@ -79,6 +134,8 @@ serve(async (req: Request): Promise<Response> => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    await sendNotification("Email confirmed", email_signup.email);
 
     const response: ResponseData = { ok: true };
     return new Response(JSON.stringify(response), {
