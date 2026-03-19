@@ -28,14 +28,17 @@ RUN vp check client/
 # Build the static site
 RUN SOURCE_COMMIT=$SOURCE_COMMIT pnpm -C client build
 
+# Copy Caddyfile to builder for later use
+COPY client/Caddyfile /build/client/Caddyfile
+
 # Runtime stage - Caddy
 FROM caddy:2-alpine
 
 # Copy built assets from builder
 COPY --from=builder /build/client/dist /srv
 
-# Copy Caddyfile
-COPY client/Caddyfile /etc/caddy/Caddyfile
+# Copy Caddyfile from builder stage
+COPY --from=builder /build/client/Caddyfile /etc/caddy/Caddyfile
 
 # Expose port
 EXPOSE 80
