@@ -1,11 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-const CanvasControls = ({
-  config,
-  onConfigChange,
-  onResetSquares,
-  onResetDefaults,
-}) => {
+const CanvasControls = ({ config, onConfigChange, onResetSquares, onResetDefaults }) => {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef(null);
 
@@ -48,8 +43,7 @@ const CanvasControls = ({
           id="canvas-controls"
           className="max-w-[501px] bg-black/70 text-white text-[13px] font-bold p-[20px_9px_0] rounded mt-[10px]"
           style={{
-            boxShadow:
-              "3px 3px 6px rgb(50, 50, 90), -3px -3px 6px rgb(90, 180, 140)",
+            boxShadow: "3px 3px 6px rgb(50, 50, 90), -3px -3px 6px rgb(90, 180, 140)",
           }}
         >
           <div className="grid grid-cols-3 gap-2">
@@ -74,9 +68,7 @@ const CanvasControls = ({
                 max="100"
                 step="3"
                 value={config.friction * 100000}
-                onChange={(e) =>
-                  handleChange("friction", e.target.value / 100000)
-                }
+                onChange={(e) => handleChange("friction", e.target.value / 100000)}
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
               />
             </div>
@@ -102,9 +94,7 @@ const CanvasControls = ({
                 max="100"
                 step="3"
                 value={config.cursorFriction * 10}
-                onChange={(e) =>
-                  handleChange("cursorFriction", e.target.value / 10)
-                }
+                onChange={(e) => handleChange("cursorFriction", e.target.value / 10)}
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
               />
             </div>
@@ -117,9 +107,7 @@ const CanvasControls = ({
                 max="100"
                 step="3"
                 value={config.cursorMass * 0.01}
-                onChange={(e) =>
-                  handleChange("cursorMass", e.target.value / 0.01)
-                }
+                onChange={(e) => handleChange("cursorMass", e.target.value / 0.01)}
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
               />
             </div>
@@ -132,9 +120,7 @@ const CanvasControls = ({
                 max="100"
                 step="3"
                 value={config.cursorForce * 100}
-                onChange={(e) =>
-                  handleChange("cursorForce", e.target.value / 100)
-                }
+                onChange={(e) => handleChange("cursorForce", e.target.value / 100)}
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
               />
             </div>
@@ -147,10 +133,7 @@ const CanvasControls = ({
                 max="40"
                 value={config.particlesN}
                 onChange={(e) =>
-                  handleChange(
-                    "particlesN",
-                    Math.max(1, Math.min(40, e.target.value)),
-                  )
+                  handleChange("particlesN", Math.max(1, Math.min(40, e.target.value)))
                 }
                 className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px] bg-white/75 text-black border border-[#85b1de] p-1"
               />

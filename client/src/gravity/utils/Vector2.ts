@@ -39,19 +39,11 @@ export const hypotenuse = (x: number, y: number): number => {
   return Math.sqrt(x * x + y * y);
 };
 
-export const direction = (
-  p1: Vector2,
-  p2: Vector2,
-  pool: Vector2Pool,
-): Vector2 => {
+export const direction = (p1: Vector2, p2: Vector2, pool: Vector2Pool): Vector2 => {
   return pool.get(p1[0] - p2[0], p1[1] - p2[1]);
 };
 
-export const distance = (
-  p1: Vector2,
-  p2: Vector2,
-  pool: Vector2Pool,
-): number => {
+export const distance = (p1: Vector2, p2: Vector2, pool: Vector2Pool): number => {
   const d = direction(p1, p2, pool);
   const r = hypotenuse(d[0], d[1]);
   pool.put(d);

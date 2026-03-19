@@ -7,12 +7,7 @@ export class PhysicalCursor extends PhysicalBody {
   isClicked: { left: boolean; middle: boolean; right: boolean };
   canvas: HTMLCanvasElement;
 
-  constructor(
-    canvas: HTMLCanvasElement,
-    pool: Vector2Pool,
-    position: Vector2,
-    velocity: Vector2,
-  ) {
+  constructor(canvas: HTMLCanvasElement, pool: Vector2Pool, position: Vector2, velocity: Vector2) {
     super(position, 0, 10, 1, velocity);
     this.canvas = canvas;
     this.trackedPosition = pool.get(0, 0);

@@ -13,11 +13,7 @@ export class QuadTree {
   protected _se: QuadTree | null = null;
   protected _quadrants: QuadTree[] = [];
 
-  constructor(
-    boundary: AABB,
-    pointPointers: PhysicalSquare[] | null,
-    RECUR_LIMIT: number,
-  ) {
+  constructor(boundary: AABB, pointPointers: PhysicalSquare[] | null, RECUR_LIMIT: number) {
     this.boundary = boundary;
     this.RECUR_LIMIT = RECUR_LIMIT;
 

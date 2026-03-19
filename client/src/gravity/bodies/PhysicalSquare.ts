@@ -27,11 +27,7 @@ export class PhysicalSquare extends PhysicalBody {
     this.LIM_H = canvasHeight;
   }
 
-  update(
-    friction: number,
-    cursorIsPressed: boolean,
-    applyGravityToCursor?: () => void,
-  ): void {
+  update(friction: number, cursorIsPressed: boolean, applyGravityToCursor?: () => void): void {
     if (!cursorIsPressed) {
       this.bounceOffLimits(this.LIM_W, this.LIM_H, this.mass * 2);
     } else if (applyGravityToCursor) {

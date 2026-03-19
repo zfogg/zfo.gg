@@ -6,13 +6,7 @@ import {
   direction,
   type Vector2,
 } from "../gravity/utils/Vector2";
-import {
-  PHI,
-  randomBetween,
-  randomElement,
-  clearCanvas,
-  randomColor,
-} from "../gravity/utils/math";
+import { PHI, randomBetween, randomElement, clearCanvas, randomColor } from "../gravity/utils/math";
 import { PhysicalSquare } from "../gravity/bodies/PhysicalSquare";
 import { PhysicalCursor } from "../gravity/bodies/PhysicalCursor";
 import { AABB } from "../gravity/barnes-hut/AABB";
@@ -62,12 +56,7 @@ export const useGravity = (externalConfig?: GravityConfig) => {
     let qt: SquareTree;
 
     // Initialize cursor
-    cursor = new PhysicalCursor(
-      canvas,
-      vectors,
-      vectors.get(0, 0),
-      vectors.get(0, 0),
-    );
+    cursor = new PhysicalCursor(canvas, vectors, vectors.get(0, 0), vectors.get(0, 0));
 
     // Set up cursor callbacks
     const originalFriction = config.friction;
@@ -99,10 +88,7 @@ export const useGravity = (externalConfig?: GravityConfig) => {
           if (dist < 25 && dist > config.distance) {
             const d = direction(s.position, cursor.position, vectors);
             normalize(d);
-            const f = vectors.get(
-              -d[0] * config.cursorForce,
-              -d[1] * config.cursorForce,
-            );
+            const f = vectors.get(-d[0] * config.cursorForce, -d[1] * config.cursorForce);
             s.applyForce(f);
             vectors.put(f);
             vectors.put(d);
@@ -186,19 +172,13 @@ export const useGravity = (externalConfig?: GravityConfig) => {
 
       const useVariableSize = Math.random() > 0.5;
       const size = useVariableSize
-        ? () =>
-            randomElement(
-              Array.from({ length: 21 }, (_, i) => 4.25 + i * 0.125),
-            )
+        ? () => randomElement(Array.from({ length: 21 }, (_, i) => 4.25 + i * 0.125))
         : randomElement([4, 5, 6, 7]);
 
       return constructSquares(gridSize, gridSize, size);
     };
 
-    const newSquareTree = (
-      ss: PhysicalSquare[],
-      recurLimit: number = 5,
-    ): SquareTree => {
+    const newSquareTree = (ss: PhysicalSquare[], recurLimit: number = 5): SquareTree => {
       const s = canvas.width / 2;
       return new SquareTree(new AABB([s, s], s), ss, recurLimit);
     };

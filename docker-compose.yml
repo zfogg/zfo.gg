@@ -1,0 +1,8 @@
+services:
+  client:
+    image: zfogg/zfo.gg:latest
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    ports:
+      - "5176:80"

@@ -18,12 +18,7 @@ export class AABB {
   }
 
   containsPoint(p: Vector2): boolean {
-    return (
-      this._nw[0] <= p[0] &&
-      p[0] <= this._se[0] &&
-      this._ne[1] <= p[1] &&
-      p[1] <= this._sw[1]
-    );
+    return this._nw[0] <= p[0] && p[0] <= this._se[0] && this._ne[1] <= p[1] && p[1] <= this._sw[1];
   }
 
   intersects(other: AABB): boolean {

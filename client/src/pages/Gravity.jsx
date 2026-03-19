@@ -29,20 +29,14 @@ const Gravity = () => {
         </Link>
       </header>
 
-      <section
-        id="content"
-        className="flex-1 flex flex-col items-center justify-center w-full"
-      >
+      <section id="content" className="flex-1 flex flex-col items-center justify-center w-full">
         <div id="gravity" className="relative w-full min-w-[320px] text-center">
           <h3>
             gravity
             <br />
             <small>a 2d n-body simulation</small>
           </h3>
-          <div
-            id="canvas-container"
-            className="relative block max-w-[960px] w-full mx-auto"
-          >
+          <div id="canvas-container" className="relative block max-w-[960px] w-full mx-auto">
             <a
               href="https://arborjs.org/docs/barnes-hut"
               target="_blank"

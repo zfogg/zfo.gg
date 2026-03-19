@@ -12,11 +12,7 @@ export class SquareTree extends QuadTree {
   theta: number = 0.2;
   private _barycenter: Float64Array;
 
-  constructor(
-    boundary: AABB,
-    pointPointers: PhysicalSquare[] | null,
-    RECUR_LIMIT: number,
-  ) {
+  constructor(boundary: AABB, pointPointers: PhysicalSquare[] | null, RECUR_LIMIT: number) {
     super(boundary, pointPointers, RECUR_LIMIT);
     this._barycenter = new Float64Array(2);
   }
@@ -35,11 +31,7 @@ export class SquareTree extends QuadTree {
   }
 
   getBarycenter(): Vector2 {
-    if (
-      this._barycenter[0] === 0 &&
-      this._barycenter[1] === 0 &&
-      this.mass !== 0
-    ) {
+    if (this._barycenter[0] === 0 && this._barycenter[1] === 0 && this.mass !== 0) {
       this._barycenter[0] = this.massx / this.mass;
       this._barycenter[1] = this.massy / this.mass;
     }
@@ -47,10 +39,7 @@ export class SquareTree extends QuadTree {
   }
 
   ratio(s: PhysicalSquare, pool: Vector2Pool): number {
-    return (
-      (this.boundary.half * 2) /
-      distance(s.position, this.getBarycenter(), pool)
-    );
+    return (this.boundary.half * 2) / distance(s.position, this.getBarycenter(), pool);
   }
 
   applyForceTo(
@@ -132,10 +121,6 @@ export class SquareTree extends QuadTree {
   }
 
   private _drawMass(ctx: CanvasRenderingContext2D): void {
-    ctx.fillText(
-      this.mass.toFixed(2),
-      this.boundary.center[0],
-      this.boundary.center[1] - 2,
-    );
+    ctx.fillText(this.mass.toFixed(2), this.boundary.center[0], this.boundary.center[1] - 2);
   }
 }

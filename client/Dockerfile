@@ -1,31 +1,43 @@
 # Build stage
-FROM oven/bun:latest AS builder
+FROM node:20-slim AS builder
+
+SHELL ["/bin/bash", "-c"]
 
 WORKDIR /build
 
-# Copy package files
-COPY package.json bun.lock* ./
+RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g pnpm
+
+RUN curl -fsSL "https://vite.plus" | bash && cp ~/.vite-plus/bin/vp /usr/local/bin/vp
+
+# Copy package files from root
+COPY package.json pnpm-lock.yaml ./
+
+# Copy client source
+COPY client ./client
 
 # Install dependencies
-RUN bun install
+RUN pnpm install --frozen-lockfile
 
-# Copy source
-COPY . .
+
+# Run all checks
+RUN vp check client/
 
 # Build the static site
-RUN bun run build
+RUN pnpm -C client build
 
 # Runtime stage - Caddy
 FROM caddy:2-alpine
 
 # Copy built assets from builder
-COPY --from=builder /build/dist /srv
+COPY --from=builder /build/client/dist /srv
 
 # Copy Caddyfile
-COPY Caddyfile /etc/caddy/Caddyfile
+COPY client/Caddyfile /etc/caddy/Caddyfile
 
 # Expose port
-EXPOSE 5176
+EXPOSE 80
 
 # Start Caddy
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
