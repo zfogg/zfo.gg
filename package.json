@@ -1,9 +1,9 @@
 {
   "name": "zfo.gg",
   "version": "11.0.0",
-  "type": "module",
   "license": "MIT",
   "repository": "http://github.com/zfogg/zfo.gg",
+  "type": "module",
   "scripts": {
     "dev": "cd client && pnpm dev",
     "build": "cd client && pnpm build && cp dist/index.html dist/404.html",
