@@ -1,12 +1,28 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import ThingCard from "../components/ThingCard";
+import { useColorAnimation } from "../hooks/useColorAnimation";
 
 const Home = () => {
+  const { bgColor, fgColor } = useColorAnimation();
+
   // Update page title
   useEffect(() => {
     document.title = "zfo.gg - Zachary Fogg's personal website";
   }, []);
+
+  // Apply background color and CSS variables for animation
+  useEffect(() => {
+    document.body.style.backgroundColor = bgColor;
+    document.documentElement.style.setProperty("--home-fg", fgColor);
+    document.body.classList.add("home-active");
+
+    return () => {
+      document.body.style.backgroundColor = "";
+      document.documentElement.style.removeProperty("--home-fg");
+      document.body.classList.remove("home-active");
+    };
+  }, [bgColor, fgColor]);
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center w-full overflow-x-hidden">
@@ -16,7 +32,7 @@ const Home = () => {
         </Link>
       </header>
 
-      <p className="sm:text-2xl text-gray-500 font-sans tracking-wide relative z-10 mt-8 mb-0">
+      <p className="sm:text-2xl font-sans tracking-wide relative z-10 mt-8 mb-0">
         Zachary Fogg's personal website
       </p>
 

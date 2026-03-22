@@ -112,6 +112,7 @@
     animation: popUp 6s infinite ease-out;
     color: #333333; /* $gray-dark */
     font-size: 1.4em;
+    transition: color 80ms ease-out;
   }
   /* Staggered animation delays for footer icons */
   /* Center two animate together, then next two out, then outer two */
@@ -136,4 +137,22 @@
   .footer-icon:nth-child(7) {
     animation-delay: 0.62s;
   } /* SoundCloud - outer */
+
+  /* Homepage color animation */
+  body.home-active {
+    color: var(--home-fg, #222222);
+    transition:
+      background-color 250ms ease-out,
+      color 250ms ease-out;
+  }
+
+  body.home-active a,
+  body.home-active .footer-icon {
+    color: var(--home-fg, #333333);
+    transition: color 250ms ease-out;
+  }
+
+  body.home-active a:hover {
+    opacity: 0.7;
+  }
 }
