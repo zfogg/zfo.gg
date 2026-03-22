@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Bitcoin from "./pages/Bitcoin";
 import Gravity from "./pages/Gravity";
+import GridZips from "./pages/GridZips";
 import Email from "./pages/email/Email";
 import EmailConfirm from "./pages/email/EmailConfirm";
 import EmailUnsubscribe from "./pages/email/EmailUnsubscribe";
@@ -33,6 +34,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/bitcoin" element={<Bitcoin />} />
             <Route path="/thing/gravity" element={<Gravity />} />
+            <Route path="/thing/gridzips" element={<GridZips />} />
             <Route path="/email" element={<Email />} />
             <Route path="/email/confirm" element={<EmailConfirm />} />
             <Route path="/email/unsubscribe" element={<EmailUnsubscribe />} />
