@@ -69,6 +69,7 @@ function getReadableFgColor(bgColor) {
 export function useColorAnimation() {
   const [bgColor, setBgColor] = useState("hsl(180, 70%, 55%)");
   const [fgColor, setFgColor] = useState("hsl(0, 0%, 12%)");
+  const [isActive, setIsActive] = useState(false);
 
   const stateRef = useRef({
     hue: 180,
@@ -124,6 +125,7 @@ export function useColorAnimation() {
     // Activate animation on first mouse move
     if (!state.active) {
       state.active = true;
+      setIsActive(true);
     }
 
     const x = e.clientX;
@@ -163,5 +165,5 @@ export function useColorAnimation() {
     };
   }, []);
 
-  return { bgColor, fgColor };
+  return { bgColor, fgColor, isActive };
 }

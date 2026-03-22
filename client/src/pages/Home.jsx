@@ -4,7 +4,7 @@ import ThingCard from "../components/ThingCard";
 import { useColorAnimation } from "../hooks/useColorAnimation";
 
 const Home = () => {
-  const { bgColor, fgColor } = useColorAnimation();
+  const { bgColor, fgColor, isActive } = useColorAnimation();
 
   // Update page title
   useEffect(() => {
@@ -13,16 +13,18 @@ const Home = () => {
 
   // Apply background color and CSS variables for animation
   useEffect(() => {
-    document.body.style.backgroundColor = bgColor;
-    document.documentElement.style.setProperty("--home-fg", fgColor);
-    document.body.classList.add("home-active");
+    if (isActive) {
+      document.body.style.backgroundColor = bgColor;
+      document.documentElement.style.setProperty("--home-fg", fgColor);
+      document.body.classList.add("home-active");
+    }
 
     return () => {
       document.body.style.backgroundColor = "";
       document.documentElement.style.removeProperty("--home-fg");
       document.body.classList.remove("home-active");
     };
-  }, [bgColor, fgColor]);
+  }, [bgColor, fgColor, isActive]);
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center w-full overflow-x-hidden">
