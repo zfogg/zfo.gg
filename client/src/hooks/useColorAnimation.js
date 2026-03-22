@@ -77,6 +77,7 @@ export function useColorAnimation() {
     lastX: null,
     lastY: null,
     rafId: null,
+    active: false, // Only start animation after first mouse move
   });
 
   // Constants
@@ -86,9 +87,15 @@ export function useColorAnimation() {
   const SATURATION = 70;
   const LIGHTNESS = 55;
 
-  // Animation loop for momentum drift
+  // Animation loop for momentum drift (only runs after first mouse move)
   const animationLoop = () => {
     const state = stateRef.current;
+
+    if (!state.active) {
+      state.rafId = requestAnimationFrame(animationLoop);
+      return;
+    }
+
     const dt = 0.016; // ~60fps
 
     // Add random jerk to momentum
@@ -113,6 +120,12 @@ export function useColorAnimation() {
   // Mouse move listener
   const handleMouseMove = (e) => {
     const state = stateRef.current;
+
+    // Activate animation on first mouse move
+    if (!state.active) {
+      state.active = true;
+    }
+
     const x = e.clientX;
     const y = e.clientY;
 
