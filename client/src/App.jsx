@@ -5,10 +5,10 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Bitcoin from "./pages/Bitcoin";
 import Gravity from "./pages/Gravity";
-import Email from "./pages/Email";
-import EmailConfirm from "./pages/EmailConfirm";
-import EmailUnsubscribe from "./pages/EmailUnsubscribe";
-import EmailUnsubscribeConfirm from "./pages/EmailUnsubscribeConfirm";
+import Email from "./pages/email/Email";
+import EmailConfirm from "./pages/email/EmailConfirm";
+import EmailUnsubscribe from "./pages/email/EmailUnsubscribe";
+import EmailUnsubscribeConfirm from "./pages/email/EmailUnsubscribeConfirm";
 import NotFound from "./pages/NotFound";
 
 // Create a client for React Query

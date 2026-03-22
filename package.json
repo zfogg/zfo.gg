@@ -1,6 +1,7 @@
 {
   "name": "zfo.gg",
   "version": "11.0.0",
+  "type": "module",
   "license": "MIT",
   "repository": "http://github.com/zfogg/zfo.gg",
   "scripts": {
