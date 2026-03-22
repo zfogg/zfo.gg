@@ -22,8 +22,10 @@ supabase secrets set SMTP_PASS="$SMTP_PASS"
 supabase secrets set SMTP_FROM="$SMTP_FROM"
 
 echo "🚀 Deploying Edge Functions..."
-supabase functions deploy email-signup
-supabase functions deploy email-confirm
+supabase functions deploy email-signup --no-jwt-verify
+supabase functions deploy email-confirm --no-jwt-verify
+supabase functions deploy email-unsubscribe --no-jwt-verify
+supabase functions deploy email-unsubscribe-confirm --no-jwt-verify
 
 echo "✅ Supabase setup complete!"
 echo "Migration will run automatically on first deploy."
