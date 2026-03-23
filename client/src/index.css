@@ -8,7 +8,8 @@
 @layer utilities {
   :root {
     --text-sm: 1rem !important;
-    --color-animation-speed: 550ms;
+    --color-animation-speed-default: 550;
+    --color-animation-speed: calc(var(--color-animation-speed-default) * 1ms);
   }
 }
 
