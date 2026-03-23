@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Pre-commit hook: Run vp check --fix and add changed files
+
+set -e
+
+echo "Running vp check --fix..."
+vp check --fix
+
+# Add any files that were modified by vp check --fix
+git add -A
+
+echo "Pre-commit hook completed successfully"
