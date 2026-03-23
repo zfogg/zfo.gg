@@ -2,8 +2,6 @@ import { useEffect, useRef, RefObject } from "react";
 import { hslToRgb, SATURATION, LIGHTNESS } from "../utils/color";
 
 const GRID = 25;
-const GRID_LINE_WIDTH = 1;
-const GRID_LINE_DECAY = 0.03; // opacity decay per frame for lit grid lines
 
 // Type definitions
 interface GridZipsConfig {
@@ -35,19 +33,6 @@ interface Zip {
   phase: "active" | "fading";
 }
 
-interface LitLineSegment {
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-  hue: number;
-  opacity: number;
-}
-
-interface LitLinesMap {
-  [key: string]: LitLineSegment;
-}
-
 interface Timer {
   frequency: number;
   phase: number;
@@ -62,7 +47,6 @@ interface GridZipsState {
   mouseZipCooldown: number;
   lastMouseCanvas: { x: number; y: number } | null;
   lastClickCanvas: { x: number; y: number } | null;
-  litLines: LitLinesMap;
   timer1: Timer;
   timer2: Timer;
   timer3: Timer;
@@ -220,53 +204,6 @@ function getPositionAlongPath(waypoints: Array<[number, number]>, dist: number):
   return last;
 }
 
-// Mark grid line segments that a line segment traverses
-function markGridLineSegment(
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number,
-  litLines: LitLinesMap,
-  hue: number,
-): void {
-  const steps = Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1)) / GRID;
-  for (let i = 0; i < steps; i++) {
-    const t = steps > 0 ? i / steps : 0;
-    const nextT = steps > 0 ? (i + 1) / steps : 1;
-    const sx = x1 + (x2 - x1) * t;
-    const sy = y1 + (y2 - y1) * t;
-    const ex = x1 + (x2 - x1) * nextT;
-    const ey = y1 + (y2 - y1) * nextT;
-
-    // Create key for this segment
-    const segKey = `${Math.round(sx / GRID)},${Math.round(sy / GRID)}-${Math.round(ex / GRID)},${Math.round(ey / GRID)}`;
-
-    if (!litLines[segKey]) {
-      litLines[segKey] = { x1: sx, y1: sy, x2: ex, y2: ey, hue, opacity: 1.0 };
-    } else {
-      litLines[segKey].opacity = Math.min(1.0, litLines[segKey].opacity + 0.2);
-      litLines[segKey].hue = hue;
-    }
-  }
-}
-
-// Draw lit grid line segments
-function drawLitGridLines(ctx: CanvasRenderingContext2D, litLines: LitLinesMap): void {
-  for (const key in litLines) {
-    const seg = litLines[key];
-    if (seg.opacity <= 0) continue;
-
-    const [r, g, b] = hslToRgb(seg.hue, SATURATION, LIGHTNESS);
-
-    ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${seg.opacity})`;
-    ctx.lineWidth = GRID_LINE_WIDTH;
-    ctx.beginPath();
-    ctx.moveTo(seg.x1, seg.y1);
-    ctx.lineTo(seg.x2, seg.y2);
-    ctx.stroke();
-  }
-}
-
 // Draw all zips
 function drawZips(ctx: CanvasRenderingContext2D, zips: Zip[]): void {
   for (const zip of zips) {
@@ -305,7 +242,6 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
     mouseZipCooldown: 0,
     lastMouseCanvas: null,
     lastClickCanvas: null,
-    litLines: {}, // map of "h:y" or "v:x" -> {hue, opacity}
     // Three oscillating timers with sine waves
     timer1: { frequency: 0.02, phase: 0, lastTriggered: false },
     timer2: { frequency: 0.015, phase: Math.PI * 0.66, lastTriggered: false },
@@ -436,20 +372,9 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       const toRemove: Zip[] = [];
       for (const zip of state.zips) {
         if (zip.phase === "active") {
-          const oldHeadDist = zip.headDist;
           zip.headDist = Math.min(zip.headDist + configRef.current.speed, zip.totalDist);
 
           const [hx, hy] = getPositionAlongPath(zip.waypoints, zip.headDist);
-
-          // Mark grid lines traversed
-          if (zip.trail.length > 0) {
-            const prevTrail = zip.trail[zip.trail.length - 1];
-            markGridLineSegment(prevTrail.x, prevTrail.y, hx, hy, state.litLines, state.hue);
-          } else {
-            // First point
-            const [startX, startY] = getPositionAlongPath(zip.waypoints, oldHeadDist);
-            markGridLineSegment(startX, startY, hx, hy, state.litLines, state.hue);
-          }
 
           zip.trail.push({ x: hx, y: hy, opacity: 1.0 });
 
@@ -475,14 +400,6 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       }
       state.zips = state.zips.filter((z) => !toRemove.includes(z));
 
-      // Decay lit grid lines
-      for (const key in state.litLines) {
-        state.litLines[key].opacity -= GRID_LINE_DECAY;
-        if (state.litLines[key].opacity <= 0) {
-          delete state.litLines[key];
-        }
-      }
-
       // Cap total zips at 150
       if (state.zips.length > 150) {
         state.zips = state.zips.slice(state.zips.length - 150);
@@ -491,7 +408,6 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       // Draw
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawLitGridLines(ctx, state.litLines);
         drawZips(ctx, state.zips);
       }
 
