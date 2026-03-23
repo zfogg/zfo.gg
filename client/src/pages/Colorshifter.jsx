@@ -21,15 +21,20 @@ const Colorshifter = () => {
     if (isActive) {
       document.body.style.backgroundColor = bgColor;
       document.documentElement.style.setProperty("--home-fg", fgColor);
+      document.documentElement.style.setProperty(
+        "--color-animation-speed",
+        `${config.animationSpeed}ms`,
+      );
       document.body.classList.add("home-active");
     }
 
     return () => {
       document.body.style.backgroundColor = "";
       document.documentElement.style.removeProperty("--home-fg");
+      document.documentElement.style.removeProperty("--color-animation-speed");
       document.body.classList.remove("home-active");
     };
-  }, [bgColor, fgColor, isActive]);
+  }, [bgColor, fgColor, isActive, config.animationSpeed]);
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center w-full overflow-x-hidden">
@@ -105,6 +110,19 @@ const Colorshifter = () => {
               step="1"
               value={config.lightness}
               onChange={(e) => handleChange("lightness", e.target.value)}
+              className="w-[100px]"
+            />
+          </div>
+
+          <div className="canvas-control text-center">
+            <p className="text-sm mb-1">Animation Speed</p>
+            <input
+              type="range"
+              min="50"
+              max="800"
+              step="10"
+              value={config.animationSpeed}
+              onChange={(e) => handleChange("animationSpeed", e.target.value)}
               className="w-[100px]"
             />
           </div>

@@ -142,14 +142,14 @@
   body.home-active {
     color: var(--home-fg, #222222);
     transition:
-      background-color 250ms ease-out,
-      color 250ms ease-out;
+      background-color var(--color-animation-speed, 250ms) ease-out,
+      color var(--color-animation-speed, 250ms) ease-out;
   }
 
   body.home-active a,
   body.home-active .footer-icon {
     color: var(--home-fg, #333333);
-    transition: color 250ms ease-out;
+    transition: color var(--color-animation-speed, 250ms) ease-out;
   }
 
   body.home-active a:hover {
