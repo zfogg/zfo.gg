@@ -44,8 +44,8 @@ const Colorshifter = () => {
         className="flex-1 flex justify-center items-center w-full text-center px-4 pt-8 relative"
       >
         <CanvasControls>
-          <div className="canvas-control text-center relative min-h-[80px]">
-            <p className="mb-2">Jerk</p>
+          <div className="canvas-control text-center">
+            <p className="text-sm mb-1">Jerk</p>
             <input
               type="range"
               min="0.1"
@@ -53,12 +53,12 @@ const Colorshifter = () => {
               step="0.5"
               value={config.jerk}
               onChange={(e) => handleChange("jerk", e.target.value)}
-              className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
+              className="w-[100px]"
             />
           </div>
 
-          <div className="canvas-control text-center relative min-h-[80px]">
-            <p className="mb-2">Decay</p>
+          <div className="canvas-control text-center">
+            <p className="text-sm mb-1">Decay</p>
             <input
               type="range"
               min="0.5"
@@ -66,12 +66,12 @@ const Colorshifter = () => {
               step="0.01"
               value={config.decay}
               onChange={(e) => handleChange("decay", e.target.value)}
-              className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
+              className="w-[100px]"
             />
           </div>
 
-          <div className="canvas-control text-center relative min-h-[80px]">
-            <p className="mb-2">Max Velocity</p>
+          <div className="canvas-control text-center">
+            <p className="text-sm mb-1">Max Velocity</p>
             <input
               type="range"
               min="0.1"
@@ -79,12 +79,12 @@ const Colorshifter = () => {
               step="0.1"
               value={config.maxV}
               onChange={(e) => handleChange("maxV", e.target.value)}
-              className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
+              className="w-[100px]"
             />
           </div>
 
-          <div className="canvas-control text-center relative min-h-[80px]">
-            <p className="mb-2">Saturation</p>
+          <div className="canvas-control text-center">
+            <p className="text-sm mb-1">Saturation</p>
             <input
               type="range"
               min="0"
@@ -92,12 +92,12 @@ const Colorshifter = () => {
               step="1"
               value={config.saturation}
               onChange={(e) => handleChange("saturation", e.target.value)}
-              className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
+              className="w-[100px]"
             />
           </div>
 
-          <div className="canvas-control text-center relative min-h-[80px]">
-            <p className="mb-2">Lightness</p>
+          <div className="canvas-control text-center">
+            <p className="text-sm mb-1">Lightness</p>
             <input
               type="range"
               min="10"
@@ -105,7 +105,7 @@ const Colorshifter = () => {
               step="1"
               value={config.lightness}
               onChange={(e) => handleChange("lightness", e.target.value)}
-              className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
+              className="w-[100px]"
             />
           </div>
         </CanvasControls>
