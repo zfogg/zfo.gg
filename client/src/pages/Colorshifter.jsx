@@ -4,7 +4,10 @@ import { useColorAnimation, getDefaultColorAnimationConfig } from "../hooks/useC
 import CanvasControls from "../components/CanvasControls";
 
 const Colorshifter = () => {
-  const [config, setConfig] = useState(getDefaultColorAnimationConfig());
+  const [config, setConfig] = useState(() => ({
+    ...getDefaultColorAnimationConfig(),
+    animationSpeed: 550,
+  }));
   const { bgColor, fgColor, isActive } = useColorAnimation(config);
 
   const handleChange = (key, value) => {
