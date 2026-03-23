@@ -11,19 +11,17 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="relative flex-1 w-full flex flex-col overflow-hidden">
-      {/* Canvas background - fills entire Home section */}
+    <div className="relative flex-1 w-full overflow-hidden">
       <canvas
         ref={canvasRef}
         id="canvas"
-        className="absolute inset-0 w-full h-full cursor-crosshair"
+        className="fixed inset-0 w-screen h-screen cursor-crosshair"
         onContextMenu={(e) => e.preventDefault()}
       />
 
-      {/* Content overlay */}
-      <div className="relative z-10 flex flex-col flex-1">
+      <div className="absolute inset-0 flex flex-col pointer-events-none">
         <header id="header" className="text-center pt-8">
-          <Link to="/">
+          <Link to="/" className="pointer-events-auto">
             <h1>zfogg</h1>
           </Link>
         </header>
@@ -32,7 +30,7 @@ const Home = () => {
           id="content"
           className="flex-1 flex justify-center items-center w-full text-center px-4"
         >
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto pointer-events-auto">
             <div className="mb-8">
               <h3 className="text-4xl">I make things, like</h3>
             </div>
