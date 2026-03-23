@@ -44,12 +44,12 @@ const CanvasControls = ({ children }: CanvasControlsProps): ReactElement => {
       {isVisible && (
         <div
           id="canvas-controls"
-          className="max-w-[501px] bg-black/70 text-white text-[13px] font-bold p-[20px_9px_0] rounded mt-[10px]"
+          className="max-w-[700px] bg-black/70 text-white text-[13px] font-bold p-[20px_9px_0] rounded mt-[10px]"
           style={{
             boxShadow: "3px 3px 6px rgb(50, 50, 90), -3px -3px 6px rgb(90, 180, 140)",
           }}
         >
-          <div className="grid grid-cols-3 gap-2">{children}</div>
+          <div className="grid grid-cols-5 gap-2">{children}</div>
         </div>
       )}
     </div>

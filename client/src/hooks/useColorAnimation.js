@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { hslToRgb, SATURATION, LIGHTNESS } from "../utils/color";
+import { hslToRgb } from "../utils/color";
 
 /**
  * Computes WCAG relative luminance from RGB.
@@ -35,7 +35,15 @@ function getReadableFgColor(bgColor) {
  * Hook that manages a color animation based on mouse movement.
  * Returns { bgColor, fgColor } as HSL strings.
  */
-export function useColorAnimation() {
+export const getDefaultColorAnimationConfig = () => ({
+  jerk: 8.0,
+  decay: 0.75,
+  maxV: 0.5,
+  saturation: 70,
+  lightness: 55,
+});
+
+export function useColorAnimation(config = getDefaultColorAnimationConfig()) {
   const [bgColor, setBgColor] = useState("hsl(180, 70%, 55%)");
   const [fgColor, setFgColor] = useState("hsl(0, 0%, 12%)");
   const [isActive, setIsActive] = useState(false);
@@ -50,14 +58,15 @@ export function useColorAnimation() {
     active: false, // Only start animation after first mouse move
   });
 
-  // Constants
-  const JERK = 8.0; // Extreme jerk to swing velocity direction rapidly
-  const DECAY = 0.75; // Very slow decay so momentum builds up strongly
-  const MAX_V = 0.5; // Smooth, gradual speed
+  const configRef = useRef(config);
+  useEffect(() => {
+    configRef.current = config;
+  }, [config]);
 
   // Animation loop for momentum drift (only runs after first mouse move)
   const animationLoop = () => {
     const state = stateRef.current;
+    const cfg = configRef.current;
 
     if (!state.active) {
       state.rafId = requestAnimationFrame(animationLoop);
@@ -65,6 +74,11 @@ export function useColorAnimation() {
     }
 
     const dt = 0.016; // ~60fps
+    const JERK = cfg.jerk ?? 8.0;
+    const DECAY = cfg.decay ?? 0.75;
+    const MAX_V = cfg.maxV ?? 0.5;
+    const SATURATION = cfg.saturation ?? 70;
+    const LIGHTNESS = cfg.lightness ?? 55;
 
     // Add random jerk to momentum
     state.momentum += (Math.random() - 0.5) * JERK * dt;

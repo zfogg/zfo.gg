@@ -1,10 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useColorAnimation } from "../hooks/useColorAnimation";
+import { useColorAnimation, getDefaultColorAnimationConfig } from "../hooks/useColorAnimation";
 import CanvasControls from "../components/CanvasControls";
 
 const Colorshifter = () => {
-  const { bgColor, fgColor, isActive } = useColorAnimation();
+  const [config, setConfig] = useState(getDefaultColorAnimationConfig());
+  const { bgColor, fgColor, isActive } = useColorAnimation(config);
+
+  const handleChange = (key, value) => {
+    setConfig((prev) => ({ ...prev, [key]: parseFloat(value) }));
+  };
 
   // Update page title
   useEffect(() => {
@@ -39,16 +44,69 @@ const Colorshifter = () => {
         className="flex-1 flex justify-center items-center w-full text-center px-4 pt-8 relative"
       >
         <CanvasControls>
-          <div className="canvas-control text-center">
-            <p>Move your mouse to change colors</p>
+          <div className="canvas-control text-center relative min-h-[80px]">
+            <p className="mb-2">Jerk</p>
+            <input
+              type="range"
+              min="0.1"
+              max="20"
+              step="0.5"
+              value={config.jerk}
+              onChange={(e) => handleChange("jerk", e.target.value)}
+              className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
+            />
           </div>
 
-          <div className="canvas-control text-center">
-            <p>Colors wander and drift smoothly</p>
+          <div className="canvas-control text-center relative min-h-[80px]">
+            <p className="mb-2">Decay</p>
+            <input
+              type="range"
+              min="0.5"
+              max="0.99"
+              step="0.01"
+              value={config.decay}
+              onChange={(e) => handleChange("decay", e.target.value)}
+              className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
+            />
           </div>
 
-          <div className="canvas-control text-center">
-            <p>Animation starts on first movement</p>
+          <div className="canvas-control text-center relative min-h-[80px]">
+            <p className="mb-2">Max Velocity</p>
+            <input
+              type="range"
+              min="0.1"
+              max="3"
+              step="0.1"
+              value={config.maxV}
+              onChange={(e) => handleChange("maxV", e.target.value)}
+              className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
+            />
+          </div>
+
+          <div className="canvas-control text-center relative min-h-[80px]">
+            <p className="mb-2">Saturation</p>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              value={config.saturation}
+              onChange={(e) => handleChange("saturation", e.target.value)}
+              className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
+            />
+          </div>
+
+          <div className="canvas-control text-center relative min-h-[80px]">
+            <p className="mb-2">Lightness</p>
+            <input
+              type="range"
+              min="10"
+              max="90"
+              step="1"
+              value={config.lightness}
+              onChange={(e) => handleChange("lightness", e.target.value)}
+              className="w-[130px] absolute bottom-0 left-1/2 -translate-x-1/2 mb-[29px]"
+            />
           </div>
         </CanvasControls>
 
