@@ -31,6 +31,7 @@ interface Zip {
   color: [number, number, number];
   trail: TrailPoint[];
   phase: "active" | "fading";
+  useDynamicColor?: boolean;
 }
 
 interface Timer {
@@ -205,11 +206,18 @@ function getPositionAlongPath(waypoints: Array<[number, number]>, dist: number):
 }
 
 // Draw all zips
-function drawZips(ctx: CanvasRenderingContext2D, zips: Zip[]): void {
+function drawZips(ctx: CanvasRenderingContext2D, zips: Zip[], frameCount: number): void {
   for (const zip of zips) {
     if (zip.trail.length < 2) continue;
 
-    const [r, g, b] = zip.color;
+    // Calculate color - dynamic for random zips, static for mouse zips
+    let [r, g, b] = zip.color;
+    if (zip.useDynamicColor && zip.trail.length > 0) {
+      const headPos = zip.trail[zip.trail.length - 1];
+      const dynamicHue =
+        (((headPos.x * 0.5 + headPos.y * 0.7 + frameCount * 0.15) % 360) + 360) % 360;
+      [r, g, b] = hslToRgb(dynamicHue, SATURATION, LIGHTNESS);
+    }
 
     // Draw trail as line segments
     for (let i = 1; i < zip.trail.length; i++) {
@@ -284,7 +292,14 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
     const state = stateRef.current;
 
     // Helper: create a zip
-    function makeZip(ax: number, ay: number, bx: number, by: number, hue: number): Zip | null {
+    function makeZip(
+      ax: number,
+      ay: number,
+      bx: number,
+      by: number,
+      hue: number,
+      useDynamicColor = false,
+    ): Zip | null {
       const [r, g, b] = hslToRgb(hue, SATURATION, LIGHTNESS);
       const waypoints = createGridPath(ax, ay, bx, by);
 
@@ -311,17 +326,30 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
         color: [r, g, b],
         trail: [],
         phase: "active",
+        useDynamicColor,
       };
     }
 
     // Helper: spawn zip with random endpoint
-    function spawnRandomZip(sx: number, sy: number, hueOverride?: number): void {
+    function spawnRandomZip(
+      sx: number,
+      sy: number,
+      hueOverride?: number,
+      useDynamicColor = false,
+    ): void {
       if (!canvas) return;
       const endpoint = randomGridEndpoint(sx, sy, 50, 400, canvas.width, canvas.height);
       if (!endpoint) return;
       const [ax, ay] = snapToGrid(sx, sy);
       const [bx, by] = endpoint;
-      const zip = makeZip(ax, ay, bx, by, hueOverride !== undefined ? hueOverride : state.hue);
+      const zip = makeZip(
+        ax,
+        ay,
+        bx,
+        by,
+        hueOverride !== undefined ? hueOverride : state.hue,
+        useDynamicColor,
+      );
       if (zip) state.zips.push(zip);
     }
 
@@ -351,7 +379,7 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
             const gx = Math.floor(Math.random() * (canvas.width / GRID)) * GRID;
             const gy = Math.floor(Math.random() * (canvas.height / GRID)) * GRID;
             const posHue = (((gx * 0.5 + gy * 0.7 + state.frameCount * 0.15) % 360) + 360) % 360;
-            spawnRandomZip(gx, gy, posHue);
+            spawnRandomZip(gx, gy, posHue, true);
           }
         }
       }
@@ -408,7 +436,7 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       // Draw
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawZips(ctx, state.zips);
+        drawZips(ctx, state.zips, state.frameCount);
       }
 
       state.animId = requestAnimationFrame(loop);
