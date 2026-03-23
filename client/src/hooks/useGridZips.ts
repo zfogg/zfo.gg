@@ -291,15 +291,6 @@ function drawZips(ctx: CanvasRenderingContext2D, zips: Zip[]): void {
       ctx.lineTo(curr.x, curr.y);
       ctx.stroke();
     }
-
-    // Draw head dot during active phase
-    if (zip.phase === "active" && zip.trail.length > 0) {
-      const head = zip.trail[zip.trail.length - 1];
-      ctx.beginPath();
-      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 1.0)`;
-      ctx.arc(head.x, head.y, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-    }
   }
 }
 
@@ -388,13 +379,13 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
     }
 
     // Helper: spawn zip with random endpoint
-    function spawnRandomZip(sx: number, sy: number): void {
+    function spawnRandomZip(sx: number, sy: number, hueOverride?: number): void {
       if (!canvas) return;
       const endpoint = randomGridEndpoint(sx, sy, 50, 400, canvas.width, canvas.height);
       if (!endpoint) return;
       const [ax, ay] = snapToGrid(sx, sy);
       const [bx, by] = endpoint;
-      const zip = makeZip(ax, ay, bx, by, state.hue);
+      const zip = makeZip(ax, ay, bx, by, hueOverride !== undefined ? hueOverride : state.hue);
       if (zip) state.zips.push(zip);
     }
 
@@ -419,11 +410,12 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       // Skip random zips while mouse is held down
       if (!state.mouseDown) {
         if (checkTimer(state.timer1) || checkTimer(state.timer2) || checkTimer(state.timer3)) {
-          const burstCount = 1 + Math.floor(Math.random() * 7);
+          const burstCount = 1 + Math.floor(Math.random() * 14);
           for (let i = 0; i < burstCount; i++) {
             const gx = Math.floor(Math.random() * (canvas.width / GRID)) * GRID;
             const gy = Math.floor(Math.random() * (canvas.height / GRID)) * GRID;
-            spawnRandomZip(gx, gy);
+            const posHue = (((gx * 0.5 + gy * 0.7 + state.frameCount * 0.15) % 360) + 360) % 360;
+            spawnRandomZip(gx, gy, posHue);
           }
         }
       }

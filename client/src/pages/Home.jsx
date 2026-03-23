@@ -40,11 +40,13 @@ const Home = () => {
                 ascii-chat
               </ThingCard>
 
-              <ThingCard href="/thing/gravity">gravity</ThingCard>
-
               <ThingCard href="https://bit.camp/" external>
                 bitcamp
               </ThingCard>
+
+              <ThingCard href="/thing/gravity">gravity</ThingCard>
+
+              <ThingCard href="/thing/colorshifter">colorshifter</ThingCard>
             </div>
           </div>
         </section>
