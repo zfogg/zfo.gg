@@ -36,11 +36,11 @@ const Home = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-              <ThingCard href="/thing/colorshifter">colorshifter</ThingCard>
+              <ThingCard href="https://ascii-chat.com" external>
+                ascii-chat
+              </ThingCard>
 
               <ThingCard href="/thing/gravity">gravity</ThingCard>
-
-              <ThingCard href="/thing/gridzips">gridzips</ThingCard>
 
               <ThingCard href="https://bit.camp/" external>
                 bitcamp
