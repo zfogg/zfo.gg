@@ -8,6 +8,7 @@
 @layer utilities {
   :root {
     --text-sm: 1rem !important;
+    --color-animation-speed: 550ms;
   }
 }
 
@@ -142,14 +143,14 @@
   body.home-active {
     color: var(--home-fg, #222222);
     transition:
-      background-color var(--color-animation-speed, 250ms) ease-out,
-      color var(--color-animation-speed, 250ms) ease-out;
+      background-color var(--color-animation-speed) ease-out,
+      color var(--color-animation-speed) ease-out;
   }
 
   body.home-active a,
   body.home-active .footer-icon {
     color: var(--home-fg, #333333);
-    transition: color var(--color-animation-speed, 250ms) ease-out;
+    transition: color var(--color-animation-speed) ease-out;
   }
 
   body.home-active a:hover {

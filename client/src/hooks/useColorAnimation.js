@@ -41,7 +41,7 @@ export const getDefaultColorAnimationConfig = () => ({
   maxV: 0.5,
   saturation: 70,
   lightness: 55,
-  animationSpeed: 250,
+  animationSpeed: 550,
 });
 
 export function useColorAnimation(config = getDefaultColorAnimationConfig()) {
