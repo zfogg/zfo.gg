@@ -337,11 +337,25 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
     const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     if (!ctx) return;
 
-    // Size canvas
+    // Size canvas to match container
     const container = canvas.parentElement;
     if (!container) return;
-    canvas.width = container.clientWidth;
-    canvas.height = container.clientHeight;
+
+    const resizeCanvas = () => {
+      if (canvas && container) {
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+      }
+    };
+
+    // Initial size
+    resizeCanvas();
+
+    // Observe container for resize
+    const resizeObserver = new ResizeObserver(() => {
+      resizeCanvas();
+    });
+    resizeObserver.observe(container);
 
     const state = stateRef.current;
 
@@ -564,6 +578,7 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mousedown", handleMouseDown);
       document.removeEventListener("mouseup", handleMouseUp);
+      resizeObserver.disconnect();
       state.zips = [];
     };
   }, []);
