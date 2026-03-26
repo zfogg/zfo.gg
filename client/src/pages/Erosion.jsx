@@ -21,15 +21,21 @@ const Erosion = () => {
   }, []);
 
   return (
-    <section
-      id="content"
-      className="flex-1 flex justify-center items-center w-full text-center px-4 pt-8 relative"
-    >
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full cursor-none"
-        onContextMenu={(e) => e.preventDefault()}
-      />
+    <section id="content" className="flex-1 flex flex-col w-full">
+      <div className="max-w-4xl mx-auto text-center px-4 pt-8 z-10">
+        <h3 className="text-4xl">erosion</h3>
+        <p className="sm:text-2xl font-sans tracking-wide mt-4">
+          Hydraulic erosion simulation with water particles
+        </p>
+      </div>
+
+      <div className="flex-1 relative">
+        <canvas
+          ref={canvasRef}
+          className="w-full h-full cursor-none"
+          onContextMenu={(e) => e.preventDefault()}
+        />
+      </div>
 
       <CanvasControls>
         <div className="canvas-control text-center">
@@ -98,15 +104,6 @@ const Erosion = () => {
           New Terrain
         </button>
       </CanvasControls>
-
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h3 className="text-4xl">erosion</h3>
-          <p className="sm:text-2xl font-sans tracking-wide relative z-10 mt-4">
-            Hydraulic erosion simulation with water particles
-          </p>
-        </div>
-      </div>
     </section>
   );
 };

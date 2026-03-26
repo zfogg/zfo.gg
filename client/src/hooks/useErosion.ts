@@ -178,14 +178,11 @@ export const useErosion = (externalConfig?: ErosionConfig) => {
     const parentElement = canvas.parentElement;
     if (!parentElement) return;
 
-    const w = Math.min(1920, parentElement.clientWidth);
-    const h = Math.floor(w * 0.6);
+    const w = parentElement.clientWidth;
+    const h = parentElement.clientHeight || Math.floor(w * 0.6);
 
     canvas.width = w;
     canvas.height = h;
-
-    canvas.style.width = `${w}px`;
-    canvas.style.height = `${h}px`;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
