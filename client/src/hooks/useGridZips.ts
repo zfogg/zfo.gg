@@ -16,6 +16,7 @@ interface TrailPoint {
   x: number;
   y: number;
   opacity: number;
+  color: [number, number, number];
 }
 
 interface Zip {
@@ -206,20 +207,11 @@ function getPositionAlongPath(waypoints: Array<[number, number]>, dist: number):
 }
 
 // Draw all zips
-function drawZips(ctx: CanvasRenderingContext2D, zips: Zip[], frameCount: number): void {
+function drawZips(ctx: CanvasRenderingContext2D, zips: Zip[]): void {
   for (const zip of zips) {
     if (zip.trail.length < 2) continue;
 
-    // Calculate color - dynamic for random zips, static for mouse zips
-    let [r, g, b] = zip.color;
-    if (zip.useDynamicColor && zip.trail.length > 0) {
-      const headPos = zip.trail[zip.trail.length - 1];
-      const dynamicHue =
-        (((headPos.x * 0.5 + headPos.y * 0.7 + frameCount * 0.15) % 360) + 360) % 360;
-      [r, g, b] = hslToRgb(dynamicHue, SATURATION, LIGHTNESS);
-    }
-
-    // Draw trail as line segments
+    // Draw trail as line segments using stored color
     for (let i = 1; i < zip.trail.length; i++) {
       const prev = zip.trail[i - 1];
       const curr = zip.trail[i];
@@ -227,6 +219,9 @@ function drawZips(ctx: CanvasRenderingContext2D, zips: Zip[], frameCount: number
       const segOpacity = Math.max(0, Math.min(1, (prev.opacity + curr.opacity) / 2));
       const taper = i / zip.trail.length;
       const lineWidth = 1.0 + taper * 4.0;
+
+      // Use stored color from trail point
+      const [r, g, b] = curr.color;
 
       ctx.beginPath();
       ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${segOpacity})`;
@@ -404,7 +399,15 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
 
           const [hx, hy] = getPositionAlongPath(zip.waypoints, zip.headDist);
 
-          zip.trail.push({ x: hx, y: hy, opacity: 1.0 });
+          // Calculate color for this trail point
+          let pointColor = zip.color;
+          if (zip.useDynamicColor) {
+            const dynamicHue =
+              (((hx * 0.5 + hy * 0.7 + state.frameCount * 0.15) % 360) + 360) % 360;
+            pointColor = hslToRgb(dynamicHue, SATURATION, LIGHTNESS);
+          }
+
+          zip.trail.push({ x: hx, y: hy, opacity: 1.0, color: pointColor });
 
           if (zip.trail.length > configRef.current.trailLength) {
             zip.trail.shift();
@@ -436,7 +439,7 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       // Draw
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawZips(ctx, state.zips, state.frameCount);
+        drawZips(ctx, state.zips);
       }
 
       state.animId = requestAnimationFrame(loop);
