@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Bitcoin from "./pages/Bitcoin";
 import Gravity from "./pages/Gravity";
 import Colorshifter from "./pages/Colorshifter";
+import Erosion from "./pages/Erosion";
 import Email from "./pages/email/Email";
 import EmailConfirm from "./pages/email/EmailConfirm";
 import EmailUnsubscribe from "./pages/email/EmailUnsubscribe";
@@ -35,6 +36,7 @@ function App() {
             <Route path="/bitcoin" element={<Bitcoin />} />
             <Route path="/thing/gravity" element={<Gravity />} />
             <Route path="/thing/colorshifter" element={<Colorshifter />} />
+            <Route path="/thing/erosion" element={<Erosion />} />
             <Route path="/email" element={<Email />} />
             <Route path="/email/confirm" element={<EmailConfirm />} />
             <Route path="/email/unsubscribe" element={<EmailUnsubscribe />} />

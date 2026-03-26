@@ -4,7 +4,7 @@ Let me explore your workspace to see what animations you've got! 🔍Okay Zach, 
 
 - **useColorAnimation** — momentum-based HSL hue drift that responds to mouse distance, with physics (jerk → momentum → velocity → hue). Buttery smooth.
 - **useGridZips** — grid-snapped geometric trails with L-shaped and winding paths, sine-wave-driven auto-spawning, and a satisfying mouse-hold-and-release burst mechanic. This one's 556 lines of pure joy.
-- **useGravity** — a full N-body simulation with Barnes-Hut spatial partitioning, orbital mechanics on right-click, and impulse forces on spacebar. You went *deep* on this one.
+- **useGravity** — a full N-body simulation with Barnes-Hut spatial partitioning, orbital mechanics on right-click, and impulse forces on spacebar. You went _deep_ on this one.
 
 Plus the micro-interactions: staggered wave-bounce on footer icons, 140ms hover transforms on cards, and accessibility-aware logo spin.
 
@@ -22,9 +22,9 @@ Here are 10 ideas I think would slot into your style while pushing into territor
 
 **5. Reaction-Diffusion (Gray-Scott Model)** — Two virtual chemicals diffusing and reacting on a 2D grid, producing Turing patterns (spots, stripes, labyrinthine structures) that evolve in real time. Mouse interaction could "feed" one chemical, creating blooming organic patterns that spread from your cursor. You'd run it on a downscaled buffer for performance, then render upscaled. It's mesmerizing and completely different from anything geometric you've done.
 
-**6. Flocking with Predator/Prey Dynamics** — Classic boids (separation, alignment, cohesion) but with an ecosystem twist: mouse is a predator that scatters nearby boids, which then regroup with emergent schooling behavior. Add a second species that *chases* the first. The emergent patterns from these simple rules are endlessly watchable and would complement your gravity sim's "simple rules → complex behavior" philosophy.
+**6. Flocking with Predator/Prey Dynamics** — Classic boids (separation, alignment, cohesion) but with an ecosystem twist: mouse is a predator that scatters nearby boids, which then regroup with emergent schooling behavior. Add a second species that _chases_ the first. The emergent patterns from these simple rules are endlessly watchable and would complement your gravity sim's "simple rules → complex behavior" philosophy.
 
-**7. Curl Noise Flow Field** — Generate a 2D curl noise field (divergence-free, so particles never clump or disperse — they just *flow*). Thousands of particles trace paths through the field, leaving fading trails like your grid zips but organic and fluid. The curl noise could slowly evolve over time, and mouse movement could locally distort the field. It would look like wind visualization or ocean currents.
+**7. Curl Noise Flow Field** — Generate a 2D curl noise field (divergence-free, so particles never clump or disperse — they just _flow_). Thousands of particles trace paths through the field, leaving fading trails like your grid zips but organic and fluid. The curl noise could slowly evolve over time, and mouse movement could locally distort the field. It would look like wind visualization or ocean currents.
 
 **8. Sympathetic String Resonance** — Visualize a set of "strings" (horizontal lines) with different natural frequencies. When you click, it plucks the nearest string, and strings with harmonic relationships start vibrating sympathetically. You could use Web Audio API to actually synthesize the tones, making it audio-visual. The physics is just damped harmonic oscillators with coupling terms — elegant math, and it bridges into your audio interests with Sidechain.
 

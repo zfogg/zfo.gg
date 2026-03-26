@@ -43,6 +43,8 @@ const Home = () => {
               <ThingCard href="/thing/gravity">gravity</ThingCard>
 
               <ThingCard href="/thing/colorshifter">colorshifter</ThingCard>
+
+              <ThingCard href="/thing/erosion">erosion</ThingCard>
             </div>
           </div>
         </section>

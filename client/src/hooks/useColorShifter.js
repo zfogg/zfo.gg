@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { hslToRgb } from "../utils/color";
+import { useAnimationLoop } from "./useAnimationLoop";
 
 /**
  * Computes WCAG relative luminance from RGB.
@@ -63,17 +64,15 @@ export function useColorShifter(config = getDefaultColorShifterConfig()) {
     configRef.current = config;
   }, [config]);
 
-  // Animation loop for momentum drift (only runs after first mouse move)
-  const animationLoop = () => {
+  // Animation loop callback
+  const animationCallback = useCallback((deltaTime) => {
     const state = stateRef.current;
     const cfg = configRef.current;
 
     if (!state.active) {
-      state.rafId = requestAnimationFrame(animationLoop);
       return;
     }
 
-    const dt = 0.016; // ~60fps
     const JERK = cfg.jerk ?? 8.0;
     const DECAY = cfg.decay ?? 0.75;
     const MAX_V = cfg.maxV ?? 0.5;
@@ -81,13 +80,13 @@ export function useColorShifter(config = getDefaultColorShifterConfig()) {
     const LIGHTNESS = cfg.lightness ?? 55;
 
     // Add random jerk to momentum
-    state.momentum += (Math.random() - 0.5) * JERK * dt;
+    state.momentum += (Math.random() - 0.5) * JERK * deltaTime;
     // Clamp momentum to prevent it from accumulating unbounded
     state.momentum = Math.max(-2.0, Math.min(2.0, state.momentum));
     // Apply decay to momentum
-    state.momentum *= Math.pow(DECAY, dt);
+    state.momentum *= Math.pow(DECAY, deltaTime);
     // Update velocity based on momentum
-    state.velocity += state.momentum * dt;
+    state.velocity += state.momentum * deltaTime;
     // Clamp velocity
     state.velocity = Math.max(-MAX_V, Math.min(MAX_V, state.velocity));
 
@@ -95,9 +94,9 @@ export function useColorShifter(config = getDefaultColorShifterConfig()) {
     const newBgColor = `hsl(${Math.round(state.hue)}, ${SATURATION}%, ${LIGHTNESS}%)`;
     setBgColor(newBgColor);
     setFgColor(getReadableFgColor(newBgColor));
+  }, []);
 
-    state.rafId = requestAnimationFrame(animationLoop);
-  };
+  useAnimationLoop(animationCallback);
 
   // Mouse move listener
   const handleMouseMove = (e) => {
@@ -139,20 +138,11 @@ export function useColorShifter(config = getDefaultColorShifterConfig()) {
   };
 
   useEffect(() => {
-    const state = stateRef.current;
-
-    // Start animation loop
-    state.rafId = requestAnimationFrame(animationLoop);
-
     // Add mouse and touch listeners
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("touchmove", handleTouchMove);
 
     return () => {
-      // Cancel animation frame
-      if (state.rafId) {
-        cancelAnimationFrame(state.rafId);
-      }
       // Remove mouse and touch listeners
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouchMove);

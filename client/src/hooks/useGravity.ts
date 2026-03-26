@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
+import { useAnimationLoop } from "./useAnimationLoop";
 import {
   Vector2Pool,
   normalize,
@@ -25,8 +26,75 @@ export interface GravityConfig {
 
 export const useGravity = (externalConfig?: GravityConfig) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const animationIdRef = useRef<number | null>(null);
   const resetSquaresCallbackRef = useRef<(() => void) | null>(null);
+
+  const stateRef = useRef<{
+    canvas: HTMLCanvasElement | null;
+    ctx: CanvasRenderingContext2D | null;
+    vectors: Vector2Pool | null;
+    config: GravityConfig;
+    gameTime: number;
+    squares: PhysicalSquare[];
+    cursor: PhysicalCursor | null;
+    qt: SquareTree | null;
+    attractionOfGravity: ((b1: any, b2: any) => Vector2) | null;
+    applyGravity: ((body1: any, body2: any) => void) | null;
+  }>({
+    canvas: null,
+    ctx: null,
+    vectors: null,
+    config: getDefaultGravityConfig(),
+    gameTime: 0,
+    squares: [],
+    cursor: null,
+    qt: null,
+    attractionOfGravity: null,
+    applyGravity: null,
+  });
+
+  const animationCallback = useCallback((deltaTime: number) => {
+    const state = stateRef.current;
+    if (!state.canvas || !state.ctx || !state.cursor || !state.config) return;
+
+    const { canvas, ctx, vectors, config, squares, cursor, qt } = state;
+
+    state.gameTime += deltaTime;
+
+    cursor.update(state.gameTime);
+
+    const cursorPressed = cursor.isClicked.left || cursor.isClicked.right;
+    for (const square of squares) {
+      square.update(
+        config.friction,
+        cursorPressed,
+        cursorPressed ? () => state.applyGravity?.(square, cursor) : undefined,
+      );
+    }
+
+    qt?.clear();
+    for (const s of squares) {
+      qt?.insert(s);
+    }
+    for (const s of squares) {
+      qt?.applyForceTo(s, vectors!, state.attractionOfGravity!);
+    }
+
+    clearCanvas(canvas, ctx);
+    ctx.fillStyle = "rgba(0, 0, 0, 0)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.beginPath();
+    qt?.map((t) => (t as SquareTree).draw(ctx));
+    ctx.closePath();
+    ctx.stroke();
+
+    cursor.draw(ctx);
+    for (const s of squares) {
+      s.draw(ctx);
+    }
+  }, []);
+
+  useAnimationLoop(animationCallback);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -42,21 +110,25 @@ export const useGravity = (externalConfig?: GravityConfig) => {
       canvas.height = canvas.width;
     }
 
-    // Initialize
-    const vectors = new Vector2Pool(1000);
-    const config = { ...(externalConfig || getDefaultGravityConfig()) };
+    // Initialize state ref
+    const state = stateRef.current;
+    state.canvas = canvas;
+    state.ctx = ctx;
+    state.vectors = new Vector2Pool(1000);
+    state.config = { ...(externalConfig || getDefaultGravityConfig()) };
 
     // Scale gravity constant based on canvas size (reference: 960px)
     const referenceCanvasSize = 960;
     const sizeScale = canvas.width / referenceCanvasSize;
-    config.gravity *= sizeScale * sizeScale;
-    let gameTime = 0;
-    let squares: PhysicalSquare[] = [];
-    let cursor: PhysicalCursor;
-    let qt: SquareTree;
+    state.config.gravity *= sizeScale * sizeScale;
+    state.gameTime = 0;
+    state.squares = [];
+
+    const { vectors, config, squares } = state;
 
     // Initialize cursor
-    cursor = new PhysicalCursor(canvas, vectors, vectors.get(0, 0), vectors.get(0, 0));
+    state.cursor = new PhysicalCursor(canvas, vectors, vectors.get(0, 0), vectors.get(0, 0));
+    const cursor = state.cursor;
 
     // Set up cursor callbacks
     const originalFriction = config.friction;
@@ -97,8 +169,8 @@ export const useGravity = (externalConfig?: GravityConfig) => {
       }
     };
 
-    // Gravity calculation
-    const attractionOfGravity = (
+    // Gravity calculation - assign to state for animation callback
+    state.attractionOfGravity = (
       b1: PhysicalSquare | { position: Vector2; mass: number },
       b2: PhysicalSquare | { position: Vector2; mass: number },
     ): Vector2 => {
@@ -117,11 +189,11 @@ export const useGravity = (externalConfig?: GravityConfig) => {
       return v;
     };
 
-    const applyGravity = (
+    state.applyGravity = (
       body1: PhysicalSquare | { position: Vector2; mass: number },
       body2: PhysicalSquare | { position: Vector2; mass: number },
     ): void => {
-      const f = attractionOfGravity(body1, body2);
+      const f = state.attractionOfGravity!(body1, body2);
       if ("applyForce" in body1) {
         body1.applyForce(f);
       }
@@ -184,86 +256,37 @@ export const useGravity = (externalConfig?: GravityConfig) => {
     };
 
     // Initialize squares and quadtree
-    squares = resetSquares(config.particlesN);
-    qt = newSquareTree(squares, 5);
+    state.squares = resetSquares(config.particlesN);
+    state.qt = newSquareTree(state.squares, 5);
 
     // Expose reset callback
     resetSquaresCallbackRef.current = () => {
-      squares = resetSquares(config.particlesN);
-      qt = newSquareTree(squares, 5);
+      state.squares = resetSquares(config.particlesN);
+      state.qt = newSquareTree(state.squares, 5);
     };
 
     // Keyboard handler for spacebar
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.code === "Space") {
         e.preventDefault();
-        for (const s of squares) {
+        for (const s of state.squares) {
           const randomForce = () =>
             randomElement([-1, 1]) * randomBetween(0.1 * s.mass, 0.4 * s.mass);
-          s.applyForce(vectors.get(randomForce(), randomForce()));
+          s.applyForce(state.vectors!.get(randomForce(), randomForce()));
         }
       }
     };
 
     document.addEventListener("keydown", handleKeyPress);
 
-    // Main animation loop
-    const main = () => {
-      // Update
-      cursor.update(gameTime);
-
-      // Update squares
-      const cursorPressed = cursor.isClicked.left || cursor.isClicked.right;
-      for (const square of squares) {
-        square.update(
-          config.friction,
-          cursorPressed,
-          cursorPressed ? () => applyGravity(square, cursor) : undefined,
-        );
-      }
-
-      // Update quadtree
-      qt.clear();
-      for (const s of squares) {
-        qt.insert(s);
-      }
-      for (const s of squares) {
-        qt.applyForceTo(s, vectors, attractionOfGravity);
-      }
-
-      // Render
-      clearCanvas(canvas, ctx);
-      ctx.fillStyle = "rgba(0, 0, 0, 0)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.beginPath();
-      qt.map((t) => (t as SquareTree).draw(ctx));
-      ctx.closePath();
-      ctx.stroke();
-
-      cursor.draw(ctx);
-      for (const s of squares) {
-        s.draw(ctx);
-      }
-
-      gameTime++;
-      animationIdRef.current = window.requestAnimationFrame(main);
-    };
-
-    // Start animation
-    main();
-
     // Cleanup
     return () => {
-      if (animationIdRef.current !== null) {
-        window.cancelAnimationFrame(animationIdRef.current);
-      }
       document.removeEventListener("keydown", handleKeyPress);
-      cursor.cleanup();
-      for (const s of squares) {
-        s.destructor(vectors);
+      state.cursor?.cleanup();
+      for (const s of state.squares) {
+        s.destructor(state.vectors!);
       }
-      vectors.clear();
+      state.vectors?.clear();
     };
   }, [externalConfig]);
 

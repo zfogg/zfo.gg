@@ -111,10 +111,10 @@ When erosion removes material, the heightmap array is modified directly and the 
 
 ```typescript
 const psd = new b2ParticleSystemDef();
-psd.radius = 0.12;              // particle radius in meters (~2.4px)
-psd.dampingStrength = 0.3;      // slight damping to prevent infinite sloshing
-psd.gravityScale = 1.0;         // normal gravity
-psd.density = 1.0;              // water density
+psd.radius = 0.12; // particle radius in meters (~2.4px)
+psd.dampingStrength = 0.3; // slight damping to prevent infinite sloshing
+psd.gravityScale = 1.0; // normal gravity
+psd.density = 1.0; // water density
 
 const particleSystem = world.CreateParticleSystem(psd);
 ```
@@ -172,9 +172,9 @@ These are accumulated into a per-terrain-segment buffer:
 
 ```typescript
 interface ErosionAccumulator {
-  segmentIndex: number;       // which terrain edge segment
-  totalImpulse: number;       // sum of |velocity| of all particles hitting this segment
-  contactCount: number;       // number of particle contacts this frame
+  segmentIndex: number; // which terrain edge segment
+  totalImpulse: number; // sum of |velocity| of all particles hitting this segment
+  contactCount: number; // number of particle contacts this frame
 }
 ```
 
@@ -209,29 +209,29 @@ If any vertices were modified, destroy the old `b2ChainShape` fixture and create
 ```typescript
 interface ErosionConfig {
   // Terrain
-  terrainSeed: number;            // Perlin noise seed (random per session)
-  terrainResolution: number;      // Heightmap sample count (default: 200)
-  baseHeight: number;             // Base terrain height as fraction of world (default: 0.4)
+  terrainSeed: number; // Perlin noise seed (random per session)
+  terrainResolution: number; // Heightmap sample count (default: 200)
+  baseHeight: number; // Base terrain height as fraction of world (default: 0.4)
 
   // Water
-  particleRadius: number;         // SPH particle radius in meters (default: 0.12)
-  maxParticles: number;           // Particle cap (default: 4000)
-  damping: number;                // Particle damping (default: 0.3)
+  particleRadius: number; // SPH particle radius in meters (default: 0.12)
+  maxParticles: number; // Particle cap (default: 4000)
+  damping: number; // Particle damping (default: 0.3)
 
   // Erosion
-  erosionRate: number;            // How fast terrain erodes (default: 0.002)
-  erosionThreshold: number;       // Minimum impulse to erode (default: 0.5)
-  depositionRate: number;         // How fast sediment deposits (default: 0.6)
-  smoothingStrength: number;      // Vertex smoothing factor (default: 0.25)
+  erosionRate: number; // How fast terrain erodes (default: 0.002)
+  erosionThreshold: number; // Minimum impulse to erode (default: 0.5)
+  depositionRate: number; // How fast sediment deposits (default: 0.6)
+  smoothingStrength: number; // Vertex smoothing factor (default: 0.25)
 
   // Rainfall
-  burstSize: number;              // Particles per click (default: 45)
-  rainRate: number;               // Particles per frame while held (default: 8)
-  rainSpreadRadius: number;       // World-space radius of rain area (default: 1.5)
+  burstSize: number; // Particles per click (default: 45)
+  rainRate: number; // Particles per frame while held (default: 8)
+  rainSpreadRadius: number; // World-space radius of rain area (default: 1.5)
 
   // Rendering
-  waterHue: number;               // Base water hue (default: 210, blue)
-  sedimentHue: number;            // Base sediment hue (default: 30, tan)
+  waterHue: number; // Base water hue (default: 210, blue)
+  sedimentHue: number; // Base sediment hue (default: 30, tan)
 }
 ```
 
@@ -262,12 +262,12 @@ The terrain is drawn as a filled polygon using the heightmap vertices, transform
 Each frame, read the particle position and color buffers from LiquidFun's `b2ParticleSystem`:
 
 ```typescript
-const positionBuffer = particleSystem.GetPositionBuffer();  // flat Float32Array [x0,y0,x1,y1,...]
+const positionBuffer = particleSystem.GetPositionBuffer(); // flat Float32Array [x0,y0,x1,y1,...]
 const count = particleSystem.GetParticleCount();
 ```
 
 **Water particles:**
-Drawn as small filled circles (radius = particle radius * PIXELS_PER_METER). Color is HSL-based using the project's existing `hslToRgb` from `utils/color.ts`:
+Drawn as small filled circles (radius = particle radius \* PIXELS_PER_METER). Color is HSL-based using the project's existing `hslToRgb` from `utils/color.ts`:
 
 ```
 hue:        waterHue (210) + slight variation based on velocity magnitude
@@ -312,7 +312,7 @@ export const useErosion = (externalConfig?: ErosionConfig) => {
     let destroyed = false;
 
     const init = async () => {
-      const Box2D = await import('liquidfun-wasm');
+      const Box2D = await import("liquidfun-wasm");
       const box2d = await Box2D.default();
       if (destroyed) return;
 
@@ -358,15 +358,16 @@ Title: "Erosion - zfo.gg"
 
 Exposed as range sliders in the existing CanvasControls component:
 
-| Control            | Config Key         | Range       | Default |
-| ------------------ | ------------------ | ----------- | ------- |
-| Erosion Rate       | erosionRate        | 0.0005–0.01 | 0.002   |
-| Rain Intensity     | rainRate           | 1–20        | 8       |
-| Water Damping      | damping            | 0.0–1.0     | 0.3     |
-| Terrain Roughness  | (regenerates seed) | 1–5 octaves | 3       |
-| Deposition Rate    | depositionRate     | 0.1–1.0     | 0.6     |
+| Control           | Config Key         | Range       | Default |
+| ----------------- | ------------------ | ----------- | ------- |
+| Erosion Rate      | erosionRate        | 0.0005–0.01 | 0.002   |
+| Rain Intensity    | rainRate           | 1–20        | 8       |
+| Water Damping     | damping            | 0.0–1.0     | 0.3     |
+| Terrain Roughness | (regenerates seed) | 1–5 octaves | 3       |
+| Deposition Rate   | depositionRate     | 0.1–1.0     | 0.6     |
 
 Plus two buttons following the Gravity page pattern:
+
 - **Default Values** — resets config to `getDefaultErosionConfig()`
 - **New Terrain** — calls `resetTerrain()`, regenerates heightmap with a new random seed
 
@@ -390,13 +391,13 @@ And the route in App.jsx:
 
 Target: 60fps on a 2020-era laptop at 960px canvas.
 
-| Component              | Per-Frame Cost   | Budget   |
-| ---------------------- | ---------------- | -------- |
-| Box2D/LiquidFun step   | ~4ms at 4k parts | 6ms max  |
-| Erosion solver          | ~0.5ms           | 1ms max  |
-| Terrain rebuild         | ~0.2ms           | 0.5ms max |
-| Canvas 2D render        | ~3ms             | 5ms max  |
-| **Total**              | **~8ms**         | **13ms** |
+| Component            | Per-Frame Cost   | Budget    |
+| -------------------- | ---------------- | --------- |
+| Box2D/LiquidFun step | ~4ms at 4k parts | 6ms max   |
+| Erosion solver       | ~0.5ms           | 1ms max   |
+| Terrain rebuild      | ~0.2ms           | 0.5ms max |
+| Canvas 2D render     | ~3ms             | 5ms max   |
+| **Total**            | **~8ms**         | **13ms**  |
 
 **Optimizations:**
 
@@ -442,6 +443,7 @@ Integrates with the existing `utils/color.ts` module (`hslToRgb`, `SATURATION`, 
 **Sediment:** Base hue 30 (warm tan). Lightness varies with erosion depth — surface sediment is L=65 (sandy), deep sediment is L=35 (dark earth). When sediment deposits, it visually darkens the valley floors.
 
 **Terrain gradient:**
+
 - Surface: `hsl(90, 40%, 45%)` — muted green-brown (topsoil)
 - Mid-depth: `hsl(30, 35%, 35%)` — warm brown (subsoil)
 - Deep: `hsl(15, 25%, 25%)` — dark reddish-brown (bedrock)
@@ -453,14 +455,14 @@ Integrates with the existing `utils/color.ts` module (`hslToRgb`, `SATURATION`, 
 
 ## Interaction Summary
 
-| Input              | Action                                        |
-| ------------------ | --------------------------------------------- |
-| Left click         | Burst of 30-60 rain particles at cursor       |
-| Left hold          | Continuous rain (8 particles / 3 frames)      |
-| Left release       | Cloudburst (2x burst)                         |
-| Right click + hold | Drain tool — removes particles at cursor      |
-| Spacebar           | Global rainstorm — rain across entire width   |
-| (no input)         | Existing water continues flowing and eroding  |
+| Input              | Action                                       |
+| ------------------ | -------------------------------------------- |
+| Left click         | Burst of 30-60 rain particles at cursor      |
+| Left hold          | Continuous rain (8 particles / 3 frames)     |
+| Left release       | Cloudburst (2x burst)                        |
+| Right click + hold | Drain tool — removes particles at cursor     |
+| Spacebar           | Global rainstorm — rain across entire width  |
+| (no input)         | Existing water continues flowing and eroding |
 
 ---
 

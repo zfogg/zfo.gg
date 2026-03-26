@@ -2,6 +2,8 @@ import { defineConfig } from "vite-plus";
 import react from "@vitejs/plugin-react";
 import sitemap from "vite-plugin-sitemap";
 import { execSync } from "child_process";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
 
 const getCommitSha = () => {
   // Check deployment platform environment variables
@@ -29,6 +31,9 @@ const getCommitSha = () => {
 const commitSha = getCommitSha();
 console.log("[vite.config.js] Commit SHA:", commitSha);
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const nodeModulesPath = resolve(__dirname, "../node_modules");
+
 // https://vite.dev/config/
 export default defineConfig({
   define: {
@@ -36,6 +41,14 @@ export default defineConfig({
   },
   preview: {
     middlewareMode: false,
+  },
+  optimizeDeps: {
+    exclude: ["liquidfun-wasm"],
+  },
+  server: {
+    fs: {
+      allow: [".", nodeModulesPath],
+    },
   },
   plugins: [
     react(),

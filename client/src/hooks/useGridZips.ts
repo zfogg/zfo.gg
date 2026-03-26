@@ -1,4 +1,5 @@
-import { useEffect, useRef, RefObject } from "react";
+import { useEffect, useRef, RefObject, useCallback } from "react";
+import { useAnimationLoop } from "./useAnimationLoop";
 import { hslToRgb, SATURATION, LIGHTNESS } from "../utils/color";
 
 const GRID = 25;
@@ -235,9 +236,21 @@ function drawZips(ctx: CanvasRenderingContext2D, zips: Zip[]): void {
 }
 
 export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
+  type GridZipsRuntimeState = GridZipsState & {
+    canvas: HTMLCanvasElement | null;
+    ctx: CanvasRenderingContext2D | null;
+    gridHueShift: number;
+    spawnRandomZip?: (
+      sx: number,
+      sy: number,
+      hueOverride?: number,
+      useDynamicColor?: boolean,
+    ) => void;
+  };
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const configRef = useRef(config);
-  const stateRef = useRef<GridZipsState>({
+  const stateRef = useRef<GridZipsRuntimeState>({
     zips: [],
     zipIdCounter: 0,
     hue: 180,
@@ -254,12 +267,121 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
     mouseDownPos: null,
     mouseDownCooldown: 0,
     animId: null,
+    canvas: null,
+    ctx: null,
+    gridHueShift: 0,
   });
 
   // Update configRef whenever config changes
   useEffect(() => {
     configRef.current = config;
   }, [config]);
+
+  // Top-level animation callback
+  const animationCallback = useCallback(() => {
+    const state = stateRef.current;
+    const canvas = state.canvas;
+    const ctx = state.ctx;
+    if (!canvas || !ctx) return;
+
+    state.frameCount++;
+
+    // Advance hue
+    state.hue = (((state.hue + 0.15) % 360) + 360) % 360;
+
+    // Animate grid hue shift - 1 cycle every ~180 frames (3 seconds at 60fps)
+    state.gridHueShift = (((state.frameCount * 2) % 360) + 360) % 360;
+
+    // Three oscillating timers with sine waves
+    const checkTimer = (timer: Timer): boolean => {
+      const sineValue = Math.sin(state.frameCount * timer.frequency + timer.phase);
+      const isTriggering = sineValue > 0.5;
+      const shouldTrigger = isTriggering && !timer.lastTriggered;
+      timer.lastTriggered = isTriggering;
+      return shouldTrigger;
+    };
+
+    // Access spawnRandomZip stored on state during effect
+    const getSpawnZip = () => {
+      const stored = (stateRef.current as GridZipsRuntimeState).spawnRandomZip;
+      return stored;
+    };
+
+    // Skip random zips while mouse is held down
+    if (!state.mouseDown) {
+      if (checkTimer(state.timer1) || checkTimer(state.timer2) || checkTimer(state.timer3)) {
+        const burstCount = 1 + Math.floor(Math.random() * 14);
+        const spawn = getSpawnZip();
+        for (let i = 0; i < burstCount; i++) {
+          const gx = Math.floor(Math.random() * (canvas.width / GRID)) * GRID;
+          const gy = Math.floor(Math.random() * (canvas.height / GRID)) * GRID;
+          const posHue = (((gx * 0.5 + gy * 0.7 + state.frameCount * 0.15) % 360) + 360) % 360;
+          if (spawn) spawn(gx, gy, posHue, true);
+        }
+      }
+    }
+
+    // Mouse hold: spawn zips while button is down
+    if (state.mouseDown && state.mouseDownPos) {
+      if (state.mouseDownCooldown === 0) {
+        state.mouseDownCooldown = 8;
+        const spawn = getSpawnZip();
+        if (spawn) spawn(state.mouseDownPos[0], state.mouseDownPos[1]);
+      }
+      if (state.mouseDownCooldown > 0) state.mouseDownCooldown--;
+    }
+
+    // Decay mouse zip cooldown
+    if (state.mouseZipCooldown > 0) state.mouseZipCooldown--;
+
+    // Update zips and mark grid lines
+    const toRemove: Zip[] = [];
+    for (const zip of state.zips) {
+      if (zip.phase === "active") {
+        zip.headDist = Math.min(zip.headDist + configRef.current.speed, zip.totalDist);
+
+        const [hx, hy] = getPositionAlongPath(zip.waypoints, zip.headDist);
+
+        let pointColor = zip.color;
+        if (zip.useDynamicColor) {
+          const dynamicHue = (((hx * 0.5 + hy * 0.7 + state.frameCount * 0.15) % 360) + 360) % 360;
+          pointColor = hslToRgb(dynamicHue, SATURATION, LIGHTNESS);
+        }
+
+        zip.trail.push({ x: hx, y: hy, opacity: 1.0, color: pointColor });
+
+        if (zip.trail.length > configRef.current.trailLength) {
+          zip.trail.shift();
+        }
+
+        if (zip.headDist >= zip.totalDist) {
+          zip.phase = "fading";
+        }
+      } else {
+        for (const seg of zip.trail) {
+          seg.opacity -= configRef.current.trailDecay;
+        }
+        while (zip.trail.length > 0 && zip.trail[0].opacity <= 0) {
+          zip.trail.shift();
+        }
+        if (zip.trail.length === 0) {
+          toRemove.push(zip);
+        }
+      }
+    }
+    state.zips = state.zips.filter((z) => !toRemove.includes(z));
+
+    if (state.zips.length > 300) {
+      state.zips = state.zips.slice(state.zips.length - 300);
+    }
+
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawZips(ctx, state.zips);
+    }
+  }, []);
+
+  useAnimationLoop(animationCallback);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -285,6 +407,8 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
     window.addEventListener("resize", resizeCanvas);
 
     const state = stateRef.current;
+    state.canvas = canvas;
+    state.ctx = ctx;
 
     // Helper: create a zip
     function makeZip(
@@ -348,104 +472,8 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       if (zip) state.zips.push(zip);
     }
 
-    // Main animation loop
-    function loop(): void {
-      if (!canvas) return;
-
-      state.frameCount++;
-
-      // Advance hue
-      state.hue = (((state.hue + 0.15) % 360) + 360) % 360;
-
-      // Three oscillating timers with sine waves
-      const checkTimer = (timer: Timer): boolean => {
-        const sineValue = Math.sin(state.frameCount * timer.frequency + timer.phase);
-        const isTriggering = sineValue > 0.5; // Trigger when sine > 0.5
-        const shouldTrigger = isTriggering && !timer.lastTriggered;
-        timer.lastTriggered = isTriggering;
-        return shouldTrigger;
-      };
-
-      // Skip random zips while mouse is held down
-      if (!state.mouseDown) {
-        if (checkTimer(state.timer1) || checkTimer(state.timer2) || checkTimer(state.timer3)) {
-          const burstCount = 1 + Math.floor(Math.random() * 14);
-          for (let i = 0; i < burstCount; i++) {
-            const gx = Math.floor(Math.random() * (canvas.width / GRID)) * GRID;
-            const gy = Math.floor(Math.random() * (canvas.height / GRID)) * GRID;
-            const posHue = (((gx * 0.5 + gy * 0.7 + state.frameCount * 0.15) % 360) + 360) % 360;
-            spawnRandomZip(gx, gy, posHue, true);
-          }
-        }
-      }
-
-      // Mouse hold: spawn zips while button is down
-      if (state.mouseDown && state.mouseDownPos) {
-        if (state.mouseDownCooldown === 0) {
-          state.mouseDownCooldown = 8; // Every ~8 frames while holding
-          spawnRandomZip(state.mouseDownPos[0], state.mouseDownPos[1]);
-        }
-        if (state.mouseDownCooldown > 0) state.mouseDownCooldown--;
-      }
-
-      // Decay mouse zip cooldown
-      if (state.mouseZipCooldown > 0) state.mouseZipCooldown--;
-
-      // Update zips and mark grid lines
-      const toRemove: Zip[] = [];
-      for (const zip of state.zips) {
-        if (zip.phase === "active") {
-          zip.headDist = Math.min(zip.headDist + configRef.current.speed, zip.totalDist);
-
-          const [hx, hy] = getPositionAlongPath(zip.waypoints, zip.headDist);
-
-          // Calculate color for this trail point
-          let pointColor = zip.color;
-          if (zip.useDynamicColor) {
-            const dynamicHue =
-              (((hx * 0.5 + hy * 0.7 + state.frameCount * 0.15) % 360) + 360) % 360;
-            pointColor = hslToRgb(dynamicHue, SATURATION, LIGHTNESS);
-          }
-
-          zip.trail.push({ x: hx, y: hy, opacity: 1.0, color: pointColor });
-
-          if (zip.trail.length > configRef.current.trailLength) {
-            zip.trail.shift();
-          }
-
-          if (zip.headDist >= zip.totalDist) {
-            zip.phase = "fading";
-          }
-        } else {
-          // Fading phase
-          for (const seg of zip.trail) {
-            seg.opacity -= configRef.current.trailDecay;
-          }
-          while (zip.trail.length > 0 && zip.trail[0].opacity <= 0) {
-            zip.trail.shift();
-          }
-          if (zip.trail.length === 0) {
-            toRemove.push(zip);
-          }
-        }
-      }
-      state.zips = state.zips.filter((z) => !toRemove.includes(z));
-
-      // Cap total zips at 150
-      if (state.zips.length > 150) {
-        state.zips = state.zips.slice(state.zips.length - 150);
-      }
-
-      // Draw
-      if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawZips(ctx, state.zips);
-      }
-
-      state.animId = requestAnimationFrame(loop);
-    }
-
-    state.animId = requestAnimationFrame(loop);
+    // Store on state for animation callback
+    (state as GridZipsRuntimeState).spawnRandomZip = spawnRandomZip;
 
     // Event handlers
     function toCanvasCoords(clientX: number, clientY: number): CanvasCoords {
@@ -488,16 +516,19 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       if (!state.mouseDown || !state.mouseDownPos || !canvas) return;
 
       const [ax, ay] = state.mouseDownPos;
-      const zipCount = (1 + Math.floor(Math.random() * 3)) * 2; // 2x normal count
+      const zipCount = 64;
 
-      // Burst on release: spawn in all directions from click point
+      // Burst on release: spawn 64 zips in circle with rainbow colors based on grid hue shift
       for (let i = 0; i < zipCount; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const dist = (50 + Math.random() * 350) * 2;
+        const angle = (i / zipCount) * Math.PI * 2;
+        const dist = 150 + Math.random() * 250;
         const [bx, by] = snapToGrid(ax + Math.cos(angle) * dist, ay + Math.sin(angle) * dist);
         if (bx === ax && by === ay) continue;
         if (bx < 0 || by < 0 || bx > canvas.width || by > canvas.height) continue;
-        const zip = makeZip(ax, ay, bx, by, state.hue);
+
+        // Color based on grid position's animated hue
+        const gridHue = (((bx * 0.5 + by * 0.7 + state.gridHueShift) % 360) + 360) % 360;
+        const zip = makeZip(ax, ay, bx, by, gridHue, true);
         if (zip) state.zips.push(zip);
       }
 
