@@ -526,7 +526,7 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       handleMouseDown(mouseEvent as unknown as MouseEvent);
     }
 
-    function handleTouchEnd(e: TouchEvent): void {
+    function handleTouchEnd(_e: TouchEvent): void {
       const mouseEvent = new MouseEvent("mouseup", {});
       handleMouseUp(mouseEvent as unknown as MouseEvent);
     }
