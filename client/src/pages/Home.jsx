@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import Header from "../components/Header";
 import ThingCard from "../components/ThingCard";
 import { useGridZips, getDefaultGridZipsConfig } from "../hooks/useGridZips";
 
@@ -20,12 +20,7 @@ const Home = () => {
       />
 
       <div className="absolute inset-0 flex flex-col pointer-events-none">
-        <header id="header" className="text-center pt-8">
-          <Link to="/" className="pointer-events-auto">
-            <h1>zfogg</h1>
-          </Link>
-          <p className="text-2xl pointer-events-auto">Zachary Fogg's personal website</p>
-        </header>
+        <Header subtitle="Zachary Fogg's personal website" />
 
         <section
           id="content"

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Header from "../components/Header";
 import { useGravity } from "../hooks/useGravity";
 import CanvasControls from "../components/CanvasControls";
 import { getDefaultGravityConfig } from "../gravity/config";
@@ -27,11 +27,7 @@ const Gravity = () => {
 
   return (
     <div className="flex-1 flex flex-col w-full">
-      <header id="header" className="text-center pt-8">
-        <Link to="/">
-          <h1>zfogg</h1>
-        </Link>
-      </header>
+      <Header />
 
       <section id="content" className="flex-1 flex flex-col items-center justify-center w-full">
         <div id="gravity" className="relative w-full min-w-[320px] text-center">

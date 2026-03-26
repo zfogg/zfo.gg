@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Header from "../components/Header";
 import { useColorAnimation, getDefaultColorAnimationConfig } from "../hooks/useColorAnimation";
 import CanvasControls from "../components/CanvasControls";
 
@@ -48,11 +48,7 @@ const Colorshifter = () => {
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center w-full overflow-x-hidden">
-      <header id="header" className="text-center pt-8">
-        <Link to="/">
-          <h1>zfogg</h1>
-        </Link>
-      </header>
+      <Header />
 
       <section
         id="content"
