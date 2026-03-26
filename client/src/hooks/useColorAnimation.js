@@ -127,22 +127,35 @@ export function useColorAnimation(config = getDefaultColorAnimationConfig()) {
     state.lastY = y;
   };
 
+  // Touch move listener
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent("mousemove", {
+      clientX: touch.clientX,
+      clientY: touch.clientY,
+    });
+    handleMouseMove(mouseEvent);
+  };
+
   useEffect(() => {
     const state = stateRef.current;
 
     // Start animation loop
     state.rafId = requestAnimationFrame(animationLoop);
 
-    // Add mouse listener
+    // Add mouse and touch listeners
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove);
 
     return () => {
       // Cancel animation frame
       if (state.rafId) {
         cancelAnimationFrame(state.rafId);
       }
-      // Remove mouse listener
+      // Remove mouse and touch listeners
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
     };
   }, []);
 

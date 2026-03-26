@@ -505,15 +505,47 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       state.mouseDownPos = null;
     }
 
+    // Touch event handlers
+    function handleTouchMove(e: TouchEvent): void {
+      if (e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent("mousemove", {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+      handleMouseMove(mouseEvent as unknown as MouseEvent);
+    }
+
+    function handleTouchStart(e: TouchEvent): void {
+      if (e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent("mousedown", {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+      handleMouseDown(mouseEvent as unknown as MouseEvent);
+    }
+
+    function handleTouchEnd(e: TouchEvent): void {
+      const mouseEvent = new MouseEvent("mouseup", {});
+      handleMouseUp(mouseEvent as unknown as MouseEvent);
+    }
+
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
+    canvas.addEventListener("touchmove", handleTouchMove);
+    canvas.addEventListener("touchstart", handleTouchStart);
+    canvas.addEventListener("touchend", handleTouchEnd);
 
     return () => {
       if (state.animId) cancelAnimationFrame(state.animId);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mousedown", handleMouseDown);
       document.removeEventListener("mouseup", handleMouseUp);
+      canvas.removeEventListener("touchmove", handleTouchMove);
+      canvas.removeEventListener("touchstart", handleTouchStart);
+      canvas.removeEventListener("touchend", handleTouchEnd);
       window.removeEventListener("resize", resizeCanvas);
       state.zips = [];
     };
