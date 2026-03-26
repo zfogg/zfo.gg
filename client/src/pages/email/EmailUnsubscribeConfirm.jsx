@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
+import Header from "../../components/Header";
 
 const EmailUnsubscribeConfirm = () => {
   const [searchParams] = useSearchParams();
@@ -51,11 +52,7 @@ const EmailUnsubscribeConfirm = () => {
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center w-full">
-      <header id="header" className="text-center">
-        <Link to="/">
-          <h1>zfogg</h1>
-        </Link>
-      </header>
+      <Header />
 
       <section id="content" className="flex-1 flex justify-center items-center w-full px-4">
         <div className="max-w-2xl mx-auto w-full text-center">
