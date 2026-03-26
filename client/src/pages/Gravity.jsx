@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Header from "../components/Header";
 import { useGravity } from "../hooks/useGravity";
 import CanvasControls from "../components/CanvasControls";
 import { getDefaultGravityConfig } from "../gravity/config";
@@ -26,10 +25,7 @@ const Gravity = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col w-full">
-      <Header />
-
-      <section id="content" className="flex-1 flex flex-col items-center justify-center w-full">
+    <section id="content" className="flex-1 flex flex-col items-center justify-center w-full">
         <div id="gravity" className="relative w-full min-w-[320px] text-center">
           <h3>
             gravity
@@ -173,7 +169,6 @@ const Gravity = () => {
           </div>
         </div>
       </section>
-    </div>
   );
 };
 
