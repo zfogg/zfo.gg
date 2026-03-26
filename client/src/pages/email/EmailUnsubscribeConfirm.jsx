@@ -51,45 +51,42 @@ const EmailUnsubscribeConfirm = () => {
 
   return (
     <section id="content" className="flex-1 flex justify-center items-center w-full px-4">
-        <div className="max-w-2xl mx-auto w-full text-center">
-          {status === "loading" && (
-            <div className="text-gray-500">
-              <p className="text-4xl">Removing you...</p>
-            </div>
-          )}
+      <div className="max-w-2xl mx-auto w-full text-center">
+        {status === "loading" && (
+          <div className="text-gray-500">
+            <p className="text-4xl">Removing you...</p>
+          </div>
+        )}
 
-          {status === "unsubscribed" && (
-            <div className="text-green-600">
-              <h2 className="text-7xl font-serif mb-4">✓ You've been removed.</h2>
-              <p className="text-gray-500 mb-8">You won't receive any more emails from zfo.gg.</p>
+        {status === "unsubscribed" && (
+          <div className="text-green-600">
+            <h2 className="text-7xl font-serif mb-4">✓ You've been removed.</h2>
+            <p className="text-gray-500 mb-8">You won't receive any more emails from zfo.gg.</p>
+            <Link to="/" className="text-blue-500 hover:text-blue-600 underline">
+              Back home
+            </Link>
+          </div>
+        )}
+
+        {status === "error" && (
+          <div className="text-red-600">
+            <h2 className="text-7xl font-serif mb-4">Oops</h2>
+            <p className="text-3xl text-gray-500 mb-4">{error}</p>
+            <p className="text-2xl text-gray-400 mb-8">
+              The link may have expired. Try unsubscribing again.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link to="/email/unsubscribe" className="text-blue-500 hover:text-blue-600 underline">
+                Try again
+              </Link>
               <Link to="/" className="text-blue-500 hover:text-blue-600 underline">
-                Back home
+                Home
               </Link>
             </div>
-          )}
-
-          {status === "error" && (
-            <div className="text-red-600">
-              <h2 className="text-7xl font-serif mb-4">Oops</h2>
-              <p className="text-3xl text-gray-500 mb-4">{error}</p>
-              <p className="text-2xl text-gray-400 mb-8">
-                The link may have expired. Try unsubscribing again.
-              </p>
-              <div className="flex gap-4 justify-center">
-                <Link
-                  to="/email/unsubscribe"
-                  className="text-blue-500 hover:text-blue-600 underline"
-                >
-                  Try again
-                </Link>
-                <Link to="/" className="text-blue-500 hover:text-blue-600 underline">
-                  Home
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 

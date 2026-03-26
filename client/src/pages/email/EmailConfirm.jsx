@@ -51,46 +51,46 @@ const EmailConfirm = () => {
 
   return (
     <section id="content" className="flex-1 flex justify-center items-center w-full px-4">
-        <div className="max-w-2xl mx-auto w-full text-center">
-          {status === "loading" && (
-            <div className="text-gray-500">
-              <p className="text-4xl">Confirming your email...</p>
-            </div>
-          )}
+      <div className="max-w-2xl mx-auto w-full text-center">
+        {status === "loading" && (
+          <div className="text-gray-500">
+            <p className="text-4xl">Confirming your email...</p>
+          </div>
+        )}
 
-          {status === "confirmed" && (
-            <div className="text-green-600">
-              <h2 className="text-4xl font-serif mb-4">✓ You're subscribed!</h2>
-              <p className="text-gray-500 mb-8">
-                You'll get an email when I write something or release software.
-              </p>
+        {status === "confirmed" && (
+          <div className="text-green-600">
+            <h2 className="text-4xl font-serif mb-4">✓ You're subscribed!</h2>
+            <p className="text-gray-500 mb-8">
+              You'll get an email when I write something or release software.
+            </p>
+            <Link to="/" className="text-blue-500 hover:text-blue-600 underline">
+              Back home
+            </Link>
+          </div>
+        )}
+
+        {status === "error" && (
+          <div className="text-red-600">
+            <h2 className="text-7xl font-serif mb-4">Oops</h2>
+            <p className="text-3xl text-gray-500 mb-4">{error}</p>
+            <p className="text-2xl text-gray-400 mb-8">
+              {error === "Email already confirmed"
+                ? "You're already subscribed."
+                : "The link may have expired. Try signing up again."}
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link to="/email" className="text-blue-500 hover:text-blue-600 underline">
+                Sign up again
+              </Link>
               <Link to="/" className="text-blue-500 hover:text-blue-600 underline">
-                Back home
+                Home
               </Link>
             </div>
-          )}
-
-          {status === "error" && (
-            <div className="text-red-600">
-              <h2 className="text-7xl font-serif mb-4">Oops</h2>
-              <p className="text-3xl text-gray-500 mb-4">{error}</p>
-              <p className="text-2xl text-gray-400 mb-8">
-                {error === "Email already confirmed"
-                  ? "You're already subscribed."
-                  : "The link may have expired. Try signing up again."}
-              </p>
-              <div className="flex gap-4 justify-center">
-                <Link to="/email" className="text-blue-500 hover:text-blue-600 underline">
-                  Sign up again
-                </Link>
-                <Link to="/" className="text-blue-500 hover:text-blue-600 underline">
-                  Home
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 
