@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import Header from "../components/Header";
 import ThingCard from "../components/ThingCard";
 import { useGridZips, getDefaultGridZipsConfig } from "../hooks/useGridZips";
 
@@ -20,8 +19,6 @@ const Home = () => {
       />
 
       <div className="absolute inset-0 flex flex-col pointer-events-none">
-        <Header subtitle="Zachary Fogg's personal website" />
-
         <section
           id="content"
           className="flex-1 flex justify-center items-center w-full text-center px-4"
