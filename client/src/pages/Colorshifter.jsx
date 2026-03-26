@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useColorAnimation, getDefaultColorAnimationConfig } from "../hooks/useColorAnimation";
+import { useColorShifter, getDefaultColorShifterConfig } from "../hooks/useColorShifter";
 import CanvasControls from "../components/CanvasControls";
 
 const Colorshifter = () => {
@@ -10,11 +10,11 @@ const Colorshifter = () => {
       ) || "550",
     );
     return {
-      ...getDefaultColorAnimationConfig(),
+      ...getDefaultColorShifterConfig(),
       animationSpeed: defaultSpeed,
     };
   });
-  const { bgColor, fgColor, isActive } = useColorAnimation(config);
+  const { bgColor, fgColor, isActive } = useColorShifter(config);
 
   const handleChange = (key, value) => {
     setConfig((prev) => ({ ...prev, [key]: parseFloat(value) }));

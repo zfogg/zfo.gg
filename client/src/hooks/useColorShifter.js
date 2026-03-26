@@ -35,7 +35,7 @@ function getReadableFgColor(bgColor) {
  * Hook that manages a color animation based on mouse movement.
  * Returns { bgColor, fgColor } as HSL strings.
  */
-export const getDefaultColorAnimationConfig = () => ({
+export const getDefaultColorShifterConfig = () => ({
   jerk: 8.0,
   decay: 0.75,
   maxV: 0.5,
@@ -43,7 +43,7 @@ export const getDefaultColorAnimationConfig = () => ({
   lightness: 55,
 });
 
-export function useColorAnimation(config = getDefaultColorAnimationConfig()) {
+export function useColorShifter(config = getDefaultColorShifterConfig()) {
   const [bgColor, setBgColor] = useState("hsl(180, 70%, 55%)");
   const [fgColor, setFgColor] = useState("hsl(0, 0%, 12%)");
   const [isActive, setIsActive] = useState(false);
