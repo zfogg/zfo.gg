@@ -278,13 +278,13 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
   }, [config]);
 
   // Top-level animation callback
-  const animationCallback = useCallback(() => {
+  const animationCallback = useCallback((deltaTime: number) => {
     const state = stateRef.current;
     const canvas = state.canvas;
     const ctx = state.ctx;
     if (!canvas || !ctx) return;
 
-    state.frameCount++;
+    state.frameCount += deltaTime;
 
     // Advance hue
     state.hue = (((state.hue + 0.15) % 360) + 360) % 360;
