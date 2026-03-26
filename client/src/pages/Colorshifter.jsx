@@ -48,7 +48,7 @@ const Colorshifter = () => {
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center w-full overflow-x-hidden">
-      <header id="header" className="text-center">
+      <header id="header" className="text-center pt-8">
         <Link to="/">
           <h1>zfogg</h1>
         </Link>
