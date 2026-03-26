@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Header from "../../components/Header";
 
 const EmailUnsubscribe = () => {
   const [email, setEmail] = useState("");
@@ -43,10 +42,7 @@ const EmailUnsubscribe = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-center items-center w-full">
-      <Header />
-
-      <section id="content" className="flex-1 flex justify-center items-center w-full px-4">
+    <section id="content" className="flex-1 flex justify-center items-center w-full px-4">
         <div className="max-w-2xl mx-auto w-full text-center">
           <h2>Unsubscribe.</h2>
           <p className="mb-8">Enter your email to remove yourself from updates.</p>
@@ -94,7 +90,6 @@ const EmailUnsubscribe = () => {
           )}
         </div>
       </section>
-    </div>
   );
 };
 
