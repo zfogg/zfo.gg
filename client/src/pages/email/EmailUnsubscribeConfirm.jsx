@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import Header from "../../components/Header";
 
 const EmailUnsubscribeConfirm = () => {
   const [searchParams] = useSearchParams();
@@ -51,10 +50,7 @@ const EmailUnsubscribeConfirm = () => {
   }, [searchParams]);
 
   return (
-    <div className="flex-1 flex flex-col justify-center items-center w-full">
-      <Header />
-
-      <section id="content" className="flex-1 flex justify-center items-center w-full px-4">
+    <section id="content" className="flex-1 flex justify-center items-center w-full px-4">
         <div className="max-w-2xl mx-auto w-full text-center">
           {status === "loading" && (
             <div className="text-gray-500">
@@ -94,7 +90,6 @@ const EmailUnsubscribeConfirm = () => {
           )}
         </div>
       </section>
-    </div>
   );
 };
 
