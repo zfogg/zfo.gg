@@ -27,7 +27,7 @@ const Gravity = () => {
 
   return (
     <div className="flex-1 flex flex-col w-full">
-      <header id="header" className="text-center">
+      <header id="header" className="text-center pt-8">
         <Link to="/">
           <h1>zfogg</h1>
         </Link>
