@@ -19,7 +19,7 @@ const Home = () => {
       />
 
       <div className="absolute inset-0 flex flex-col pointer-events-none">
-        <p className="text-gray-600 text-2xl text-center pt-2 -mt-6 pointer-events-auto">
+        <p className="text-gray-600 text-2xl text-center pt-2 pointer-events-auto">
           Zachary Fogg's personal website
         </p>
         <section
