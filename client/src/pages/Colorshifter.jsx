@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Header from "../components/Header";
 import { useColorAnimation, getDefaultColorAnimationConfig } from "../hooks/useColorAnimation";
 import CanvasControls from "../components/CanvasControls";
 
@@ -47,10 +46,7 @@ const Colorshifter = () => {
   }, [bgColor, fgColor, isActive, config.animationSpeed]);
 
   return (
-    <div className="flex-1 flex flex-col justify-center items-center w-full overflow-x-hidden">
-      <Header />
-
-      <section
+    <section
         id="content"
         className="flex-1 flex justify-center items-center w-full text-center px-4 pt-8 relative"
       >
@@ -143,7 +139,6 @@ const Colorshifter = () => {
           </div>
         </div>
       </section>
-    </div>
   );
 };
 
