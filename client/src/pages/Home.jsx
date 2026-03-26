@@ -19,6 +19,9 @@ const Home = () => {
       />
 
       <div className="absolute inset-0 flex flex-col pointer-events-none">
+        <p className="text-gray-600 text-2xl text-center pt-2 -mt-6 pointer-events-auto">
+          Zachary Fogg's personal website
+        </p>
         <section
           id="content"
           className="flex-1 flex justify-center items-center w-full text-center px-4"
@@ -26,7 +29,6 @@ const Home = () => {
           <div className="max-w-4xl mx-auto pointer-events-auto">
             <div className="mb-8">
               <h3 className="text-4xl">I make things, like</h3>
-              <p className="text-gray-600 text-2xl mt-2">Zachary Fogg's personal website</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
