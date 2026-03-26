@@ -24,7 +24,7 @@ const Home = () => {
           <Link to="/" className="pointer-events-auto">
             <h1>zfogg</h1>
           </Link>
-          <p className="text-sm pointer-events-auto">Zachary Fogg's personal website</p>
+          <p className="text-2xl pointer-events-auto">Zachary Fogg's personal website</p>
         </header>
 
         <section
