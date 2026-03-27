@@ -144,13 +144,8 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
       const scaleX = glCanvas.width / rect.width;
       const scaleY = glCanvas.height / rect.height;
 
-      // Scale to canvas dimensions first, then to canvasSize space
-      const canvasX = (e.clientX - rect.left) * scaleX;
-      const canvasY = (e.clientY - rect.top) * scaleY;
-
-      // Map to the canvasSize coordinate space (which is max(width, height) x max(width, height))
-      const mx = canvasX * (state.canvasSize / glCanvas.width);
-      const my = canvasY * (state.canvasSize / glCanvas.height);
+      const mx = (e.clientX - rect.left) * scaleX;
+      const my = (e.clientY - rect.top) * scaleY;
 
       state.fractureSystem.fracture(mx, my, state.seedField);
       state.fractureSystem.touch();
