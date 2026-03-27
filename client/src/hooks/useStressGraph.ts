@@ -97,14 +97,14 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
         return;
       }
 
-      // Set canvas sizes to match container
+      // Set canvas to full container dimensions
       glCanvas.width = width;
       glCanvas.height = height;
       overlayCanvas.width = width;
       overlayCanvas.height = height;
 
-      // Use smaller dimension for physics simulation
-      const canvasSize = Math.min(width, height);
+      // Use full canvas dimensions for physics
+      const canvasSize = Math.max(width, height);
 
       const state = stateRef.current;
 
@@ -164,15 +164,27 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
     // Resize handler
     const handleWindowResize = () => {
       const state = stateRef.current;
-      if (!state.glRenderer || !state.overlayRenderer) return;
+      if (!state.glRenderer || !state.overlayRenderer || !state.seedField) return;
 
       const container = glCanvas.parentElement;
       if (!container) return;
 
       const newWidth = container.clientWidth;
       const newHeight = container.clientHeight;
+      const oldWidth = glCanvas.width;
+      const oldHeight = glCanvas.height;
 
-      if (newWidth !== glCanvas.width || newHeight !== glCanvas.height) {
+      if (newWidth !== oldWidth || newHeight !== oldHeight) {
+        // Scale seeds proportionally to new canvas dimensions
+        const scaleX = newWidth / oldWidth;
+        const scaleY = newHeight / oldHeight;
+        for (const seed of state.seedField.seeds) {
+          seed.x *= scaleX;
+          seed.y *= scaleY;
+          seed.anchorX *= scaleX;
+          seed.anchorY *= scaleY;
+        }
+
         glCanvas.width = newWidth;
         glCanvas.height = newHeight;
         overlayCanvas.width = newWidth;
