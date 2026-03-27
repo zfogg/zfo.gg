@@ -25,11 +25,30 @@ export interface GLSeedData {
 export class SeedField {
   seeds: Seed[] = [];
   private nextId = 0;
+  private width: number;
+  private height: number;
+
+  getNextId(): number {
+    return this.nextId;
+  }
+
+  resetId(): void {
+    this.nextId = 0;
+  }
+
+  setDimensions(width: number, height: number): void {
+    this.width = width;
+    this.height = height;
+  }
 
   constructor(
     private config: StressGraphConfig,
-    private canvasSize: number,
-  ) {}
+    width: number,
+    height: number,
+  ) {
+    this.width = width;
+    this.height = height;
+  }
 
   // Mitchell's best-candidate Poisson disk: for each of seedCount seeds,
   // generate k=30 random candidates, keep the one farthest from existing seeds.
@@ -44,8 +63,8 @@ export class SeedField {
       let bestDist = -1;
 
       for (let j = 0; j < k; j++) {
-        const cx = Math.random() * this.canvasSize;
-        const cy = Math.random() * this.canvasSize;
+        const cx = Math.random() * this.width;
+        const cy = Math.random() * this.height;
         let minD = Infinity;
 
         for (const s of this.seeds) {
@@ -102,14 +121,15 @@ export class SeedField {
       // Compute stress (displacement from anchor)
       const dx = s.x - s.anchorX;
       const dy = s.y - s.anchorY;
-      s.stress = Math.min(1, Math.hypot(dx, dy) / (this.canvasSize * 0.05));
+      const maxDim = Math.max(this.width, this.height);
+      s.stress = Math.min(1, Math.hypot(dx, dy) / (maxDim * 0.05));
 
       // Boundary repulsion
       if (s.x < margin) s.vx += (margin - s.x) * 0.5;
-      else if (s.x > this.canvasSize - margin) s.vx -= (s.x - (this.canvasSize - margin)) * 0.5;
+      else if (s.x > this.width - margin) s.vx -= (s.x - (this.width - margin)) * 0.5;
 
       if (s.y < margin) s.vy += (margin - s.y) * 0.5;
-      else if (s.y > this.canvasSize - margin) s.vy -= (s.y - (this.canvasSize - margin)) * 0.5;
+      else if (s.y > this.height - margin) s.vy -= (s.y - (this.height - margin)) * 0.5;
     }
   }
 
@@ -172,7 +192,7 @@ export class SeedField {
     for (let i = 0; i < n; i++) {
       const s = this.seeds[i];
       positions[i * 2] = s.x;
-      positions[i * 2 + 1] = this.canvasSize - s.y; // FLIP Y
+      positions[i * 2 + 1] = this.height - s.y; // FLIP Y
       hues[i] = s.hue;
       stresses[i] = s.stress;
     }

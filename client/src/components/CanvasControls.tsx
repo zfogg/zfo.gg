@@ -32,10 +32,10 @@ const CanvasControls = ({ children }: CanvasControlsProps): ReactElement => {
     <div
       ref={containerRef}
       id="canvas-controls-container"
-      className="absolute top-[15px] left-[20px] font-bold text-[13.5px]"
+      className="absolute top-[15px] left-[20px] font-bold text-[13.5px] text-white"
     >
       <h4 className="text-[1.61em] cursor-default">
-        <a onClick={handleToggle} className="cursor-pointer">
+        <a onClick={handleToggle} className="cursor-pointer underline">
           {isVisible ? "hide" : "show"}
         </a>
         {" controls"}

@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useStressGraph } from "../hooks/useStressGraph";
 import CanvasControls from "../components/CanvasControls";
 
 const StressGraph = () => {
-  const { glCanvasRef, overlayCanvasRef } = useStressGraph();
+  const { glCanvasRef, overlayCanvasRef, togglePause, reset } = useStressGraph();
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     document.title = "stressgraph - zfo.gg";
@@ -32,17 +33,38 @@ const StressGraph = () => {
             aria-hidden="true"
           />
 
-          <CanvasControls>
-            <div className="canvas-control text-center">
-              <p className="text-sm">Left click: fracture</p>
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="pointer-events-auto">
+              <CanvasControls>
+                <button
+                  onClick={() => {
+                    const newPaused = togglePause();
+                    setPaused(newPaused);
+                  }}
+                  className="px-4 py-2 bg-orange-600 hover:bg-orange-500 rounded text-sm transition-colors"
+                >
+                  {paused ? "Resume" : "Pause"}
+                </button>
+                <button
+                  onClick={() => {
+                    const event = new KeyboardEvent("keydown", { code: "Space" });
+                    document.dispatchEvent(event);
+                  }}
+                  className="px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded text-sm transition-colors"
+                >
+                  Randomize Hues
+                </button>
+                <button
+                  onClick={() => {
+                    reset();
+                  }}
+                  className="px-4 py-2 bg-red-700 hover:bg-red-600 rounded text-sm transition-colors"
+                >
+                  Reset
+                </button>
+              </CanvasControls>
             </div>
-            <div className="canvas-control text-center">
-              <p className="text-sm">Right hold: gravity well</p>
-            </div>
-            <div className="canvas-control text-center">
-              <p className="text-sm">Space: randomize hues</p>
-            </div>
-          </CanvasControls>
+          </div>
         </div>
       </div>
     </section>

@@ -12,6 +12,7 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
   const glCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const overlayCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const randomizeHuesCallbackRef = useRef<(() => void) | null>(null);
+  const isPausedRef = useRef(false);
 
   const stateRef = useRef<{
     glRenderer: GLRenderer | null;
@@ -36,7 +37,7 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
   // Animation callback at top level - not in useEffect
   const animationCallback = useCallback((deltaTime: number) => {
     const state = stateRef.current;
-    if (!state.initialized) return;
+    if (!state.initialized || isPausedRef.current) return;
 
     const cursor = state.stressModel!.update();
 
@@ -103,9 +104,6 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
       overlayCanvas.width = width;
       overlayCanvas.height = height;
 
-      // Use full canvas dimensions for physics
-      const canvasSize = Math.max(width, height);
-
       const state = stateRef.current;
 
       // Initialize renderers
@@ -117,8 +115,8 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
         return;
       }
 
-      // Initialize physics
-      state.seedField = new SeedField(config, canvasSize);
+      // Initialize physics with actual canvas dimensions
+      state.seedField = new SeedField(config, width, height);
       state.seedField.initialize();
 
       state.stressModel = new StressModel(glCanvas, config);
@@ -127,7 +125,7 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
       state.fractureSystem = new FractureSystem(config, config.seedCount);
 
       state.config = config;
-      state.canvasSize = canvasSize;
+      state.canvasSize = Math.max(width, height);
 
       // Mark as initialized
       state.initialized = true;
@@ -164,37 +162,38 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
 
     document.addEventListener("keydown", handleKeyDown);
 
-    // Resize handler
+    // Resize handler with debounce
+    let resizeTimeoutId: ReturnType<typeof setTimeout> | null = null;
     const handleWindowResize = () => {
-      const state = stateRef.current;
-      if (!state.glRenderer || !state.overlayRenderer || !state.seedField) return;
+      if (resizeTimeoutId) clearTimeout(resizeTimeoutId);
 
-      const container = glCanvas.parentElement;
-      if (!container) return;
+      resizeTimeoutId = setTimeout(() => {
+        const state = stateRef.current;
+        if (!state.glRenderer || !state.overlayRenderer || !state.seedField) return;
 
-      const newWidth = container.clientWidth;
-      const newHeight = container.clientHeight;
-      const oldWidth = glCanvas.width;
-      const oldHeight = glCanvas.height;
+        const container = glCanvas.parentElement;
+        if (!container) return;
 
-      if (newWidth !== oldWidth || newHeight !== oldHeight) {
-        // Scale seeds proportionally to new canvas dimensions
-        const scaleX = newWidth / oldWidth;
-        const scaleY = newHeight / oldHeight;
-        for (const seed of state.seedField.seeds) {
-          seed.x *= scaleX;
-          seed.y *= scaleY;
-          seed.anchorX *= scaleX;
-          seed.anchorY *= scaleY;
+        const newWidth = container.clientWidth;
+        const newHeight = container.clientHeight;
+
+        if (newWidth !== glCanvas.width || newHeight !== glCanvas.height) {
+          glCanvas.width = newWidth;
+          glCanvas.height = newHeight;
+          overlayCanvas.width = newWidth;
+          overlayCanvas.height = newHeight;
+
+          state.glRenderer.resize(newWidth, newHeight);
+          state.canvasSize = Math.max(newWidth, newHeight);
+
+          // Reset seeds on resize with new dimensions
+          state.seedField.setDimensions(newWidth, newHeight);
+          state.seedField.seeds = [];
+          state.seedField.resetId();
+          state.seedField.initialize();
+          state.fractureSystem!.crackLines = [];
         }
-
-        glCanvas.width = newWidth;
-        glCanvas.height = newHeight;
-        overlayCanvas.width = newWidth;
-        overlayCanvas.height = newHeight;
-
-        state.glRenderer.resize(newWidth, newHeight);
-      }
+      }, 200);
     };
 
     window.addEventListener("resize", handleWindowResize);
@@ -211,6 +210,7 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
     // Cleanup
     return () => {
       destroyed = true;
+      if (resizeTimeoutId) clearTimeout(resizeTimeoutId);
       glCanvas.removeEventListener("click", handleClick);
       document.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleWindowResize);
@@ -226,5 +226,24 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
     glCanvasRef,
     overlayCanvasRef,
     randomizeHues: () => randomizeHuesCallbackRef.current?.(),
+    togglePause: () => {
+      isPausedRef.current = !isPausedRef.current;
+      return isPausedRef.current;
+    },
+    isPaused: () => isPausedRef.current,
+    reset: () => {
+      const state = stateRef.current;
+      if (!state.seedField || !state.fractureSystem || !state.glRenderer || !state.overlayRenderer)
+        return;
+      state.seedField.seeds = [];
+      state.seedField.resetId();
+      state.seedField.initialize();
+      state.fractureSystem.crackLines = [];
+
+      // Force a render even if paused
+      const glData = state.seedField.packForGL();
+      state.glRenderer.render(glData);
+      state.overlayRenderer.render(0, 0, false, [], state.canvasSize);
+    },
   };
 };
