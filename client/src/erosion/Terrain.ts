@@ -66,6 +66,49 @@ export function buildChainVertices(
   return vertices;
 }
 
+/**
+ * Creates a b2ChainShape fixture from JS vertex data and attaches it to a body.
+ * Handles the Emscripten memory layout that CreateLoop expects:
+ * a contiguous block of b2Vec2 in WASM heap.
+ */
+export function createChainFixture(
+  box2d: any,
+  body: any,
+  vertices: Array<{ x: number; y: number }>,
+): any {
+  // Allocate a contiguous buffer of b2Vec2 on the Emscripten heap.
+  // Each b2Vec2 is 8 bytes (two 32-bit floats).
+  const count = vertices.length;
+  const bufferSize = count * 8;
+  const bufferPtr = box2d._malloc(bufferSize);
+  const floatView = new Float32Array(box2d.HEAPF32.buffer, bufferPtr, count * 2);
+
+  for (let i = 0; i < count; i++) {
+    floatView[i * 2] = vertices[i].x;
+    floatView[i * 2 + 1] = vertices[i].y;
+  }
+
+  // CreateLoop connects the last vertex back to the first (closed basin).
+  const chainShape = new box2d.b2ChainShape();
+  chainShape.CreateLoop(bufferPtr, count);
+
+  box2d._free(bufferPtr);
+
+  // Attach fixture using setter API
+  const fixtureDef = new box2d.b2FixtureDef();
+  fixtureDef.set_shape(chainShape);
+  fixtureDef.set_density(0);
+  fixtureDef.set_friction(0.3);
+  fixtureDef.set_restitution(0.1);
+
+  const fixture = body.CreateFixture(fixtureDef);
+
+  fixtureDef.__destroy__();
+  chainShape.__destroy__();
+
+  return fixture;
+}
+
 export class Terrain {
   heights: number[];
   body: any; // b2Body
@@ -88,28 +131,8 @@ export class Terrain {
       this.body.DestroyFixture(this.fixture);
     }
 
-    // Build new chain shape
     const vertices = buildChainVertices(this.heights, worldWidth);
-    const b2Vec2 = box2d.b2Vec2;
-    const b2ChainShape = box2d.b2ChainShape;
-
-    const chainShape = new b2ChainShape();
-    const verts: any[] = [];
-
-    for (const v of vertices) {
-      verts.push(new b2Vec2(v.x, v.y));
-    }
-
-    chainShape.CreateChain(verts);
-
-    // Create new fixture
-    const fixtureDef = new box2d.b2FixtureDef();
-    fixtureDef.shape = chainShape;
-    fixtureDef.density = 0;
-    fixtureDef.friction = 0.3;
-    fixtureDef.restitution = 0.1;
-
-    this.fixture = this.body.CreateFixture(fixtureDef);
+    this.fixture = createChainFixture(box2d, this.body, vertices);
     this.isDirty = false;
   }
 

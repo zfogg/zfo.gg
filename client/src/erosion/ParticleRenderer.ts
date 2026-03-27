@@ -13,35 +13,37 @@ export class ParticleRenderer {
     frameCount: number,
     box2d: any,
   ): void {
-    const posBuffer = particleSystem.GetPositionBuffer();
     const particleCount = particleSystem.GetParticleCount();
-
-    if (particleCount === 0 || !posBuffer) return;
+    if (particleCount === 0) return;
 
     const canvas = ctx.canvas;
     const height = canvas.height;
 
-    // Try to get velocity buffer for velocity-based effects
-    let velocityBuffer: Float32Array | null = null;
+    // Access WASM heap buffers for position and velocity data.
+    // GetPositionBuffer/GetVelocityBuffer return b2Vec2 pointers into the WASM heap.
+    // We read them as flat float arrays: [x0, y0, x1, y1, ...]
+    let positions: Float32Array;
+    let velocities: Float32Array | null = null;
+
     try {
-      velocityBuffer = particleSystem.GetVelocityBuffer();
+      const posPtr = box2d.getPointer(particleSystem.GetPositionBuffer());
+      positions = new Float32Array(box2d.HEAPF32.buffer, posPtr, particleCount * 2);
     } catch {
-      // Velocity buffer not available, will use position-based variation instead
+      return; // Can't render without positions
     }
 
-    // Try to get flags buffer to distinguish particle types
-    let flagsBuffer: Uint32Array | null = null;
     try {
-      flagsBuffer = particleSystem.GetFlagsBuffer();
+      const velPtr = box2d.getPointer(particleSystem.GetVelocityBuffer());
+      velocities = new Float32Array(box2d.HEAPF32.buffer, velPtr, particleCount * 2);
     } catch {
-      // Flags buffer not available, will treat all particles as water
+      // Velocity buffer not available, will use position-based variation instead
     }
 
     // Determine particle flags if available
     const b2_powderParticle = box2d.b2_powderParticle || 0x0008;
 
     // Batch water particles by hue
-    const hueBuckets = new Map<number, Array<{ x: number; y: number; vx?: number; vy?: number }>>();
+    const hueBuckets = new Map<number, Array<{ x: number; y: number }>>();
     const sedimentParticles: Array<{
       x: number;
       y: number;
@@ -49,42 +51,41 @@ export class ParticleRenderer {
     }> = [];
 
     for (let i = 0; i < particleCount; i++) {
-      // GetPositionBuffer returns a flat array [x0, y0, x1, y1, ...]
-      const x = posBuffer[i * 2];
-      const y = posBuffer[i * 2 + 1];
+      const x = positions[i * 2];
+      const y = positions[i * 2 + 1];
 
-      if (typeof x !== "number" || typeof y !== "number") continue;
       if (!isFinite(x) || !isFinite(y)) continue;
 
       const px = x * PIXELS_PER_METER;
       const py = height - y * PIXELS_PER_METER;
 
-      // Check if particle is sediment (powder)
-      const isSediment = flagsBuffer && (flagsBuffer[i] & b2_powderParticle) !== 0;
+      // Check if particle is sediment (powder) via per-particle flags API
+      let isSediment = false;
+      try {
+        isSediment = (particleSystem.GetParticleFlags(i) & b2_powderParticle) !== 0;
+      } catch {
+        // Flags not available
+      }
 
       if (isSediment) {
-        // Sediment particles: colored by erosion depth (y position)
-        // Deeper/lower particles are darker
         const depthFraction = Math.max(0, 1 - y / (height * 0.5));
         sedimentParticles.push({ x: px, y: py, depth: depthFraction });
       } else {
-        // Water particles: velocity-based hue shifting
         let vx = 0;
         let vy = 0;
-        if (velocityBuffer) {
-          vx = velocityBuffer[i * 2];
-          vy = velocityBuffer[i * 2 + 1];
+        if (velocities) {
+          vx = velocities[i * 2];
+          vy = velocities[i * 2 + 1];
         }
 
-        // Velocity magnitude affects hue (fast = cyan, slow = deep blue)
         const velocityMag = Math.sqrt(vx * vx + vy * vy);
-        const hueShift = Math.min(40, velocityMag * 10); // shift up to 40 hue points
+        const hueShift = Math.min(40, velocityMag * 10);
         const hue = Math.round(((config.waterHue - hueShift + frameCount * 0.5) % 360) / 45) * 45;
 
         if (!hueBuckets.has(hue)) {
           hueBuckets.set(hue, []);
         }
-        hueBuckets.get(hue)!.push({ x: px, y: py, vx, vy });
+        hueBuckets.get(hue)!.push({ x: px, y: py });
       }
     }
 

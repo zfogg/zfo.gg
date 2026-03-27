@@ -50,32 +50,39 @@ export function setupContactListener(
     particleSystem: any,
     particleBodyContact: any,
   ) => {
-    const particleIndex = particleBodyContact.GetParticleIndex();
-    const body = particleBodyContact.GetBody();
+    try {
+      const particleIndex = particleBodyContact.GetParticleIndex();
+      const body = particleBodyContact.GetBody();
 
-    // Check if the body is the terrain
-    if (body === terrain.body) {
-      // Get particle position
-      const posBuffer = particleSystem.GetPositionBuffer();
-      const pos = posBuffer[particleIndex];
+      // Check if the body is the terrain
+      if (body === terrain.body) {
+        // GetPositionBuffer returns a pointer into the WASM heap.
+        // Access as flat float pairs: [x0, y0, x1, y1, ...]
+        const posPtr = box2d.getPointer(particleSystem.GetPositionBuffer());
+        const floats = new Float32Array(
+          box2d.HEAPF32.buffer,
+          posPtr,
+          particleSystem.GetParticleCount() * 2,
+        );
+        const px = floats[particleIndex * 2];
 
-      // Convert world position to terrain index
-      const terrainIndex = Math.round((pos.x / worldWidth) * (terrain.heights.length - 1));
+        // Convert world x-position to terrain index
+        const terrainIndex = Math.round((px / worldWidth) * (terrain.heights.length - 1));
 
-      // Accumulate a small impulse
-      accumulator.add(terrainIndex, 0.1);
-    }
-
-    // Check if the body is the drain body
-    if (drainBodyRef?.current && body === drainBodyRef.current) {
-      // Mark particle as zombie to remove it
-      try {
-        const flagsBuffer = particleSystem.GetFlagsBuffer();
-        const b2_zombieParticle = box2d.b2_zombieParticle || 0x0020;
-        flagsBuffer[particleIndex] = flagsBuffer[particleIndex] | b2_zombieParticle;
-      } catch {
-        // Flags not available, can't mark as zombie
+        // Accumulate a small impulse
+        accumulator.add(terrainIndex, 0.1);
       }
+
+      // Check if the body is the drain body
+      if (drainBodyRef?.current && body === drainBodyRef.current) {
+        // Mark particle for removal
+        particleSystem.SetParticleFlags(
+          particleIndex,
+          particleSystem.GetParticleFlags(particleIndex) | (box2d.b2_zombieParticle || 0x0020),
+        );
+      }
+    } catch {
+      // Contact handling failed — non-fatal, skip this contact
     }
   };
 
@@ -152,7 +159,6 @@ function spawnSedimentParticles(
   const y = terrain.heights[terrainIndex] + 0.5;
 
   const b2Vec2 = box2d.b2Vec2;
-  const b2ParticleGroupDef = box2d.b2ParticleGroupDef;
 
   // Powder particle flag for sediment behavior (scatters like sand)
   const b2_powderParticle = box2d.b2_powderParticle || 0x0008;
@@ -160,13 +166,18 @@ function spawnSedimentParticles(
   for (let i = 0; i < particleCount && i < 10; i++) {
     const offsetX = (Math.random() - 0.5) * 1.0;
     const offsetY = (Math.random() - 0.5) * 0.5;
-    const def = new b2ParticleGroupDef();
-    def.position = new b2Vec2(x + offsetX, y + offsetY);
-    def.particleCount = 1;
-    def.flags = b2_powderParticle; // Mark as sediment
-    def.linearVelocity = new b2Vec2((Math.random() - 0.5) * 2, -1);
+    const def = new box2d.b2ParticleDef();
+    const pos = new b2Vec2(x + offsetX, y + offsetY);
+    const vel = new b2Vec2((Math.random() - 0.5) * 2, -1);
+    def.set_position(pos);
+    def.set_velocity(vel);
+    def.set_flags(b2_powderParticle); // Mark as sediment
 
-    particleSystem.CreateParticleGroup(def);
+    particleSystem.CreateParticle(def);
+
+    def.__destroy__();
+    pos.__destroy__();
+    vel.__destroy__();
   }
 }
 
@@ -180,63 +191,64 @@ function convertSedimentToTerrain(
   box2d: any,
   worldWidth: number,
 ): void {
-  // Try to get flags and velocity buffers
-  let flagsBuffer: Uint32Array | null = null;
-  let velocityBuffer: Float32Array | null = null;
-  let posBuffer: Float32Array | null = null;
-
-  try {
-    flagsBuffer = particleSystem.GetFlagsBuffer();
-    velocityBuffer = particleSystem.GetVelocityBuffer();
-    posBuffer = particleSystem.GetPositionBuffer();
-  } catch {
-    // Buffers not available, skip deposition
-    return;
-  }
-
   const b2_powderParticle = box2d.b2_powderParticle || 0x0008;
   const b2_zombieParticle = box2d.b2_zombieParticle || 0x0020;
 
   const particleCount = particleSystem.GetParticleCount();
+  if (particleCount === 0) return;
+
+  // Access WASM heap buffers for position and velocity
+  let positions: Float32Array;
+  let velocities: Float32Array;
+  try {
+    const posPtr = box2d.getPointer(particleSystem.GetPositionBuffer());
+    positions = new Float32Array(box2d.HEAPF32.buffer, posPtr, particleCount * 2);
+    const velPtr = box2d.getPointer(particleSystem.GetVelocityBuffer());
+    velocities = new Float32Array(box2d.HEAPF32.buffer, velPtr, particleCount * 2);
+  } catch {
+    return; // Buffers not available, skip deposition
+  }
+
   const velocityThreshold = 0.2; // m/s below which particle is considered "at rest"
 
   // Find sediment particles that are at rest and close to terrain
   const depositionLocations = new Map<number, number>(); // terrainIndex -> total deposition
 
   for (let i = 0; i < particleCount; i++) {
-    if (!flagsBuffer || !velocityBuffer || !posBuffer) continue;
-
-    // Check if particle is sediment
-    const isSediment = (flagsBuffer[i] & b2_powderParticle) !== 0;
+    // Check if particle is sediment via per-particle flags API
+    let isSediment = false;
+    try {
+      isSediment = (particleSystem.GetParticleFlags(i) & b2_powderParticle) !== 0;
+    } catch {
+      continue;
+    }
     if (!isSediment) continue;
 
     // Check velocity magnitude
-    const vx = velocityBuffer[i * 2];
-    const vy = velocityBuffer[i * 2 + 1];
+    const vx = velocities[i * 2];
+    const vy = velocities[i * 2 + 1];
     const velocityMag = Math.sqrt(vx * vx + vy * vy);
 
     if (velocityMag < velocityThreshold) {
       // Particle is at rest; find nearest terrain vertex
-      const x = posBuffer[i * 2];
-      const y = posBuffer[i * 2 + 1];
+      const x = positions[i * 2];
+      const y = positions[i * 2 + 1];
 
-      // Find nearest terrain index
       const terrainIndex = Math.round((x / worldWidth) * (terrain.heights.length - 1));
 
       if (terrainIndex >= 0 && terrainIndex < terrain.heights.length) {
-        // Check if particle is at or near the surface
         if (y <= terrain.heights[terrainIndex] + 0.5) {
-          const deposition = 0.01; // small height increase per deposited particle
-          if (!depositionLocations.has(terrainIndex)) {
-            depositionLocations.set(terrainIndex, 0);
-          }
+          const deposition = 0.01;
           depositionLocations.set(
             terrainIndex,
             (depositionLocations.get(terrainIndex) || 0) + deposition,
           );
 
-          // Mark particle for removal
-          flagsBuffer[i] = flagsBuffer[i] | b2_zombieParticle;
+          // Mark particle for removal using the safe per-particle API
+          particleSystem.SetParticleFlags(
+            i,
+            particleSystem.GetParticleFlags(i) | b2_zombieParticle,
+          );
         }
       }
     }

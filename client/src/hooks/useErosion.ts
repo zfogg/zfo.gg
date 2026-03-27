@@ -2,7 +2,12 @@ import { useEffect, useRef, useCallback } from "react";
 import { useAnimationLoop } from "./useAnimationLoop";
 import type { ErosionConfig } from "../erosion/config";
 import { getDefaultErosionConfig } from "../erosion/config";
-import { generateHeightmap, Terrain, buildChainVertices } from "../erosion/Terrain";
+import {
+  generateHeightmap,
+  Terrain,
+  buildChainVertices,
+  createChainFixture,
+} from "../erosion/Terrain";
 import { createWorld, createParticleSystem, stepWorld, toMeters } from "../erosion/ErosionWorld";
 import { Cursor, type CursorState } from "../erosion/Cursor";
 import { ErosionAccumulator, setupContactListener, solve } from "../erosion/ErosionSolver";
@@ -71,12 +76,21 @@ export const useErosion = (externalConfig?: ErosionConfig) => {
 
     // Debug logging - every frame initially
     if (state.frameCount < 5) {
-      console.log("[erosion] Frame:", Math.round(state.frameCount), "Particles:", state.particleSystem.GetParticleCount());
+      console.log(
+        "[erosion] Frame:",
+        Math.round(state.frameCount),
+        "Particles:",
+        state.particleSystem.GetParticleCount(),
+      );
     }
 
     // Spawn rain particles at cursor
     if (cursorState.spawnRain) {
-      console.log("[erosion] Spawning rain at worldPos:", cursorState.worldPos.x.toFixed(2), cursorState.worldPos.y.toFixed(2));
+      console.log(
+        "[erosion] Spawning rain at worldPos:",
+        cursorState.worldPos.x.toFixed(2),
+        cursorState.worldPos.y.toFixed(2),
+      );
       const x = cursorState.worldPos.x;
       const y = cursorState.worldPos.y;
 
@@ -86,19 +100,25 @@ export const useErosion = (externalConfig?: ErosionConfig) => {
         const offsetY = (Math.random() - 0.5) * config.rainSpreadRadius;
 
         try {
-          const def = new state.Box2D.b2ParticleGroupDef();
-          def.position = new state.Box2D.b2Vec2(x + offsetX, y + offsetY);
-          def.particleCount = 1;
-          def.linearVelocity = new state.Box2D.b2Vec2((Math.random() - 0.5) * 2, -2);
+          const def = new state.Box2D.b2ParticleDef();
+          const pos = new state.Box2D.b2Vec2(x + offsetX, y + offsetY);
+          const vel = new state.Box2D.b2Vec2((Math.random() - 0.5) * 2, -2);
+          def.set_position(pos);
+          def.set_velocity(vel);
+          def.set_flags(state.Box2D.b2_waterParticle || 0);
 
-          state.particleSystem.CreateParticleGroup(def);
+          state.particleSystem.CreateParticle(def);
+
+          def.__destroy__();
+          pos.__destroy__();
+          vel.__destroy__();
         } catch (err) {
           console.error("[erosion] Error creating particle:", err);
         }
       }
       const afterCount = state.particleSystem.GetParticleCount();
       if (afterCount > beforeCount) {
-        console.log("[erosion] Particles created successfully. Before:", beforeCount, "After:", afterCount);
+        console.log("[erosion] Particles created:", afterCount - beforeCount, "total:", afterCount);
       } else {
         console.warn("[erosion] No particles created! Before:", beforeCount, "After:", afterCount);
       }
@@ -114,37 +134,46 @@ export const useErosion = (externalConfig?: ErosionConfig) => {
         const offsetX = (Math.random() - 0.5) * config.rainSpreadRadius;
         const offsetY = (Math.random() - 0.5) * config.rainSpreadRadius;
 
-        const def = new state.Box2D.b2ParticleGroupDef();
-        def.position = new state.Box2D.b2Vec2(x + offsetX, y + offsetY);
-        def.particleCount = 1;
-        def.linearVelocity = new state.Box2D.b2Vec2((Math.random() - 0.5) * 3, -3);
+        const def = new state.Box2D.b2ParticleDef();
+        const pos = new state.Box2D.b2Vec2(x + offsetX, y + offsetY);
+        const vel = new state.Box2D.b2Vec2((Math.random() - 0.5) * 3, -3);
+        def.set_position(pos);
+        def.set_velocity(vel);
+        def.set_flags(state.Box2D.b2_waterParticle || 0);
 
-        state.particleSystem.CreateParticleGroup(def);
+        state.particleSystem.CreateParticle(def);
+
+        def.__destroy__();
+        pos.__destroy__();
+        vel.__destroy__();
       }
     }
 
     // Drain particles at cursor (right-click)
     if (cursorState.drainActive) {
       if (!state.drainBody) {
-        const b2BodyDef = state.Box2D.b2BodyDef;
-        const bodyDef = new b2BodyDef();
-        bodyDef.type = 2;
-        bodyDef.position = new state.Box2D.b2Vec2(cursorState.worldPos.x, cursorState.worldPos.y);
+        const bodyDef = new state.Box2D.b2BodyDef();
+        bodyDef.set_type(2); // b2_kinematicBody
+        const pos = new state.Box2D.b2Vec2(cursorState.worldPos.x, cursorState.worldPos.y);
+        bodyDef.set_position(pos);
         state.drainBody = state.world.CreateBody(bodyDef);
         drainBodyRef.current = state.drainBody;
+        bodyDef.__destroy__();
+        pos.__destroy__();
 
-        const b2PolygonShape = state.Box2D.b2PolygonShape;
-        const shape = new b2PolygonShape();
+        const shape = new state.Box2D.b2PolygonShape();
         shape.SetAsBox(0.3, 0.3);
 
         const fixtureDef = new state.Box2D.b2FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 0;
+        fixtureDef.set_shape(shape);
+        fixtureDef.set_density(0);
         state.drainBody.CreateFixture(fixtureDef);
+        fixtureDef.__destroy__();
+        shape.__destroy__();
       } else {
-        state.drainBody.SetPosition(
-          new state.Box2D.b2Vec2(cursorState.worldPos.x, cursorState.worldPos.y),
-        );
+        const pos = new state.Box2D.b2Vec2(cursorState.worldPos.x, cursorState.worldPos.y);
+        state.drainBody.SetTransform(pos, 0);
+        pos.__destroy__();
       }
     } else if (state.drainBody) {
       state.world.DestroyBody(state.drainBody);
@@ -169,12 +198,13 @@ export const useErosion = (externalConfig?: ErosionConfig) => {
     const particleCount = state.particleSystem.GetParticleCount();
     if (particleCount > config.maxParticles) {
       try {
-        const flagsBuffer = state.particleSystem.GetFlagsBuffer();
         const b2_zombieParticle = state.Box2D.b2_zombieParticle || 0x0020;
-
         const toRemove = Math.floor(particleCount * 0.1);
         for (let i = 0; i < toRemove && i < particleCount; i++) {
-          flagsBuffer[i] = flagsBuffer[i] | b2_zombieParticle;
+          state.particleSystem.SetParticleFlags(
+            i,
+            state.particleSystem.GetParticleFlags(i) | b2_zombieParticle,
+          );
         }
       } catch {
         // Flags not available
@@ -253,33 +283,16 @@ export const useErosion = (externalConfig?: ErosionConfig) => {
           // Create physics world
           world = createWorld(Box2D);
 
-          // Create terrain ground body
-          const b2BodyDef = Box2D.b2BodyDef;
-          const bodyDef = new b2BodyDef();
-          bodyDef.type = 1; // Static body
+          // Create terrain ground body (static = 0 in Box2D)
+          const bodyDef = new Box2D.b2BodyDef();
+          bodyDef.set_type(0); // b2_staticBody
           const terrainBody = world.CreateBody(bodyDef);
+          bodyDef.__destroy__();
 
           // Generate heightmap and build terrain
           const heights = generateHeightmap(config, worldWidth, worldHeight);
-
           const vertices = buildChainVertices(heights, worldWidth);
-          const b2Vec2 = Box2D.b2Vec2;
-          const b2ChainShape = Box2D.b2ChainShape;
-
-          const chainShape = new b2ChainShape();
-          const verts: any[] = [];
-          for (const v of vertices) {
-            verts.push(new b2Vec2(v.x, v.y));
-          }
-          chainShape.CreateChain(verts);
-
-          const fixtureDef = new Box2D.b2FixtureDef();
-          fixtureDef.shape = chainShape;
-          fixtureDef.density = 0;
-          fixtureDef.friction = 0.3;
-          fixtureDef.restitution = 0.1;
-
-          const fixture = terrainBody.CreateFixture(fixtureDef);
+          const fixture = createChainFixture(Box2D, terrainBody, vertices);
           terrain = new Terrain(heights, terrainBody, fixture);
 
           // Create particle system
@@ -357,7 +370,7 @@ export const useErosion = (externalConfig?: ErosionConfig) => {
       if (newW !== state.canvas.width || newH !== state.canvas.height) {
         state.canvas.width = newW;
         state.canvas.height = newH;
-        console.log("[erosion] Resized canvas to", newW, 'x', newH);
+        console.log("[erosion] Resized canvas to", newW, "x", newH);
       }
     };
 

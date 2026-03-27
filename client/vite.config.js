@@ -69,7 +69,13 @@ export default defineConfig({
     },
     sitemap({
       hostname: "https://zfo.gg",
-      dynamicRoutes: ["/bitcoin", "/thing/gravity", "/thing/erosion"],
+      dynamicRoutes: [
+        "/bitcoin",
+        "/thing/gravity",
+        "/thing/colorshifter",
+        "/thing/erosion",
+        "/thing/stressgraph",
+      ],
     }),
   ],
 });

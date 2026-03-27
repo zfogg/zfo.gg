@@ -30,15 +30,16 @@ export function createParticleSystem(box2d: any, world: any, config: ErosionConf
   const b2ParticleSystemDef = box2d.b2ParticleSystemDef;
 
   const def = new b2ParticleSystemDef();
-  def.radius = config.particleRadius;
-  def.dampingStrength = config.damping;
-  def.gravityScale = 1.0;
-  def.elasticStrength = 0.3;
-  def.viscousStrength = 0.5;
-  def.surfaceTension = 0.0;
-  def.pressureStrength = 1.0;
+  def.set_radius(config.particleRadius);
+  def.set_dampingStrength(config.damping);
+  def.set_gravityScale(1.0);
+  def.set_elasticStrength(0.3);
+  def.set_viscousStrength(0.5);
+  def.set_surfaceTensionPressureStrength(0.0);
+  def.set_pressureStrength(1.0);
 
   const particleSystem = world.CreateParticleSystem(def);
+  def.__destroy__();
 
   return particleSystem;
 }
