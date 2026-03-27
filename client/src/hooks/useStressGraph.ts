@@ -78,15 +78,21 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
 
     if (!glCanvas || !overlayCanvas) return;
 
-    // Determine canvas size
+    // Determine canvas size from container
     const container = glCanvas.parentElement;
-    const canvasSize = container ? Math.min(1920, container.clientWidth) : 960;
+    if (!container) return;
 
-    // Set canvas sizes
-    glCanvas.width = canvasSize;
-    glCanvas.height = canvasSize;
-    overlayCanvas.width = canvasSize;
-    overlayCanvas.height = canvasSize;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    // Set canvas sizes to match container
+    glCanvas.width = width;
+    glCanvas.height = height;
+    overlayCanvas.width = width;
+    overlayCanvas.height = height;
+
+    // Use smaller dimension for physics simulation (square Voronoi)
+    const canvasSize = Math.min(width, height);
 
     const config = externalConfig || getDefaultStressGraphConfig();
     const state = stateRef.current;
@@ -148,16 +154,16 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
       const container = glCanvas.parentElement;
       if (!container) return;
 
-      const newCanvasSize = Math.min(1920, container.clientWidth);
+      const newWidth = container.clientWidth;
+      const newHeight = container.clientHeight;
 
-      if (newCanvasSize !== state.canvasSize) {
-        glCanvas.width = newCanvasSize;
-        glCanvas.height = newCanvasSize;
-        overlayCanvas.width = newCanvasSize;
-        overlayCanvas.height = newCanvasSize;
+      if (newWidth !== glCanvas.width || newHeight !== glCanvas.height) {
+        glCanvas.width = newWidth;
+        glCanvas.height = newHeight;
+        overlayCanvas.width = newWidth;
+        overlayCanvas.height = newHeight;
 
-        state.glRenderer.resize(newCanvasSize, newCanvasSize);
-        state.canvasSize = newCanvasSize;
+        state.glRenderer.resize(newWidth, newHeight);
       }
     };
 

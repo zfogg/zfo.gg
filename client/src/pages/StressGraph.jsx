@@ -10,20 +10,18 @@ const StressGraph = () => {
   }, []);
 
   return (
-    <section id="content" className="flex-1 flex flex-col items-center justify-center w-full">
-      <div id="stressgraph" className="relative w-full min-w-[320px] text-center">
+    <section id="content" className="flex-1 flex flex-col w-full min-h-0 overflow-hidden">
+      <div id="stressgraph" className="w-full text-center px-4 py-4 flex-shrink-0">
         <h3 className="text-4xl">stressgraph</h3>
         <p className="text-base text-gray-500 mt-1">a voronoi stress simulation</p>
+      </div>
 
-        <div
-          id="canvas-container"
-          className="relative block max-w-[960px] w-full mx-auto mt-4"
-          style={{ aspectRatio: "1 / 1" }}
-        >
+      <div className="flex-1 relative w-full min-h-0">
+        <div id="canvas-container" className="relative w-full h-full">
           {/* WebGL canvas: bottom layer, receives pointer events */}
           <canvas
             ref={glCanvasRef}
-            className="absolute inset-0 block w-full h-full cursor-none"
+            className="block w-full h-full cursor-none"
             onContextMenu={(e) => e.preventDefault()}
           />
 
