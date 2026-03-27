@@ -73,50 +73,65 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
   useAnimationLoop(animationCallback);
 
   useEffect(() => {
+    let destroyed = false;
     const glCanvas = glCanvasRef.current;
     const overlayCanvas = overlayCanvasRef.current;
 
     if (!glCanvas || !overlayCanvas) return;
 
-    // Determine canvas size from container
-    const container = glCanvas.parentElement;
-    if (!container) return;
-
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-
-    // Set canvas sizes to match container
-    glCanvas.width = width;
-    glCanvas.height = height;
-    overlayCanvas.width = width;
-    overlayCanvas.height = height;
-
-    // Use smaller dimension for physics simulation (square Voronoi)
-    const canvasSize = Math.min(width, height);
-
     const config = externalConfig || getDefaultStressGraphConfig();
-    const state = stateRef.current;
 
-    // Initialize renderers
-    try {
-      state.glRenderer = new GLRenderer(glCanvas);
-      state.overlayRenderer = new OverlayRenderer(overlayCanvas);
-    } catch (error) {
-      console.error("[useStressGraph] Failed to initialize renderers:", error);
-      return;
-    }
+    // Wait for layout to settle before reading canvas dimensions
+    const measureAndInit = () => {
+      if (destroyed) return;
 
-    // Initialize physics
-    state.seedField = new SeedField(config, canvasSize);
-    state.seedField.initialize();
+      const container = glCanvas.parentElement;
+      if (!container) return;
 
-    state.stressModel = new StressModel(glCanvas, config);
-    state.stressModel.attach();
+      const width = container.clientWidth;
+      const height = container.clientHeight;
 
-    state.fractureSystem = new FractureSystem(config, config.seedCount);
+      if (width === 0 || height === 0) {
+        // Layout not ready, try again next frame
+        requestAnimationFrame(measureAndInit);
+        return;
+      }
 
-    state.config = config;
-    state.canvasSize = canvasSize;
+      // Set canvas sizes to match container
+      glCanvas.width = width;
+      glCanvas.height = height;
+      overlayCanvas.width = width;
+      overlayCanvas.height = height;
+
+      // Use smaller dimension for physics simulation
+      const canvasSize = Math.min(width, height);
+
+      const state = stateRef.current;
+
+      // Initialize renderers
+      try {
+        state.glRenderer = new GLRenderer(glCanvas);
+        state.overlayRenderer = new OverlayRenderer(overlayCanvas);
+      } catch (error) {
+        console.error("[useStressGraph] Failed to initialize renderers:", error);
+        return;
+      }
+
+      // Initialize physics
+      state.seedField = new SeedField(config, canvasSize);
+      state.seedField.initialize();
+
+      state.stressModel = new StressModel(glCanvas, config);
+      state.stressModel.attach();
+
+      state.fractureSystem = new FractureSystem(config, config.seedCount);
+
+      state.config = config;
+      state.canvasSize = canvasSize;
+
+      // Mark as initialized
+      state.initialized = true;
+    };
 
     // Click handler for fracturing (left-click only)
     const handleClick = (e: MouseEvent) => {
@@ -129,8 +144,8 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
       const mx = (e.clientX - rect.left) * scaleX;
       const my = (e.clientY - rect.top) * scaleY;
 
-      state.fractureSystem!.fracture(mx, my, state.seedField!);
-      state.fractureSystem!.touch();
+      stateRef.current.fractureSystem?.fracture(mx, my, stateRef.current.seedField!);
+      stateRef.current.fractureSystem?.touch();
     };
 
     glCanvas.addEventListener("click", handleClick);
@@ -139,8 +154,8 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space") {
         e.preventDefault();
-        state.seedField!.randomizeHues();
-        state.fractureSystem!.touch();
+        stateRef.current.seedField?.randomizeHues();
+        stateRef.current.fractureSystem?.touch();
       }
     };
 
@@ -171,23 +186,24 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
 
     // Expose randomizeHues callback
     randomizeHuesCallbackRef.current = () => {
-      state.seedField?.randomizeHues();
-      state.fractureSystem?.touch();
+      stateRef.current.seedField?.randomizeHues();
+      stateRef.current.fractureSystem?.touch();
     };
 
-    // Mark as initialized
-    state.initialized = true;
+    // Measure layout and initialize
+    requestAnimationFrame(measureAndInit);
 
     // Cleanup
     return () => {
+      destroyed = true;
       glCanvas.removeEventListener("click", handleClick);
       document.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleWindowResize);
 
-      state.stressModel?.detach();
-      state.glRenderer?.destroy();
+      stateRef.current.stressModel?.detach();
+      stateRef.current.glRenderer?.destroy();
 
-      state.initialized = false;
+      stateRef.current.initialized = false;
     };
   }, [externalConfig]);
 
