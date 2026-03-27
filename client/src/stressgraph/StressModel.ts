@@ -23,22 +23,27 @@ export class StressModel {
   private prevX = 0;
   private prevY = 0;
   private handlers: Map<string, EventListener> = new Map();
+  private longPressTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private canvas: HTMLCanvasElement,
     private config: StressGraphConfig,
   ) {}
 
+  private updateCursorFromEvent(clientX: number, clientY: number): void {
+    const rect = this.canvas.getBoundingClientRect();
+    const scaleX = this.canvas.width / rect.width;
+    const scaleY = this.canvas.height / rect.height;
+    this.prevX = this.cursor.x;
+    this.prevY = this.cursor.y;
+    this.cursor.x = (clientX - rect.left) * scaleX;
+    this.cursor.y = (clientY - rect.top) * scaleY;
+    this.cursor.lastMoveTime = performance.now();
+  }
+
   attach(): void {
     const onMove = (e: MouseEvent) => {
-      const rect = this.canvas.getBoundingClientRect();
-      const scaleX = this.canvas.width / rect.width;
-      const scaleY = this.canvas.height / rect.height;
-      this.prevX = this.cursor.x;
-      this.prevY = this.cursor.y;
-      this.cursor.x = (e.clientX - rect.left) * scaleX;
-      this.cursor.y = (e.clientY - rect.top) * scaleY;
-      this.cursor.lastMoveTime = performance.now();
+      this.updateCursorFromEvent(e.clientX, e.clientY);
     };
 
     const onDown = (e: MouseEvent) => {
@@ -49,21 +54,55 @@ export class StressModel {
       if (e.button === 2) this.cursor.isRightHeld = false;
     };
 
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 0) return;
+      this.updateCursorFromEvent(e.touches[0].clientX, e.touches[0].clientY);
+      e.preventDefault();
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 0) return;
+      this.updateCursorFromEvent(e.touches[0].clientX, e.touches[0].clientY);
+      // Start long-press timer for gravity well (right-click equivalent)
+      if (this.longPressTimeoutId) clearTimeout(this.longPressTimeoutId);
+      this.longPressTimeoutId = setTimeout(() => {
+        this.cursor.isRightHeld = true;
+      }, 500);
+    };
+
+    const onTouchEnd = (_e: TouchEvent) => {
+      if (this.longPressTimeoutId) clearTimeout(this.longPressTimeoutId);
+      this.cursor.isRightHeld = false;
+    };
+
     this.canvas.addEventListener("mousemove", onMove as EventListener);
     this.canvas.addEventListener("mousedown", onDown as EventListener);
     this.canvas.addEventListener("mouseup", onUp as EventListener);
     document.addEventListener("mouseup", onUp as EventListener);
 
+    this.canvas.addEventListener("touchmove", onTouchMove as EventListener, { passive: false });
+    this.canvas.addEventListener("touchstart", onTouchStart as EventListener);
+    this.canvas.addEventListener("touchend", onTouchEnd as EventListener);
+    document.addEventListener("touchend", onTouchEnd as EventListener);
+
     this.handlers.set("mousemove", onMove as EventListener);
     this.handlers.set("mousedown", onDown as EventListener);
     this.handlers.set("mouseup", onUp as EventListener);
+    this.handlers.set("touchmove", onTouchMove as EventListener);
+    this.handlers.set("touchstart", onTouchStart as EventListener);
+    this.handlers.set("touchend", onTouchEnd as EventListener);
   }
 
   detach(): void {
+    if (this.longPressTimeoutId) clearTimeout(this.longPressTimeoutId);
     this.canvas.removeEventListener("mousemove", this.handlers.get("mousemove")!);
     this.canvas.removeEventListener("mousedown", this.handlers.get("mousedown")!);
     this.canvas.removeEventListener("mouseup", this.handlers.get("mouseup")!);
     document.removeEventListener("mouseup", this.handlers.get("mouseup")!);
+    this.canvas.removeEventListener("touchmove", this.handlers.get("touchmove")!);
+    this.canvas.removeEventListener("touchstart", this.handlers.get("touchstart")!);
+    this.canvas.removeEventListener("touchend", this.handlers.get("touchend")!);
+    document.removeEventListener("touchend", this.handlers.get("touchend")!);
   }
 
   update(): CursorState {

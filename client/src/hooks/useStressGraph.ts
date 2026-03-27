@@ -151,6 +151,30 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
 
     glCanvas.addEventListener("click", handleClick);
 
+    // Touch handler for fracturing (tap only)
+    const handleTouchEnd = (e: TouchEvent) => {
+      // Only fracture on tap if it wasn't a long press (gravity well)
+      if (e.changedTouches.length === 0) return;
+
+      const state = stateRef.current;
+      if (!state.stressModel || !state.seedField || !state.fractureSystem) return;
+
+      // If gravity well is active (long press), don't fracture
+      if (state.stressModel.cursor.isRightHeld) return;
+
+      const rect = glCanvas.getBoundingClientRect();
+      const scaleX = glCanvas.width / rect.width;
+      const scaleY = glCanvas.height / rect.height;
+
+      const mx = (e.changedTouches[0].clientX - rect.left) * scaleX;
+      const my = (e.changedTouches[0].clientY - rect.top) * scaleY;
+
+      state.fractureSystem.fracture(mx, my, state.seedField);
+      state.fractureSystem.touch();
+    };
+
+    glCanvas.addEventListener("touchend", handleTouchEnd);
+
     // Spacebar handler for randomizing hues
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space") {
@@ -212,6 +236,7 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
       destroyed = true;
       if (resizeTimeoutId) clearTimeout(resizeTimeoutId);
       glCanvas.removeEventListener("click", handleClick);
+      glCanvas.removeEventListener("touchend", handleTouchEnd);
       document.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleWindowResize);
 

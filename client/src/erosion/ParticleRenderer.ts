@@ -93,13 +93,17 @@ export class ParticleRenderer {
     const previousAlpha = ctx.globalAlpha;
     ctx.globalAlpha = 0.7;
 
+    const radius = config.particleRadius * PIXELS_PER_METER;
+
     for (const [hue, particles] of hueBuckets) {
       const [r, g, b] = hslToRgb(hue, SATURATION, LIGHTNESS);
       ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
 
       ctx.beginPath();
       for (const p of particles) {
-        const radius = config.particleRadius * PIXELS_PER_METER;
+        // moveTo before each arc prevents Canvas from drawing connecting
+        // lines between arcs, which would create triangle artifacts on fill.
+        ctx.moveTo(p.x + radius, p.y);
         ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
       }
       ctx.fill();
