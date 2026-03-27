@@ -137,15 +137,23 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
     const handleClick = (e: MouseEvent) => {
       if (e.button !== 0) return; // Left-click only
 
+      const state = stateRef.current;
+      if (!state.seedField || !state.fractureSystem) return;
+
       const rect = glCanvas.getBoundingClientRect();
       const scaleX = glCanvas.width / rect.width;
       const scaleY = glCanvas.height / rect.height;
 
-      const mx = (e.clientX - rect.left) * scaleX;
-      const my = (e.clientY - rect.top) * scaleY;
+      // Scale to canvas dimensions first, then to canvasSize space
+      const canvasX = (e.clientX - rect.left) * scaleX;
+      const canvasY = (e.clientY - rect.top) * scaleY;
 
-      stateRef.current.fractureSystem?.fracture(mx, my, stateRef.current.seedField!);
-      stateRef.current.fractureSystem?.touch();
+      // Map to the canvasSize coordinate space (which is max(width, height) x max(width, height))
+      const mx = canvasX * (state.canvasSize / glCanvas.width);
+      const my = canvasY * (state.canvasSize / glCanvas.height);
+
+      state.fractureSystem.fracture(mx, my, state.seedField);
+      state.fractureSystem.touch();
     };
 
     glCanvas.addEventListener("click", handleClick);
