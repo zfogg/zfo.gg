@@ -24,12 +24,10 @@ const Erosion = () => {
     <section id="content" className="flex-1 flex flex-col w-full">
       <div className="max-w-4xl mx-auto text-center px-4 pt-8 z-10">
         <h3 className="text-4xl">erosion</h3>
-        <p className="sm:text-2xl font-sans tracking-wide mt-4">
-          Hydraulic erosion simulation with water particles
-        </p>
+        <p className="sm:text-2xl font-sans tracking-wide mt-4">Hydraulic erosion simulation</p>
       </div>
 
-      <div className="flex-1 relative">
+      <div className="flex-1 relative min-h-0 max-h-[calc(100vh-300px)]">
         <canvas
           ref={canvasRef}
           className="w-full h-full cursor-none"

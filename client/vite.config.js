@@ -4,6 +4,8 @@ import sitemap from "vite-plugin-sitemap";
 import { execSync } from "child_process";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
+import { copyFileSync } from "fs";
+import { join } from "path";
 
 const getCommitSha = () => {
   // Check deployment platform environment variables
@@ -52,9 +54,17 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    {
+      name: "copy-robots",
+      writeBundle() {
+        const src = join(__dirname, "public", "robots.txt");
+        const dest = join(__dirname, "dist", "robots.txt");
+        copyFileSync(src, dest);
+      },
+    },
     sitemap({
       hostname: "https://zfo.gg",
-      dynamicRoutes: ["/bitcoin", "/thing/gravity"],
+      dynamicRoutes: ["/bitcoin", "/thing/gravity", "/thing/erosion"],
     }),
   ],
 });

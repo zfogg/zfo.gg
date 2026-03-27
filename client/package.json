@@ -10,7 +10,7 @@
     "check": "vp check",
     "format": "vp fmt --check",
     "format:write": "vp fmt",
-    "prebuild": "pnpm run lint && pnpm run typecheck",
+    "prebuild": "pnpm run lint && pnpm run check",
     "preview": "vite preview"
   },
   "dependencies": {
