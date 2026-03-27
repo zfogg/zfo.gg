@@ -33,7 +33,8 @@ void main() {
   vec2 uv = gl_FragCoord.xy;
   float minDist1 = 1.0e10;
   float minDist2 = 1.0e10;
-  int closest = 0;
+  float closestHue = 0.0;
+  float closestStress = 0.0;
 
   for (int i = 0; i < MAX_SEEDS; i++) {
     if (i >= u_seedCount) break;
@@ -41,7 +42,8 @@ void main() {
     if (d < minDist1) {
       minDist2 = minDist1;
       minDist1 = d;
-      closest = i;
+      closestHue = u_hues[i];
+      closestStress = u_stress[i];
     } else if (d < minDist2) {
       minDist2 = d;
     }
@@ -49,9 +51,9 @@ void main() {
 
   float edgeDist = minDist2 - minDist1;
   float edgeFactor = smoothstep(0.0, 4.0, edgeDist);
-  float stress = u_stress[closest];
+  float stress = closestStress;
 
-  float h = mod((u_hues[closest] + stress * 60.0) / 360.0, 1.0);
+  float h = mod((closestHue + stress * 60.0) / 360.0, 1.0);
   float s = 0.70 + stress * 0.20;
   float l = 0.55 - stress * 0.10;
   vec3 cellColor = hsl2rgb(h, s, l);
