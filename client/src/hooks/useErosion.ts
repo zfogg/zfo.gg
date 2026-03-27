@@ -53,7 +53,12 @@ export const useErosion = (externalConfig?: ErosionConfig) => {
   // Animation callback at top level - not in useEffect
   const animationCallback = useCallback((deltaTime: number) => {
     const state = stateRef.current;
-    if (!state.initialized || !state.canvas || !state.ctx) return;
+    if (!state.initialized || !state.canvas || !state.ctx) {
+      if (state.frameCount % 60 === 0) {
+        console.log("[erosion] Animation running but not initialized yet");
+      }
+      return;
+    }
 
     const { config, ctx, worldWidth, worldHeight, drainBodyRef } = state;
     const { w, h } = {
@@ -64,21 +69,38 @@ export const useErosion = (externalConfig?: ErosionConfig) => {
     state.frameCount += deltaTime;
     const cursorState: CursorState = state.cursor.update();
 
+    // Debug logging - every frame initially
+    if (state.frameCount < 5) {
+      console.log("[erosion] Frame:", Math.round(state.frameCount), "Particles:", state.particleSystem.GetParticleCount());
+    }
+
     // Spawn rain particles at cursor
     if (cursorState.spawnRain) {
+      console.log("[erosion] Spawning rain at worldPos:", cursorState.worldPos.x.toFixed(2), cursorState.worldPos.y.toFixed(2));
       const x = cursorState.worldPos.x;
       const y = cursorState.worldPos.y;
 
+      const beforeCount = state.particleSystem.GetParticleCount();
       for (let i = 0; i < config.rainRate; i++) {
         const offsetX = (Math.random() - 0.5) * config.rainSpreadRadius;
         const offsetY = (Math.random() - 0.5) * config.rainSpreadRadius;
 
-        const def = new state.Box2D.b2ParticleGroupDef();
-        def.position = new state.Box2D.b2Vec2(x + offsetX, y + offsetY);
-        def.particleCount = 1;
-        def.linearVelocity = new state.Box2D.b2Vec2((Math.random() - 0.5) * 2, -2);
+        try {
+          const def = new state.Box2D.b2ParticleGroupDef();
+          def.position = new state.Box2D.b2Vec2(x + offsetX, y + offsetY);
+          def.particleCount = 1;
+          def.linearVelocity = new state.Box2D.b2Vec2((Math.random() - 0.5) * 2, -2);
 
-        state.particleSystem.CreateParticleGroup(def);
+          state.particleSystem.CreateParticleGroup(def);
+        } catch (err) {
+          console.error("[erosion] Error creating particle:", err);
+        }
+      }
+      const afterCount = state.particleSystem.GetParticleCount();
+      if (afterCount > beforeCount) {
+        console.log("[erosion] Particles created successfully. Before:", beforeCount, "After:", afterCount);
+      } else {
+        console.warn("[erosion] No particles created! Before:", beforeCount, "After:", afterCount);
       }
     }
 
@@ -175,140 +197,175 @@ export const useErosion = (externalConfig?: ErosionConfig) => {
     if (!canvas) return;
 
     const config = externalConfig || getDefaultErosionConfig();
-    const parentElement = canvas.parentElement;
-    if (!parentElement) return;
 
-    const w = parentElement.clientWidth;
-    const h = parentElement.clientHeight || Math.floor(w * 0.6);
+    // Wait for layout to settle before reading canvas dimensions
+    const measureAndInit = () => {
+      if (destroyed) return;
 
-    canvas.width = w;
-    canvas.height = h;
+      const w = canvas.offsetWidth;
+      const h = canvas.offsetHeight;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+      if (w === 0 || h === 0) {
+        // Layout not ready, try again next frame
+        requestAnimationFrame(measureAndInit);
+        return;
+      }
 
-    const worldWidth = toMeters(w);
-    const worldHeight = toMeters(h);
+      // Set canvas drawing surface to match display size
+      canvas.width = w;
+      canvas.height = h;
 
-    const drainBodyRef = { current: null as any };
-    const state = stateRef.current;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
 
-    // Store context in state for animation callback
-    state.canvas = canvas;
-    state.ctx = ctx;
-    state.config = config;
-    state.worldWidth = worldWidth;
-    state.worldHeight = worldHeight;
-    state.drainBodyRef = drainBodyRef;
+      const worldWidth = toMeters(w);
+      const worldHeight = toMeters(h);
 
-    const init = async () => {
-      try {
-        // Import LiquidFun WASM from explicit entry point
-        // @ts-ignore - liquidfun-wasm has incorrect type definitions
-        const Box2DModule = await import("liquidfun-wasm/dist/es/entry.js");
-        const Box2D = await Box2DModule.default();
+      const drainBodyRef = { current: null as any };
+      const state = stateRef.current;
 
-        if (destroyed) return;
+      // Store context in state for animation callback
+      state.canvas = canvas;
+      state.ctx = ctx;
+      state.config = config;
+      state.worldWidth = worldWidth;
+      state.worldHeight = worldHeight;
+      state.drainBodyRef = drainBodyRef;
 
-        // Declare local variables for initialization
-        let world: ReturnType<typeof createWorld>;
-        let cursor: Cursor;
-        let terrain: Terrain;
-        let particleSystem: ReturnType<typeof createParticleSystem>;
-        let terrainRenderer: TerrainRenderer;
-        let particleRenderer: ParticleRenderer;
-        let accumulator: ErosionAccumulator;
+      const init = async () => {
+        try {
+          // Import LiquidFun WASM from explicit entry point
+          // @ts-ignore - liquidfun-wasm has incorrect type definitions
+          const Box2DModule = await import("liquidfun-wasm/dist/es/entry.js");
+          const Box2D = await Box2DModule.default();
 
-        // Create physics world
-        world = createWorld(Box2D);
+          if (destroyed) return;
 
-        // Create terrain ground body
-        const b2BodyDef = Box2D.b2BodyDef;
-        const bodyDef = new b2BodyDef();
-        bodyDef.type = 1; // Static body
-        const terrainBody = world.CreateBody(bodyDef);
+          // Declare local variables for initialization
+          let world: ReturnType<typeof createWorld>;
+          let cursor: Cursor;
+          let terrain: Terrain;
+          let particleSystem: ReturnType<typeof createParticleSystem>;
+          let terrainRenderer: TerrainRenderer;
+          let particleRenderer: ParticleRenderer;
+          let accumulator: ErosionAccumulator;
 
-        // Generate heightmap and build terrain
-        const heights = generateHeightmap(config, worldWidth, worldHeight);
+          // Create physics world
+          world = createWorld(Box2D);
 
-        const vertices = buildChainVertices(heights, worldWidth);
-        const b2Vec2 = Box2D.b2Vec2;
-        const b2ChainShape = Box2D.b2ChainShape;
+          // Create terrain ground body
+          const b2BodyDef = Box2D.b2BodyDef;
+          const bodyDef = new b2BodyDef();
+          bodyDef.type = 1; // Static body
+          const terrainBody = world.CreateBody(bodyDef);
 
-        const chainShape = new b2ChainShape();
-        const verts: any[] = [];
-        for (const v of vertices) {
-          verts.push(new b2Vec2(v.x, v.y));
-        }
-        chainShape.CreateChain(verts);
+          // Generate heightmap and build terrain
+          const heights = generateHeightmap(config, worldWidth, worldHeight);
 
-        const fixtureDef = new Box2D.b2FixtureDef();
-        fixtureDef.shape = chainShape;
-        fixtureDef.density = 0;
-        fixtureDef.friction = 0.3;
-        fixtureDef.restitution = 0.1;
+          const vertices = buildChainVertices(heights, worldWidth);
+          const b2Vec2 = Box2D.b2Vec2;
+          const b2ChainShape = Box2D.b2ChainShape;
 
-        const fixture = terrainBody.CreateFixture(fixtureDef);
-        terrain = new Terrain(heights, terrainBody, fixture);
+          const chainShape = new b2ChainShape();
+          const verts: any[] = [];
+          for (const v of vertices) {
+            verts.push(new b2Vec2(v.x, v.y));
+          }
+          chainShape.CreateChain(verts);
 
-        // Create particle system
-        particleSystem = createParticleSystem(Box2D, world, config);
+          const fixtureDef = new Box2D.b2FixtureDef();
+          fixtureDef.shape = chainShape;
+          fixtureDef.density = 0;
+          fixtureDef.friction = 0.3;
+          fixtureDef.restitution = 0.1;
 
-        // Create cursor
-        cursor = new Cursor();
-        cursor.attach(canvas);
+          const fixture = terrainBody.CreateFixture(fixtureDef);
+          terrain = new Terrain(heights, terrainBody, fixture);
 
-        // Create renderers
-        terrainRenderer = new TerrainRenderer();
-        particleRenderer = new ParticleRenderer();
+          // Create particle system
+          particleSystem = createParticleSystem(Box2D, world, config);
 
-        // Create erosion solver
-        accumulator = new ErosionAccumulator(config.terrainResolution);
-        setupContactListener(
-          Box2D,
-          world,
-          terrain,
-          particleSystem,
-          accumulator,
-          worldWidth,
-          drainBodyRef,
-        );
+          // Create cursor
+          cursor = new Cursor();
+          cursor.attach(canvas);
 
-        // Populate state ref with initialized values
-        state.Box2D = Box2D;
-        state.world = world;
-        state.terrain = terrain;
-        state.particleSystem = particleSystem;
-        state.cursor = cursor;
-        state.terrainRenderer = terrainRenderer;
-        state.particleRenderer = particleRenderer;
-        state.accumulator = accumulator;
-        state.frameCount = 0;
-        state.drainBody = null;
+          // Create renderers
+          terrainRenderer = new TerrainRenderer();
+          particleRenderer = new ParticleRenderer();
 
-        // Reset callback
-        resetTerrainCallbackRef.current = () => {
-          const newHeights = generateHeightmap(
-            { ...config, terrainSeed: Math.random() * 1000 },
+          // Create erosion solver
+          accumulator = new ErosionAccumulator(config.terrainResolution);
+          setupContactListener(
+            Box2D,
+            world,
+            terrain,
+            particleSystem,
+            accumulator,
             worldWidth,
-            worldHeight,
+            drainBodyRef,
           );
-          state.terrain.heights = newHeights;
-          state.terrain.isDirty = true;
-          state.terrain.rebuild(state.Box2D, state.world, worldWidth);
-        };
 
-        // Mark as initialized - this allows the top-level animation callback to run
-        state.initialized = true;
-      } catch (error) {
-        console.error("Failed to initialize erosion simulation:", error);
+          // Populate state ref with initialized values
+          state.Box2D = Box2D;
+          state.world = world;
+          state.terrain = terrain;
+          state.particleSystem = particleSystem;
+          state.cursor = cursor;
+          state.terrainRenderer = terrainRenderer;
+          state.particleRenderer = particleRenderer;
+          state.accumulator = accumulator;
+          state.frameCount = 0;
+          state.drainBody = null;
+
+          // Reset callback
+          resetTerrainCallbackRef.current = () => {
+            const newHeights = generateHeightmap(
+              { ...config, terrainSeed: Math.random() * 1000 },
+              worldWidth,
+              worldHeight,
+            );
+            state.terrain.heights = newHeights;
+            state.terrain.isDirty = true;
+            state.terrain.rebuild(state.Box2D, state.world, worldWidth);
+          };
+
+          // Mark as initialized - this allows the top-level animation callback to run
+          state.initialized = true;
+          console.log("[erosion] Initialization complete");
+        } catch (error) {
+          console.error("Failed to initialize erosion simulation:", error);
+        }
+      };
+
+      void init();
+    };
+
+    // Measure canvas dimensions when layout is ready
+    requestAnimationFrame(measureAndInit);
+
+    // Handle canvas resize on window resize
+    const handleWindowResize = () => {
+      const state = stateRef.current;
+      if (!state.canvas || !state.initialized) return;
+
+      const parentElement = state.canvas.parentElement;
+      if (!parentElement) return;
+
+      const newW = parentElement.clientWidth;
+      const newH = parentElement.clientHeight || Math.floor(newW * 0.6);
+
+      if (newW !== state.canvas.width || newH !== state.canvas.height) {
+        state.canvas.width = newW;
+        state.canvas.height = newH;
+        console.log("[erosion] Resized canvas to", newW, 'x', newH);
       }
     };
 
-    void init();
+    window.addEventListener("resize", handleWindowResize);
 
     return () => {
       destroyed = true;
+      window.removeEventListener("resize", handleWindowResize);
       // Cleanup drain body if it exists
       if (stateRef.current.drainBody && stateRef.current.world) {
         stateRef.current.world.DestroyBody(stateRef.current.drainBody);

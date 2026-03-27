@@ -21,21 +21,21 @@ const Erosion = () => {
   }, []);
 
   return (
-    <section id="content" className="flex-1 flex flex-col w-full">
-      <div className="max-w-4xl mx-auto text-center px-4 pt-8 z-10">
+    <section id="content" className="flex-1 flex flex-col w-full min-h-0 overflow-hidden">
+      <div id="erosion" className="w-full text-center px-4 py-4 flex-shrink-0">
         <h3 className="text-4xl">erosion</h3>
-        <p className="sm:text-2xl font-sans tracking-wide mt-4">Hydraulic erosion simulation</p>
+        <p className="sm:text-2xl font-sans tracking-wide mt-2">Hydraulic erosion simulation</p>
       </div>
 
-      <div className="flex-1 relative min-h-0 max-h-[calc(100vh-300px)]">
-        <canvas
-          ref={canvasRef}
-          className="w-full h-full cursor-none"
-          onContextMenu={(e) => e.preventDefault()}
-        />
-      </div>
+      <div className="flex-1 relative w-full min-h-0">
+        <div id="canvas-container" className="relative w-full h-full">
+          <canvas
+            ref={canvasRef}
+            className="block w-full h-full cursor-none"
+            onContextMenu={(e) => e.preventDefault()}
+          />
 
-      <CanvasControls>
+          <CanvasControls>
         <div className="canvas-control text-center">
           <p className="text-sm mb-1">Erosion Rate</p>
           <input
@@ -101,7 +101,9 @@ const Erosion = () => {
         >
           New Terrain
         </button>
-      </CanvasControls>
+          </CanvasControls>
+        </div>
+      </div>
     </section>
   );
 };
