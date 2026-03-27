@@ -44,6 +44,11 @@ export default defineConfig({
   preview: {
     middlewareMode: false,
   },
+  build: {
+    rollupOptions: {
+      external: ["liquidfun-wasm"],
+    },
+  },
   optimizeDeps: {
     exclude: ["liquidfun-wasm"],
   },
