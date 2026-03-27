@@ -46,7 +46,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: ["liquidfun-wasm"],
+      external: ["liquidfun-wasm", /^liquidfun-wasm\//],
     },
   },
   optimizeDeps: {
