@@ -40,6 +40,10 @@ const Home = () => {
                 bitcamp
               </ThingCard>
 
+              <ThingCard href="https://www.beanaries.com" external>
+                beanaries
+              </ThingCard>
+
               <ThingCard href="/thing/gravity">gravity</ThingCard>
 
               <ThingCard href="/thing/colorshifter">colorshifter</ThingCard>
