@@ -512,10 +512,11 @@ export function useGridZips(config: GridZipsConfig): UseGridZipsReturn {
       state.mouseDownCooldown = 0;
     }
 
-    function handleMouseUp(_e: MouseEvent): void {
+    function handleMouseUp(e: MouseEvent): void {
       if (!state.mouseDown || !state.mouseDownPos || !canvas) return;
 
-      const [ax, ay] = state.mouseDownPos;
+      const pos = toCanvasCoords(e.clientX, e.clientY);
+      const [ax, ay] = snapToGrid(pos.x, pos.y);
       const zipCount = 64;
 
       // Burst on release: spawn 64 zips in circle with rainbow colors based on grid hue shift
