@@ -59,7 +59,6 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
 
     // Render
     const glData = state.seedField!.packForGL();
-    console.log("[useStressGraph.animationCallback] About to render", glData.count, "seeds");
     state.glRenderer!.render(glData);
 
     state.overlayRenderer!.render(
@@ -94,22 +93,13 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
       const width = Math.round(rect.width);
       const height = Math.round(rect.height);
 
-      console.log("[useStressGraph] Container dimensions:", {
-        width,
-        height,
-        rectWidth: rect.width,
-        rectHeight: rect.height,
-      });
-
       if (width === 0 || height === 0) {
         // Layout not ready, try again next frame
-        console.log("[useStressGraph] Layout not ready, retrying...");
         requestAnimationFrame(measureAndInit);
         return;
       }
 
       // Set canvas to full container dimensions
-      console.log("[useStressGraph] Setting canvas dimensions:", { width, height });
       glCanvas.width = width;
       glCanvas.height = height;
       overlayCanvas.width = width;
@@ -140,7 +130,6 @@ export const useStressGraph = (externalConfig?: StressGraphConfig) => {
 
       // Mark as initialized
       state.initialized = true;
-      console.log("[useStressGraph] Initialization complete");
     };
 
     // Click handler for fracturing (left-click only)

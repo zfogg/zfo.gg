@@ -124,50 +124,9 @@ export class GLRenderer {
     const gl = this.gl;
     const n = data.count;
 
-    if (n === 0) {
-      console.log("[GLRenderer] No seeds to render");
-    } else if (n <= 10) {
-      const huesSample = Array.from(data.hues.slice(0, Math.min(3, n)));
-      const posSample = Array.from(data.positions.slice(0, Math.min(3, n) * 2));
-      console.log(
-        "[GLRenderer] Rendering",
-        n,
-        "seeds. First 3 hues:",
-        huesSample,
-        "First 3 positions:",
-        posSample,
-      );
-    }
-
     this.seedsUpload.set(data.positions.subarray(0, n * 2));
     this.huesUpload.set(data.hues.subarray(0, n));
     this.stressUpload.set(data.stresses.subarray(0, n));
-
-    const positionsSample = Array.from(data.positions.slice(0, Math.min(3, n) * 2));
-
-    // Log ALL positions to check spread
-    const allPositions = Array.from(data.positions.slice(0, n * 2));
-    const xCoords = [];
-    const yCoords = [];
-    for (let i = 0; i < n; i++) {
-      xCoords.push(allPositions[i * 2]);
-      yCoords.push(allPositions[i * 2 + 1]);
-    }
-    const minX = Math.min(...xCoords);
-    const maxX = Math.max(...xCoords);
-    const minY = Math.min(...yCoords);
-    const maxY = Math.max(...yCoords);
-
-    console.log(
-      "[GLRenderer] Uploading uniforms: seedCount=",
-      n,
-      "positions sample (first 3 seeds):",
-      positionsSample,
-      "X range: " + minX.toFixed(1) + "-" + maxX.toFixed(1),
-      "Y range: " + minY.toFixed(1) + "-" + maxY.toFixed(1),
-      "hues sample:",
-      Array.from(this.huesUpload.slice(0, Math.min(3, n))),
-    );
 
     gl.useProgram(this.program);
     gl.uniform1i(this.u_seedCount, n);
