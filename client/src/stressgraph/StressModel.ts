@@ -110,17 +110,40 @@ export class StressModel {
     this.cursor.vy = this.cursor.y - this.prevY;
     this.prevX = this.cursor.x;
     this.prevY = this.cursor.y;
+
+    const speed = Math.hypot(this.cursor.vx, this.cursor.vy);
+    if (speed > 0) {
+      console.log(
+        "[StressModel.update] Cursor speed:",
+        speed.toFixed(2),
+        "at (",
+        this.cursor.x.toFixed(1),
+        ",",
+        this.cursor.y.toFixed(1),
+        "), isRightHeld:",
+        this.cursor.isRightHeld,
+      );
+    }
+
     return { ...this.cursor };
   }
 
   applyRepulsion(seedField: SeedField): void {
     const { x, y, vx, vy } = this.cursor;
     const speed = Math.hypot(vx, vy);
-    if (speed < 0.5) return;
+    if (speed < 0.5) {
+      console.log(
+        "[StressModel.applyRepulsion] Mouse speed too low:",
+        speed.toFixed(2),
+        "- no repulsion applied",
+      );
+      return;
+    }
 
     const R = this.config.mouseRepulsionRadius;
     const strength = this.config.mouseRepulsionStrength;
 
+    let impulseCount = 0;
     for (const s of seedField.seeds) {
       const dx = s.x - x;
       const dy = s.y - y;
@@ -131,13 +154,26 @@ export class StressModel {
       const falloff = 1 - dist / R;
       const mag = speed * strength * falloff * falloff;
       seedField.applyImpulse(s.id, (dx / dist) * mag, (dy / dist) * mag);
+      impulseCount++;
     }
+    console.log(
+      "[StressModel.applyRepulsion] Applied repulsion to",
+      impulseCount,
+      "seeds, speed=",
+      speed.toFixed(2),
+      "cursor at (",
+      x.toFixed(1),
+      ",",
+      y.toFixed(1),
+      ")",
+    );
   }
 
   applyGravityWell(seedField: SeedField): void {
     const { x, y } = this.cursor;
     const strength = this.config.gravityWellStrength;
 
+    let impulseCount = 0;
     for (const s of seedField.seeds) {
       const dx = x - s.x;
       const dy = y - s.y;
@@ -147,7 +183,17 @@ export class StressModel {
 
       const mag = strength / Math.max(dist, 30);
       seedField.applyImpulse(s.id, (dx / dist) * mag, (dy / dist) * mag);
+      impulseCount++;
     }
+    console.log(
+      "[StressModel.applyGravityWell] Applied gravity well to",
+      impulseCount,
+      "seeds, cursor at (",
+      x.toFixed(1),
+      ",",
+      y.toFixed(1),
+      ")",
+    );
   }
 
   isIdle(): boolean {

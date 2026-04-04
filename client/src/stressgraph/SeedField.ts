@@ -57,6 +57,10 @@ export class SeedField {
     const k = 30;
     this.seeds = [];
 
+    console.log(
+      `[SeedField.initialize] Starting with seedCount=${n}, dimensions=${this.width}x${this.height}`,
+    );
+
     for (let i = 0; i < n; i++) {
       let bestX = 0;
       let bestY = 0;
@@ -83,8 +87,8 @@ export class SeedField {
         id: this.nextId++,
         x: bestX,
         y: bestY,
-        vx: 0,
-        vy: 0,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
         anchorX: bestX,
         anchorY: bestY,
         mass: 1.0,
@@ -96,13 +100,31 @@ export class SeedField {
         parentId: null,
       });
     }
+    console.log(
+      `[SeedField.initialize] Created ${this.seeds.length} seeds`,
+      this.seeds
+        .slice(0, 5)
+        .map((s) => ({ x: s.x.toFixed(1), y: s.y.toFixed(1), hue: s.hue.toFixed(1) })),
+    );
+    const xCoords = this.seeds.map((s) => s.x);
+    const yCoords = this.seeds.map((s) => s.y);
+    console.log(
+      `[SeedField.initialize] X range: ${Math.min(...xCoords).toFixed(1)}-${Math.max(...xCoords).toFixed(1)}, Y range: ${Math.min(...yCoords).toFixed(1)}-${Math.max(...yCoords).toFixed(1)}`,
+    );
   }
 
   step(deltaTime: number): void {
     const dt = this.config.dt * deltaTime;
     const margin = 20;
 
+    let logOnce = this.seeds.length > 0 && Math.random() < 0.02; // log ~2% of frames
+
     for (const s of this.seeds) {
+      if (logOnce && s.id === 0) {
+        console.log(
+          `[SeedField.step] Seed 0 before: pos=(${s.x.toFixed(1)}, ${s.y.toFixed(1)}), vel=(${s.vx.toFixed(2)}, ${s.vy.toFixed(2)})`,
+        );
+      }
       // Spring force toward anchor
       s.vx += -this.config.springK * (s.x - s.anchorX) * dt;
       s.vy += -this.config.springK * (s.y - s.anchorY) * dt;
@@ -130,6 +152,12 @@ export class SeedField {
 
       if (s.y < margin) s.vy += (margin - s.y) * 0.5;
       else if (s.y > this.height - margin) s.vy -= (s.y - (this.height - margin)) * 0.5;
+
+      if (logOnce && s.id === 0) {
+        console.log(
+          `[SeedField.step] Seed 0 after: pos=(${s.x.toFixed(1)}, ${s.y.toFixed(1)}), vel=(${s.vx.toFixed(2)}, ${s.vy.toFixed(2)})`,
+        );
+      }
     }
   }
 
@@ -157,8 +185,8 @@ export class SeedField {
       id: this.nextId++,
       x,
       y,
-      vx,
-      vy,
+      vx: vx || (Math.random() - 0.5) * 2,
+      vy: vy || (Math.random() - 0.5) * 2,
       anchorX,
       anchorY,
       mass: 1,
@@ -195,6 +223,10 @@ export class SeedField {
       positions[i * 2 + 1] = this.height - s.y; // FLIP Y
       hues[i] = s.hue;
       stresses[i] = s.stress;
+    }
+
+    if (n <= 3) {
+      console.log(`[SeedField.packForGL] Packing ${n} seeds:`, Array.from(hues.slice(0, n)));
     }
 
     return { positions, hues, stresses, count: n };

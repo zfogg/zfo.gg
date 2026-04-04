@@ -8,7 +8,7 @@ void main() {
 `;
 
 const FRAGMENT_SHADER_SRC = `
-precision mediump float;
+precision highp float;
 #define MAX_SEEDS 200
 
 uniform vec2 u_resolution;
@@ -31,10 +31,18 @@ vec3 hsl2rgb(float h, float s, float l) {
 
 void main() {
   vec2 uv = gl_FragCoord.xy;
+
+  // Debug: if u_seedCount is 0, show red
+  if (u_seedCount <= 0) {
+    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    return;
+  }
+
   float minDist1 = 1.0e10;
   float minDist2 = 1.0e10;
   float closestHue = 0.0;
   float closestStress = 0.0;
+  int closestIdx = -1;
 
   for (int i = 0; i < MAX_SEEDS; i++) {
     if (i >= u_seedCount) break;
@@ -44,6 +52,7 @@ void main() {
       minDist1 = d;
       closestHue = u_hues[i];
       closestStress = u_stress[i];
+      closestIdx = i;
     } else if (d < minDist2) {
       minDist2 = d;
     }
@@ -53,7 +62,9 @@ void main() {
   float edgeFactor = smoothstep(0.0, 4.0, edgeDist);
   float stress = closestStress;
 
-  float h = mod((closestHue + stress * 60.0) / 360.0, 1.0);
+  // Hue comes in as 0-360, normalize to 0-1
+  float hueNorm = mod(closestHue / 360.0, 1.0);
+  float h = mod(hueNorm + stress * 60.0 / 360.0, 1.0);
   float s = 0.70 + stress * 0.20;
   float l = 0.55 - stress * 0.10;
   vec3 cellColor = hsl2rgb(h, s, l);
@@ -113,9 +124,50 @@ export class GLRenderer {
     const gl = this.gl;
     const n = data.count;
 
+    if (n === 0) {
+      console.log("[GLRenderer] No seeds to render");
+    } else if (n <= 10) {
+      const huesSample = Array.from(data.hues.slice(0, Math.min(3, n)));
+      const posSample = Array.from(data.positions.slice(0, Math.min(3, n) * 2));
+      console.log(
+        "[GLRenderer] Rendering",
+        n,
+        "seeds. First 3 hues:",
+        huesSample,
+        "First 3 positions:",
+        posSample,
+      );
+    }
+
     this.seedsUpload.set(data.positions.subarray(0, n * 2));
     this.huesUpload.set(data.hues.subarray(0, n));
     this.stressUpload.set(data.stresses.subarray(0, n));
+
+    const positionsSample = Array.from(data.positions.slice(0, Math.min(3, n) * 2));
+
+    // Log ALL positions to check spread
+    const allPositions = Array.from(data.positions.slice(0, n * 2));
+    const xCoords = [];
+    const yCoords = [];
+    for (let i = 0; i < n; i++) {
+      xCoords.push(allPositions[i * 2]);
+      yCoords.push(allPositions[i * 2 + 1]);
+    }
+    const minX = Math.min(...xCoords);
+    const maxX = Math.max(...xCoords);
+    const minY = Math.min(...yCoords);
+    const maxY = Math.max(...yCoords);
+
+    console.log(
+      "[GLRenderer] Uploading uniforms: seedCount=",
+      n,
+      "positions sample (first 3 seeds):",
+      positionsSample,
+      "X range: " + minX.toFixed(1) + "-" + maxX.toFixed(1),
+      "Y range: " + minY.toFixed(1) + "-" + maxY.toFixed(1),
+      "hues sample:",
+      Array.from(this.huesUpload.slice(0, Math.min(3, n))),
+    );
 
     gl.useProgram(this.program);
     gl.uniform1i(this.u_seedCount, n);
