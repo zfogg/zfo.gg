@@ -49,6 +49,10 @@ const Home = () => {
               <ThingCard href="/thing/colorshifter">colorshifter</ThingCard>
 
               <ThingCard href="/thing/stressgraph">stressgraph</ThingCard>
+
+              <ThingCard href="https://github.com/zfogg/spaniel" external>
+                spaniel
+              </ThingCard>
             </div>
           </div>
         </section>
