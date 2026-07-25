@@ -6,6 +6,6 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["client"],
+  "include": ["client", "vite.config.ts"],
   "exclude": ["supabase", "node_modules", "dist"]
 }
