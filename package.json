@@ -8,7 +8,6 @@
     "dev": "cd client && pnpm dev",
     "build": "cd client && pnpm build && cp dist/index.html dist/404.html",
     "preview": "cd client && pnpm run preview",
-    "start": "coffee zfogg.coffee",
     "prepare": "vp config"
   },
   "dependencies": {
