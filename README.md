@@ -1,3 +1,5 @@
+
+
 # zfo.gg
 
 Zachary's personal website.
@@ -8,7 +10,6 @@ Zachary's personal website.
 - Vite
 - TypeScript
 - Express
-- CoffeeScript
 - React
 - React Router
 - React Query
